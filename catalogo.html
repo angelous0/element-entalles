@@ -1,0 +1,371 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Catálogo · Element Premium</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;700;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0a0a0a;
+    --accent:#cbe83a;
+    --accent-ink:#0a0a0a;
+    --paper:#101010;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;background:#0a0a0a;color:#f5f5f5;font-family:"Archivo",system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+  body{height:100vh;height:100dvh;display:flex;flex-direction:column;overflow:hidden}
+  img{display:block}
+  button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit}
+  a{color:inherit;text-decoration:none}
+
+  /* Top bar */
+  .bar{
+    flex:0 0 auto;display:flex;align-items:center;justify-content:space-between;
+    padding:12px 18px;background:#0e0e0e;border-bottom:1px solid #1c1c1c;z-index:30;
+  }
+  .bar .brand img{height:20px;opacity:1}
+  .bar .title{font-family:"JetBrains Mono",monospace;font-size:11px;letter-spacing:0.2em;text-transform:uppercase;color:#8a8a8a;display:none}
+  @media (min-width:680px){.bar .title{display:block}}
+  .bar .home{
+    font-family:"JetBrains Mono",monospace;font-size:10px;letter-spacing:0.16em;text-transform:uppercase;
+    color:#0a0a0a;background:var(--accent);padding:8px 12px;border-radius:99px;display:flex;align-items:center;gap:6px;
+  }
+  .bar .home svg{width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:2}
+  .bar-right{display:flex;align-items:center;gap:10px;position:relative}
+  .dl-btn{
+    font-family:"JetBrains Mono",monospace;font-size:10px;letter-spacing:0.16em;text-transform:uppercase;
+    color:#f5f5f5;background:#161616;border:1px solid #333;padding:8px 12px;border-radius:99px;display:flex;align-items:center;gap:6px;transition:all .2s;
+  }
+  .dl-btn:hover{border-color:var(--accent);color:var(--accent)}
+  .dl-btn svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2}
+  .dl-btn .lbl{display:none}
+  @media (min-width:680px){.dl-btn .lbl{display:inline}}
+  .dl-menu{
+    position:absolute;top:calc(100% + 8px);right:0;z-index:60;
+    background:#161616;border:1px solid #2c2c2c;border-radius:12px;overflow:hidden;min-width:210px;
+    box-shadow:0 16px 40px rgba(0,0,0,0.6);display:none;
+  }
+  .dl-menu.open{display:block}
+  .dl-menu button{
+    display:flex;align-items:center;gap:10px;width:100%;text-align:left;padding:13px 15px;
+    font-size:12.5px;color:#f5f5f5;transition:background .15s;
+  }
+  .dl-menu button:hover{background:#1f1f1f}
+  .dl-menu button + button{border-top:1px solid #242424}
+  .dl-menu svg{width:16px;height:16px;stroke:var(--accent);fill:none;stroke-width:2;flex-shrink:0}
+  .dl-menu .sub{display:block;font-family:"JetBrains Mono",monospace;font-size:9px;letter-spacing:0.12em;text-transform:uppercase;color:#888;margin-top:2px}
+
+  /* Stage */
+  .stage{
+    flex:1;position:relative;display:flex;align-items:center;justify-content:center;
+    padding:22px 14px;min-height:0;
+    background:radial-gradient(80% 80% at 50% 30%, #181818, #0a0a0a 75%);
+    overflow:hidden;
+  }
+  @media (max-width:679px){
+    .stage{display:block;padding:0;overflow-y:auto;-webkit-overflow-scrolling:touch}
+  }
+  .book{
+    position:relative;height:100%;display:flex;gap:0;
+    box-shadow:0 36px 80px rgba(0,0,0,0.65);border-radius:4px;overflow:hidden;background:#000;
+  }
+  .page{height:100%;background:#000;position:relative}
+  .page img{height:100%;width:auto;display:block;max-width:none}
+  @media (max-width:679px){
+    .book{height:auto;width:100%;box-sizing:border-box;border-radius:0;box-shadow:none;flex-direction:column;gap:10px;padding:10px 10px 18px}
+    .page{height:auto;width:100%;display:block;border-radius:6px;overflow:hidden}
+    .page img{width:100%;height:auto;object-fit:contain;max-width:none}
+    .stage .nav-arrow{display:none}
+    .book.turning .page{animation:none}
+  }
+  /* gutter shadow between two pages */
+  .book.spread::after{
+    content:"";position:absolute;left:50%;top:0;bottom:0;width:46px;transform:translateX(-50%);
+    background:linear-gradient(90deg, transparent, rgba(0,0,0,0.0) 40%, rgba(0,0,0,0.35) 50%, rgba(0,0,0,0.0) 60%, transparent);
+    pointer-events:none;z-index:6;
+  }
+  .book.turning .page{animation:fade .4s ease}
+  @keyframes fade{0%{opacity:0.25}100%{opacity:1}}
+
+  /* arrows on the sides */
+  .nav-arrow{
+    position:absolute;z-index:10;top:50%;transform:translateY(-50%);
+    width:48px;height:48px;border-radius:50%;border:1px solid #333;background:rgba(18,18,18,0.78);
+    backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;color:#f5f5f5;transition:all .2s;
+  }
+  .nav-arrow:hover:not(:disabled){background:var(--accent);color:#0a0a0a;border-color:var(--accent)}
+  .nav-arrow:disabled{opacity:0.25;cursor:default}
+  .nav-arrow svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:2}
+  .nav-arrow.prev{left:10px}
+  .nav-arrow.next{right:10px}
+  @media (min-width:680px){.nav-arrow.prev{left:18px}.nav-arrow.next{right:18px}}
+
+  /* Bottom controls */
+  .controls{
+    flex:0 0 auto;display:flex;align-items:center;justify-content:center;gap:16px;
+    padding:12px;background:#0e0e0e;border-top:1px solid #1c1c1c;z-index:30;
+  }
+  .ctrl-btn{
+    width:42px;height:42px;border-radius:50%;border:1px solid #333;background:#161616;color:#f5f5f5;
+    display:flex;align-items:center;justify-content:center;transition:all .2s;
+  }
+  .ctrl-btn:hover:not(:disabled){background:var(--accent);color:#0a0a0a;border-color:var(--accent)}
+  .ctrl-btn:disabled{opacity:0.28;cursor:default}
+  .ctrl-btn svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:2}
+  .ctrl-info{font-family:"JetBrains Mono",monospace;font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:#9a9a9a;min-width:120px;text-align:center}
+  .ctrl-info b{color:#f5f5f5}
+
+  /* dots / quick jump */
+  .dots{display:flex;gap:6px;align-items:center}
+  .dot{width:8px;height:8px;border-radius:50%;background:#333;transition:all .2s}
+  .dot.active{background:var(--accent);transform:scale(1.25)}
+  @media (max-width:540px){.dots{display:none}}
+
+  .hint{
+    position:absolute;top:12px;left:50%;transform:translateX(-50%);z-index:20;
+    font-family:"JetBrains Mono",monospace;font-size:10px;letter-spacing:0.14em;text-transform:uppercase;color:#888;
+    background:rgba(14,14,14,0.85);border:1px solid #262626;border-radius:99px;padding:7px 14px;
+    transition:opacity .4s;pointer-events:none;
+  }
+</style>
+</head>
+<body>
+
+<template id="__bundler_thumbnail">
+  <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+    <rect width="200" height="200" fill="#0a0a0a"/>
+    <rect x="40" y="46" width="120" height="108" rx="4" fill="#f4f1ea"/>
+    <rect x="100" y="46" width="3" height="108" fill="#c8c2b4"/>
+    <rect x="52" y="60" width="40" height="64" rx="2" fill="#7c97b8"/>
+    <rect x="110" y="60" width="40" height="64" rx="2" fill="#2f3a46"/>
+    <text x="100" y="182" font-family="Archivo, sans-serif" font-size="15" fill="#cbe83a" text-anchor="middle" font-weight="900" letter-spacing="1">CATÁLOGO</text>
+  </svg>
+</template>
+
+<!-- preload for bundler -->
+<div style="display:none" aria-hidden="true">
+  <img id="src-1" src="assets/catalog/p-a.jpg" alt="">
+  <img id="src-2" src="assets/catalog/p-c.jpg" alt="">
+  <img id="src-3" src="assets/catalog/p-b.jpg" alt="">
+  <img id="src-4" src="assets/catalog/p-d.jpg" alt="">
+  <img id="src-5" src="assets/catalog/p-e.jpg" alt="">
+  <img id="src-6" src="assets/catalog/p-f.jpg" alt="">
+  <img id="src-7" src="assets/catalog/p-g.jpg" alt="">
+  <img id="src-8" src="assets/catalog/p-h.jpg" alt="">
+</div>
+
+<div class="bar">
+  <a class="brand" href="index.html"><img src="assets/logo-element.png" alt="Element Premium" /></a>
+  <span class="title">Catálogo 26 · Denim Premium</span>
+  <div class="bar-right">
+    <button class="dl-btn" id="dlBtn" aria-label="Descargar">
+      <svg viewBox="0 0 24 24"><path d="M12 3v12M7 11l5 5 5-5M5 21h14"/></svg>
+      <span class="lbl">Descargar</span>
+    </button>
+    <a class="home" href="index.html">
+      <svg viewBox="0 0 24 24"><path d="M3 11l9-8 9 8M5 9v11h14V9"/></svg>
+      Inicio
+    </a>
+    <div class="dl-menu" id="dlMenu">
+      <button id="dlCurrent">
+        <svg viewBox="0 0 24 24"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M9 12l3 3 3-3M12 7v8"/></svg>
+        <span>Página actual<span class="sub">Descarga la vista actual</span></span>
+      </button>
+      <button id="dlAll">
+        <svg viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/><path d="M12 3v4M9 5l3-2 3 2" /></svg>
+        <span>Todo el catálogo<span class="sub">Las 8 páginas (JPG)</span></span>
+      </button>
+    </div>
+  </div>
+</div>
+
+<div class="stage">
+  <div class="hint" id="hint">Usa las flechas o desliza para pasar página</div>
+  <button class="nav-arrow prev" id="prev" aria-label="Anterior"><svg viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6"/></svg></button>
+  <div class="book" id="book"></div>
+  <button class="nav-arrow next" id="next" aria-label="Siguiente"><svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></button>
+</div>
+
+<div class="controls">
+  <button class="ctrl-btn" id="first" aria-label="Inicio"><svg viewBox="0 0 24 24"><path d="M18 6l-6 6 6 6M11 6l-6 6 6 6"/></svg></button>
+  <span class="ctrl-info" id="info">Página 1</span>
+  <div class="dots" id="dots"></div>
+  <button class="ctrl-btn" id="last" aria-label="Final"><svg viewBox="0 0 24 24"><path d="M6 6l6 6-6 6M13 6l6 6-6 6"/></svg></button>
+</div>
+
+<script>
+  const src = id => document.getElementById(id).getAttribute('src');
+  const PAGES = [
+    { img: src('src-1'), label:'Baggy' },
+    { img: src('src-2'), label:'Baggy' },
+    { img: src('src-3'), label:'Oversize' },
+    { img: src('src-4'), label:'Oversize' },
+    { img: src('src-5'), label:'Oversize Cargo' },
+    { img: src('src-6'), label:'Oversize Cargo' },
+    { img: src('src-7'), label:'Clover' },
+    { img: src('src-8'), label:'American' }
+  ];
+  const N = PAGES.length;
+
+  const book = document.getElementById('book');
+  const info = document.getElementById('info');
+  const dotsEl = document.getElementById('dots');
+  const stage = document.querySelector('.stage');
+  const hintEl = document.getElementById('hint');
+  const mqSpread = window.matchMedia('(min-width:680px)');
+
+  let pos = 0; // index of the (left) page currently shown
+
+  function isSpread(){ return mqSpread.matches; }
+
+  function clampPos(){
+    if (isSpread()){
+      pos = Math.max(0, Math.min(N-1, pos));
+      if (pos % 2 !== 0) pos -= 1; // left page must be even
+    } else {
+      pos = Math.max(0, Math.min(N-1, pos));
+    }
+  }
+
+  function render(){
+    clampPos();
+    book.classList.remove('turning','spread');
+    void book.offsetWidth;
+
+    if (isSpread()){
+      const l = pos, r = pos+1;
+      let html = `<div class="page"><img src="${PAGES[l].img}" alt="${PAGES[l].label}"></div>`;
+      if (r < N) html += `<div class="page"><img src="${PAGES[r].img}" alt="${PAGES[r].label}"></div>`;
+      book.innerHTML = html;
+      if (r < N) book.classList.add('spread');
+      book.classList.add('turning');
+      hintEl.textContent = 'Usa las flechas o desliza para pasar página';
+    } else {
+      // Móvil: todas las páginas apiladas en scroll vertical (eager: solo 8 imgs y el offset de scroll necesita altura real)
+      book.innerHTML = PAGES.map((p,i) => `<div class="page" data-i="${i}"><img src="${p.img}" alt="${p.label}"></div>`).join('');
+      hintEl.textContent = 'Desliza hacia abajo para recorrer el catálogo';
+      watchScroll();
+    }
+    updateUI();
+    updateCtrlIcons();
+  }
+
+  // En móvil los botones inferiores pasan página por página; en escritorio saltan al inicio/final
+  function updateCtrlIcons(){
+    const firstBtn = document.getElementById('first'), lastBtn = document.getElementById('last');
+    if (isSpread()){
+      firstBtn.innerHTML = '<svg viewBox="0 0 24 24"><path d="M18 6l-6 6 6 6M11 6l-6 6 6 6"/></svg>';
+      lastBtn.innerHTML  = '<svg viewBox="0 0 24 24"><path d="M6 6l6 6-6 6M13 6l6 6-6 6"/></svg>';
+      firstBtn.setAttribute('aria-label','Inicio'); lastBtn.setAttribute('aria-label','Final');
+    } else {
+      firstBtn.innerHTML = '<svg viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6"/></svg>';
+      lastBtn.innerHTML  = '<svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg>';
+      firstBtn.setAttribute('aria-label','Página anterior'); lastBtn.setAttribute('aria-label','Página siguiente');
+    }
+  }
+
+  function updateUI(){
+    if (isSpread()){
+      const l = pos, r = pos+1;
+      info.innerHTML = r < N ? `Pág. <b>${l+1}\u2013${r+1}</b> / ${N}` : `Pág. <b>${l+1}</b> / ${N}`;
+    } else {
+      info.innerHTML = `Pág. <b>${pos+1}</b> / ${N} · ${PAGES[pos].label}`;
+    }
+    document.getElementById('prev').disabled = pos <= 0;
+    document.getElementById('next').disabled = isSpread() ? (pos+2 >= N) : (pos+1 >= N);
+    document.getElementById('first').disabled = pos <= 0;
+    document.getElementById('last').disabled = isSpread() ? (pos+2 >= N) : (pos+1 >= N);
+    dotsEl.querySelectorAll('.dot').forEach((d,i) => {
+      const on = isSpread() ? (i === pos || i === pos+1) : (i === pos);
+      d.classList.toggle('active', on);
+    });
+  }
+
+  // Móvil: detectar la página visible mientras se hace scroll
+  let pageObserver = null;
+  function watchScroll(){
+    if (pageObserver) pageObserver.disconnect();
+    pageObserver = new IntersectionObserver(entries => {
+      entries.forEach(en => {
+        if (en.isIntersecting){ pos = +en.target.dataset.i; updateUI(); }
+      });
+    }, { root: stage, rootMargin: '-45% 0px -45% 0px', threshold: 0 });
+    book.querySelectorAll('.page').forEach(p => pageObserver.observe(p));
+  }
+
+  function scrollToPage(n){
+    const el = book.querySelector(`.page[data-i="${n}"]`);
+    if (!el) return;
+    const doScroll = () => {
+      const top = el.getBoundingClientRect().top - stage.getBoundingClientRect().top + stage.scrollTop - 10;
+      stage.scrollTo({ top, behavior: 'smooth' });
+    };
+    // Si aún hay imágenes sin cargar arriba de la página destino, re-scroll cuando terminen
+    const pending = [...book.querySelectorAll('img')].filter(im => !im.complete);
+    doScroll();
+    if (pending.length){
+      let left = pending.length;
+      pending.forEach(im => im.addEventListener('load', () => { if (--left === 0) doScroll(); }, { once:true }));
+    }
+  }
+
+  const step = () => isSpread() ? 2 : 1;
+  function go(n){
+    hintEl.style.opacity = '0';
+    if (isSpread()){ pos = n; render(); }
+    else { pos = Math.max(0, Math.min(N-1, n)); scrollToPage(pos); updateUI(); }
+  }
+  document.getElementById('prev').addEventListener('click', () => go(pos - step()));
+  document.getElementById('next').addEventListener('click', () => go(pos + step()));
+  document.getElementById('first').addEventListener('click', () => go(isSpread() ? 0 : pos - 1));
+  document.getElementById('last').addEventListener('click', () => go(isSpread() ? N - 1 : pos + 1));
+  document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowRight') go(pos + step());
+    if (e.key === 'ArrowLeft') go(pos - step());
+  });
+
+  // dots
+  dotsEl.innerHTML = PAGES.map((_,i) => `<span class="dot" data-i="${i}"></span>`).join('');
+  dotsEl.querySelectorAll('.dot').forEach(d => d.addEventListener('click', () => go(+d.dataset.i)));
+
+  // swipe
+  let sx = 0, sy = 0;
+  book.addEventListener('touchstart', e => { sx = e.touches[0].clientX; sy = e.touches[0].clientY; }, {passive:true});
+  book.addEventListener('touchend', e => {
+    if (!isSpread()) return; // en móvil el scroll vertical es nativo
+    const dx = (e.changedTouches[0]?.clientX||0) - sx;
+    const dy = (e.changedTouches[0]?.clientY||0) - sy;
+    if (Math.abs(dx) > 45 && Math.abs(dx) > Math.abs(dy)) go(dx < 0 ? pos+step() : pos-step());
+  });
+
+  mqSpread.addEventListener('change', render);
+  render();
+  setTimeout(() => { document.getElementById('hint').style.opacity='0'; }, 4000);
+
+  /* ===== Descargas ===== */
+  function downloadImage(src, name){
+    const a = document.createElement('a');
+    a.href = src; a.download = name;
+    document.body.appendChild(a); a.click(); a.remove();
+  }
+  const dlBtn = document.getElementById('dlBtn');
+  const dlMenu = document.getElementById('dlMenu');
+  dlBtn.addEventListener('click', (e) => { e.stopPropagation(); dlMenu.classList.toggle('open'); });
+  document.addEventListener('click', () => dlMenu.classList.remove('open'));
+  dlMenu.addEventListener('click', e => e.stopPropagation());
+
+  document.getElementById('dlCurrent').addEventListener('click', () => {
+    dlMenu.classList.remove('open');
+    const pages = isSpread() && pos+1 < N ? [pos, pos+1] : [pos];
+    pages.forEach((p,i) => setTimeout(() => downloadImage(PAGES[p].img, `Element-Catalogo-pag-${p+1}-${PAGES[p].label}.jpg`), i*350));
+  });
+  document.getElementById('dlAll').addEventListener('click', () => {
+    dlMenu.classList.remove('open');
+    PAGES.forEach((pg,i) => setTimeout(() => downloadImage(pg.img, `Element-Catalogo-pag-${i+1}-${pg.label}.jpg`), i*400));
+  });
+</script>
+</body>
+</html>

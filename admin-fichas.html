@@ -1,0 +1,559 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Panel · Fichas Element</title>
+<script src="admin-auth.js"></script>
+<script>ElementAuth.guard();</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0a0a0a;--bg-2:#111;--surface:#161616;--surface-2:#1c1c1c;
+    --line:#262626;--line-2:#333;--text:#f5f5f5;--muted:#8a8a8a;--muted-2:#5e5e5e;
+    --accent:#cbe83a;--accent-ink:#0a0a0a;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;background:var(--bg);color:var(--text);font-family:"Archivo",system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+  img{display:block;max-width:100%}
+  button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit}
+  a{color:inherit}
+  .mono{font-family:"JetBrains Mono",monospace}
+
+  header.top{position:sticky;top:0;z-index:30;background:var(--accent);color:var(--accent-ink)}
+  .top-inner{max-width:1080px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;padding:14px 20px}
+  .top-inner .b{font-weight:900;letter-spacing:-0.01em;font-size:15px;display:flex;align-items:center;gap:10px}
+  .top-inner .b img{height:22px;filter:brightness(0)}
+  .top-tag{font-family:"JetBrains Mono",monospace;font-size:10px;letter-spacing:0.18em;text-transform:uppercase;background:var(--accent-ink);color:var(--accent);padding:6px 11px;border-radius:99px}
+  header.top a{text-decoration:none}
+  .top-sess{display:flex;align-items:center;gap:8px}
+  .top-sess .who{display:flex;align-items:center;gap:7px;background:var(--accent-ink);color:var(--accent);border-radius:99px;padding:5px 11px 5px 6px;font-family:"JetBrains Mono",monospace;font-size:10px;letter-spacing:0.1em;text-transform:uppercase}
+  .top-sess .who .av{width:20px;height:20px;border-radius:50%;background:var(--accent);color:var(--accent-ink);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:10px}
+  .top-sess .lo{display:flex;align-items:center;gap:6px;border:1.5px solid var(--accent-ink);border-radius:99px;padding:6px 12px;font-family:"JetBrains Mono",monospace;font-size:10px;letter-spacing:0.1em;text-transform:uppercase;font-weight:700;transition:all .15s;color:var(--accent-ink)}
+  .top-sess .lo:hover{background:var(--accent-ink);color:var(--accent)}
+  .top-sess .lo svg{width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:2}
+  @media (max-width:560px){.top-sess .who span:last-child{display:none}}
+  .ent-add{flex:0 0 auto;display:flex;align-items:center;gap:7px;padding:11px 15px;border:1px dashed var(--line-2);border-radius:99px;background:transparent;color:var(--muted);font-family:"JetBrains Mono",monospace;font-size:11px;letter-spacing:0.12em;text-transform:uppercase;transition:all .15s}
+  .ent-add:hover{border-color:var(--accent);color:var(--accent)}
+  .ent-add svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2}
+
+  .wrap{max-width:1080px;margin:0 auto;padding:26px 20px 120px}
+  .intro h1{font-weight:900;letter-spacing:-0.02em;font-size:clamp(26px,5vw,40px);margin:0;text-transform:uppercase;line-height:0.95}
+  .intro p{color:var(--muted);font-size:14px;line-height:1.6;max-width:64ch;margin:12px 0 0}
+
+  /* entalle selector tabs */
+  .ent-tabs{display:flex;gap:8px;overflow-x:auto;padding:18px 0 6px;scrollbar-width:none}
+  .ent-tabs::-webkit-scrollbar{display:none}
+  .ent-tab{flex:0 0 auto;padding:11px 16px;border:1px solid var(--line);border-radius:99px;background:var(--bg-2);color:var(--muted);font-family:"JetBrains Mono",monospace;font-size:11px;letter-spacing:0.14em;text-transform:uppercase;transition:all .15s;position:relative}
+  .ent-tab.active{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+  .ent-tab .dot{display:inline-block;width:7px;height:7px;border-radius:50%;margin-left:7px;vertical-align:middle;background:#444}
+  .ent-tab.has .dot{background:#2ecf6f}
+  .ent-tab.active .dot{background:var(--accent-ink)}
+
+  .panel{margin-top:20px;display:grid;gap:18px;grid-template-columns:1fr;background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:20px}
+  @media (min-width:820px){.panel{grid-template-columns:330px 1fr;gap:28px;padding:26px}}
+  .col h3{font-family:"JetBrains Mono",monospace;font-size:11px;letter-spacing:0.16em;text-transform:uppercase;color:var(--muted);margin:0 0 12px;font-weight:500}
+  .col + .col{margin-top:6px}
+
+  /* photo slots */
+  .hero-slot{aspect-ratio:4/5;border:1.5px dashed var(--line-2);border-radius:12px;background:var(--bg-2);position:relative;overflow:hidden;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:border-color .2s}
+  .hero-slot:hover{border-color:var(--accent)}
+  .hero-slot img{width:100%;height:100%;object-fit:cover;position:absolute;inset:0}
+  .hero-slot .ph{display:flex;flex-direction:column;align-items:center;gap:8px;color:var(--muted-2);font-family:"JetBrains Mono",monospace;font-size:10px;letter-spacing:0.12em;text-transform:uppercase;text-align:center;padding:16px;z-index:1}
+  .hero-slot .ph svg{width:30px;height:30px;stroke:var(--accent);fill:none;stroke-width:1.5}
+  .slot-x{position:absolute;top:8px;right:8px;z-index:3;width:28px;height:28px;border-radius:50%;background:rgba(10,10,10,0.8);border:1px solid var(--line-2);display:none;align-items:center;justify-content:center}
+  .hero-slot.filled .slot-x{display:flex}
+  .slot-x svg{width:14px;height:14px;stroke:#fff;fill:none;stroke-width:2}
+
+  .details-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:12px}
+  .det-slot{aspect-ratio:1;border:1.5px dashed var(--line-2);border-radius:10px;background:var(--bg-2);position:relative;overflow:hidden;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:border-color .2s}
+  .det-slot:hover{border-color:var(--accent)}
+  .det-slot img{width:100%;height:100%;object-fit:cover;position:absolute;inset:0}
+  .det-slot .ph{color:var(--muted-2);font-family:"JetBrains Mono",monospace;font-size:9px;letter-spacing:0.1em;text-transform:uppercase;z-index:1}
+  .det-slot.filled .slot-x{display:flex;width:24px;height:24px}
+  .det-slot .slot-x svg{width:12px;height:12px}
+
+  /* firma color */
+  .firma{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+  .firma .sw{width:34px;height:34px;border-radius:9px;border:2px solid transparent;cursor:pointer;transition:transform .15s}
+  .firma .sw:hover{transform:scale(1.08)}
+  .firma .sw.active{border-color:#fff;box-shadow:0 0 0 2px var(--accent)}
+  .firma .custom{display:flex;align-items:center;gap:7px;margin-left:4px}
+  .firma .custom input[type=color]{width:34px;height:34px;border:1px solid var(--line-2);border-radius:9px;background:none;cursor:pointer;padding:0}
+  .firma .reset{font-family:"JetBrains Mono",monospace;font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);border:1px solid var(--line);border-radius:99px;padding:7px 11px}
+  .firma .reset:hover{border-color:var(--accent);color:var(--accent)}
+
+  /* colors availability */
+  .fam-block{margin-top:6px}
+  .fam-head{display:flex;align-items:center;justify-content:space-between;margin:14px 0 10px}
+  .fam-head .lbl{font-family:"JetBrains Mono",monospace;font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:var(--text)}
+  .fam-head .mini{font-family:"JetBrains Mono",monospace;font-size:10px;letter-spacing:0.1em;color:var(--muted)}
+  .fam-head .selall{font-family:"JetBrains Mono",monospace;font-size:9px;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);border:1px solid var(--line);border-radius:99px;padding:5px 9px}
+  .fam-head .selall:hover{border-color:var(--accent);color:var(--accent)}
+  .color-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:8px}
+  .ccell{display:flex;align-items:center;gap:9px;padding:8px 10px;border:1px solid var(--line);border-radius:10px;background:var(--bg-2);cursor:pointer;transition:all .15s;user-select:none}
+  .ccell:hover{border-color:var(--line-2)}
+  .ccell.on{border-color:var(--accent);background:rgba(203,232,58,0.07)}
+  .ccell .chip{width:20px;height:26px;border-radius:5px;border:1px solid rgba(255,255,255,0.12);flex-shrink:0}
+  .ccell .nm{font-size:12px;line-height:1.1}
+  .ccell .ck{margin-left:auto;width:16px;height:16px;border-radius:5px;border:1px solid var(--line-2);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+  .ccell.on .ck{background:var(--accent);border-color:var(--accent)}
+  .ccell .ck svg{width:11px;height:11px;stroke:var(--accent-ink);fill:none;stroke-width:3;opacity:0;transition:opacity .1s}
+  .ccell.on .ck svg{opacity:1}
+  .ccell .cam{width:26px;height:26px;border-radius:8px;border:1px solid var(--line-2);background:transparent;color:var(--muted);display:flex;align-items:center;justify-content:center;flex-shrink:0;cursor:pointer;transition:all .15s}
+  .ccell .cam svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:1.8}
+  .ccell .cam:hover{border-color:var(--accent);color:var(--accent)}
+  .ccell .cam.has{color:var(--accent);border-color:var(--accent)}
+  .ccell .cam-x{width:20px;height:20px;border-radius:50%;border:1px solid var(--line-2);background:#1a1a1a;color:#999;display:flex;align-items:center;justify-content:center;flex-shrink:0;cursor:pointer}
+  .ccell .cam-x svg{width:10px;height:10px;stroke:currentColor;fill:none;stroke-width:2}
+  .ccell .cam-x:hover{color:#ff6b6b;border-color:#ff6b6b}
+
+  .hint-row{display:flex;align-items:flex-start;gap:8px;margin-top:14px;color:var(--muted-2);font-size:12px;line-height:1.5}
+  .hint-row svg{width:15px;height:15px;stroke:var(--accent);fill:none;stroke-width:1.8;flex-shrink:0;margin-top:2px}
+
+  .footer-bar{position:fixed;bottom:0;left:0;right:0;z-index:40;background:rgba(14,14,14,0.96);backdrop-filter:blur(10px);border-top:1px solid var(--line);padding:13px 20px;display:flex;align-items:center;gap:12px;justify-content:center;flex-wrap:wrap}
+  .btn{display:inline-flex;align-items:center;gap:9px;border-radius:99px;padding:12px 18px;font-family:"JetBrains Mono",monospace;font-size:11px;letter-spacing:0.13em;text-transform:uppercase;font-weight:700;transition:transform .15s,border-color .15s,background .15s}
+  .btn svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2}
+  .btn-primary{background:var(--accent);color:var(--accent-ink)}
+  .btn-primary:hover{transform:translateY(-2px)}
+  .btn-ghost{background:transparent;color:var(--text);border:1px solid var(--line-2)}
+  .btn-ghost:hover{border-color:var(--accent);color:var(--accent)}
+  .save-state{font-family:"JetBrains Mono",monospace;font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted)}
+  .save-state b{color:#2ecf6f}
+  .pub-state{display:flex;align-items:center;gap:8px;font-family:"JetBrains Mono",monospace;font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted)}
+  .pub-state .dot{width:8px;height:8px;border-radius:50%;background:#555;flex-shrink:0}
+  .pub-state .dot.on{background:#2ecf6f}
+  .pub-state .dot.warn{background:#e8c33a}
+  .pub-state .dot.off{background:#777}
+  .btn:disabled{opacity:0.4;pointer-events:none;transform:none}
+
+  .toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%) translateY(20px);z-index:60;background:var(--surface);border:1px solid var(--line-2);color:var(--text);padding:12px 18px;border-radius:99px;font-family:"JetBrains Mono",monospace;font-size:11px;letter-spacing:0.12em;text-transform:uppercase;opacity:0;pointer-events:none;transition:all .25s}
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+  .fam-acts{display:flex;gap:8px;align-items:center}
+  .fam-head .editlist{font-family:"JetBrains Mono",monospace;font-size:9px;letter-spacing:0.1em;text-transform:uppercase;color:var(--accent);border:1px solid var(--line);border-radius:99px;padding:5px 9px;background:var(--bg-2)}
+  .fam-head .editlist:hover{border-color:var(--accent)}
+
+  /* ===== editor de colores (modal) ===== */
+  .cmodal{position:fixed;inset:0;z-index:80;background:rgba(0,0,0,0.62);backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;padding:20px}
+  .cmodal[hidden]{display:none}
+  .cmodal-card{width:100%;max-width:440px;max-height:84vh;display:flex;flex-direction:column;background:var(--surface);border:1px solid var(--line-2);border-radius:18px;overflow:hidden;box-shadow:0 30px 80px -30px #000}
+  .cmodal-head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:17px 20px;border-bottom:1px solid var(--line)}
+  .cmodal-head h3{font-family:"Archivo",sans-serif;font-weight:900;text-transform:uppercase;letter-spacing:-0.01em;font-size:16px;margin:0}
+  .cmodal-x{width:32px;height:32px;border-radius:9px;border:1px solid var(--line-2);display:flex;align-items:center;justify-content:center;color:var(--muted)}
+  .cmodal-x:hover{border-color:var(--accent);color:var(--accent)}
+  .cmodal-x svg{width:15px;height:15px;stroke:currentColor;fill:none;stroke-width:2}
+  .cmodal-body{padding:14px 20px;overflow-y:auto;display:flex;flex-direction:column;gap:9px}
+  .cm-empty{color:var(--muted-2);font-size:13px;text-align:center;padding:18px 0}
+  .cm-row{display:flex;align-items:center;gap:10px}
+  .cm-row .cm-hex{width:38px;height:38px;min-width:38px;padding:0;border:1px solid var(--line-2);border-radius:9px;background:none;cursor:pointer}
+  .cm-row .cm-name{flex:1;background:var(--bg-2);border:1px solid var(--line);border-radius:9px;color:var(--text);font-family:"Archivo",sans-serif;font-size:14px;padding:10px 12px}
+  .cm-row .cm-name:focus{outline:none;border-color:var(--accent)}
+  .cm-row .cm-del{width:36px;height:36px;min-width:36px;border-radius:9px;border:1px solid var(--line);display:flex;align-items:center;justify-content:center;color:var(--muted)}
+  .cm-row .cm-del:hover{border-color:#e05555;color:#e05555}
+  .cm-row .cm-del svg{width:15px;height:15px;stroke:currentColor;fill:none;stroke-width:2}
+  .cmodal-foot{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:15px 20px;border-top:1px solid var(--line)}
+  .cm-add{display:flex;align-items:center;gap:8px;border:1px dashed var(--line-2);border-radius:99px;padding:10px 14px;color:var(--muted);font-family:"JetBrains Mono",monospace;font-size:10px;letter-spacing:0.12em;text-transform:uppercase;font-weight:700}
+  .cm-add:hover{border-color:var(--accent);color:var(--accent)}
+  .cm-add svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2}
+  .cm-done{background:var(--accent);color:var(--accent-ink);border-radius:99px;padding:11px 20px;font-family:"JetBrains Mono",monospace;font-size:11px;letter-spacing:0.13em;text-transform:uppercase;font-weight:700;transition:transform .12s}
+  .cm-done:hover{transform:translateY(-1px)}
+  .hidden-input{display:none}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="top-inner">
+    <a class="b" href="panel.html"><img src="assets/logo-element.png" alt="Element"/> Fichas por entalle</a>
+    <div class="top-sess">
+      <a class="lo" href="panel.html"><svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg> Panel</a>
+      <span class="who"><span class="av" id="sessAv">A</span><span id="sessName">admin</span></span>
+      <button class="lo" id="sessOut"><svg viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/></svg> Salir</button>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+  <div class="intro">
+    <h1>Fotos y colores por entalle</h1>
+    <p>Elige un entalle y dale su foto principal, fotos de detalle, color de acento y los colores en que se vende. Se guarda automáticamente y la ficha lo toma al instante. El verde indica entalles ya configurados.</p>
+  </div>
+
+  <div class="ent-tabs" id="entTabs"></div>
+
+  <div class="panel">
+    <div>
+      <div class="col">
+        <h3>Foto principal</h3>
+        <div class="hero-slot" id="heroSlot">
+          <button class="slot-x" id="heroX" title="Quitar"><svg viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
+          <div class="ph"><svg viewBox="0 0 24 24"><path d="M12 16V4M7 9l5-5 5 5M5 20h14"/></svg>Toca para subir<br>la foto del modelo</div>
+        </div>
+        <input type="file" id="heroInput" class="hidden-input" accept="image/*">
+      </div>
+      <div class="col">
+        <h3>Fotos de detalle (hasta 3)</h3>
+        <div class="details-grid" id="detailsGrid"></div>
+        <input type="file" id="detInput" class="hidden-input" accept="image/*">
+      </div>
+    </div>
+
+    <div>
+      <div class="col">
+        <h3>Color de acento del entalle</h3>
+        <div class="firma" id="firma">
+          <button class="reset" id="firmaReset">Por defecto</button>
+        </div>
+      </div>
+
+      <div class="col">
+        <h3>Colores disponibles en este entalle</h3>
+        <div class="fam-block">
+          <div class="fam-head"><span class="lbl">Versión Color</span><span class="fam-acts"><button class="editlist" data-edit="color">Editar lista</button><button class="selall" data-all="color">Todos / ninguno</button></span></div>
+          <div class="color-list" id="listColor"></div>
+        </div>
+        <div class="fam-block">
+          <div class="fam-head"><span class="lbl">Versión Negra</span><span class="fam-acts"><button class="editlist" data-edit="negra">Editar lista</button><button class="selall" data-all="negra">Todos / ninguno</button></span></div>
+          <div class="color-list" id="listNegra"></div>
+        </div>
+        <div class="hint-row">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 8h.01M11 12h1v4h1"/></svg>
+          <span>Marca solo los colores en que este entalle realmente se vende. Si no marcas ninguno, la ficha muestra la paleta completa por defecto. Con el botón de cámara 📷 subes la foto real de cada color (se usa en todas las fichas). Con <b style="color:var(--text);font-weight:600">Editar lista</b> cambias nombres, agregas o eliminas colores de la paleta.</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="cmodal" id="cmodal" hidden>
+  <div class="cmodal-card">
+    <div class="cmodal-head">
+      <h3 id="cmTitle">Colores</h3>
+      <button class="cmodal-x" id="cmClose" title="Cerrar"><svg viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
+    </div>
+    <div class="cmodal-body" id="cmBody"></div>
+    <div class="cmodal-foot">
+      <button class="cm-add" id="cmAdd"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg> Agregar color</button>
+      <button class="cm-done" id="cmDone">Listo</button>
+    </div>
+  </div>
+</div>
+
+<div class="footer-bar">
+  <span class="pub-state" id="pubState"><i class="dot"></i> —</span>
+  <a class="btn btn-ghost" id="openFicha" href="ficha.html?preview" target="_blank"><svg viewBox="0 0 24 24"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg> Vista previa</a>
+  <button class="btn btn-primary" id="publishBtn"><svg viewBox="0 0 24 24"><path d="M12 16V4M7 9l5-5 5 5M5 20h14"/></svg> Publicar</button>
+  <button class="btn btn-ghost" id="resetEnt"><svg viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></svg> Reiniciar entalle</button>
+</div>
+
+<div class="toast" id="toast">Guardado</div>
+
+<script>
+  const CFG_KEY = 'element_fichas_config_v1';
+  // entalles (mismo orden que la ficha)
+  const ENT_BASE = [
+    {key:'baggy',name:'Baggy',sig:'#cbe83a'},
+    {key:'oversize',name:'Oversize',sig:'#d9a06c'},
+    {key:'flare',name:'Flare',sig:'#e85d9b'},
+    {key:'mom',name:'Mom',sig:'#5bc0a8'},
+    {key:'regular',name:'Regular',sig:'#5b8cf5'},
+    {key:'semipitillo',name:'Semipitillo',sig:'#b88cf0'},
+    {key:'pitillo',name:'Pitillo',sig:'#ff7a59'},
+    {key:'skinny',name:'Skinny',sig:'#ff5470'}
+  ];
+  // paleta maestra (igual que la ficha)
+  const PAL_BASE = {
+    color:[
+      {id:'hielo',name:'Hielo',hex:'#E8EEF2'},{id:'celeste',name:'Celeste',hex:'#B3D2E8'},
+      {id:'celeste-contaminado',name:'Celeste cont.',hex:'#7E97A8'},{id:'acero',name:'Acero',hex:'#6C7B8A'},
+      {id:'azul',name:'Azul',hex:'#2C4A72'},{id:'maiz',name:'Maíz',hex:'#E5C76A'},
+      {id:'topo',name:'Topo',hex:'#9F8067'},{id:'madera',name:'Madera',hex:'#7A5236'},
+      {id:'arena',name:'Arena',hex:'#D4BE94'},{id:'oliva',name:'Oliva',hex:'#6E7148'},
+      {id:'vino',name:'Vino',hex:'#5E2A2E'},{id:'mostaza',name:'Mostaza',hex:'#B68A2C'}
+    ],
+    negra:[
+      {id:'negro',name:'Negro',hex:'#0D0D0D'},{id:'carbon',name:'Carbón',hex:'#22221F'},
+      {id:'plomo-oscuro',name:'Plomo osc.',hex:'#3A3A3D'},{id:'plomo',name:'Plomo',hex:'#6B6E72'},
+      {id:'cafe',name:'Café',hex:'#3A2820'},{id:'plata',name:'Plata',hex:'#C2C5C8'},
+      {id:'humo',name:'Humo',hex:'#56575A'},{id:'grafito',name:'Grafito',hex:'#2E3033'},
+      {id:'tabaco',name:'Tabaco',hex:'#5C4530'},{id:'arena-oscura',name:'Arena osc.',hex:'#8B7765'}
+    ]
+  };
+  const SIG_OPTIONS = ['#cbe83a','#d9a06c','#e85d9b','#5bc0a8','#5b8cf5','#b88cf0','#ff7a59','#ff5470','#ffffff','#f2c14e'];
+
+  let cfg = {};
+  try { cfg = JSON.parse(localStorage.getItem(CFG_KEY)) || {}; } catch(e){ cfg = {}; }
+  let cur = 'baggy';
+
+  function allEnt(){ return ENT_BASE.concat((cfg._entalles||[]).map(e=>Object.assign({custom:true}, e))); }
+  // paleta efectiva: si el usuario editó la lista, manda cfg._palMeta; si no, la base.
+  function palette(){
+    return {
+      color: (cfg._palMeta && cfg._palMeta.color) ? cfg._palMeta.color : PAL_BASE.color,
+      negra: (cfg._palMeta && cfg._palMeta.negra) ? cfg._palMeta.negra : PAL_BASE.negra
+    };
+  }
+  function ensurePalMeta(){
+    if(!cfg._palMeta){ cfg._palMeta = { color: PAL_BASE.color.map(c=>Object.assign({},c)), negra: PAL_BASE.negra.map(c=>Object.assign({},c)) }; }
+    return cfg._palMeta;
+  }
+  function entCfg(k){ if(!cfg[k]) cfg[k] = {}; return cfg[k]; }
+  function isConfigured(k){ const c=cfg[k]; return c && (c.hero || (c.details&&c.details.length) || c.sig || (c.colors&&((c.colors.color&&c.colors.color.length)||(c.colors.negra&&c.colors.negra.length)))); }
+  function save(){ try{ localStorage.setItem(CFG_KEY, JSON.stringify(cfg)); }catch(e){ toast('Memoria llena'); } renderTabs(); updatePubState(); }
+
+  const toastEl = document.getElementById('toast');
+  function toast(m){ toastEl.textContent=m; toastEl.classList.add('show'); clearTimeout(window.__t); window.__t=setTimeout(()=>toastEl.classList.remove('show'),1500); }
+
+  // Optimiza cualquier imagen para web: escala el lado más largo y baja
+  // calidad/tamaño automáticamente hasta cumplir un presupuesto de peso.
+  function compress(file, maxEdge){
+    return new Promise(res=>{
+      const ME = maxEdge || 1600;          // cap del lado más largo (px)
+      const BUDGET = 480 * 1024;           // peso objetivo del dataURL (~360 KB de imagen)
+      const img = new Image();
+      img.onload = ()=>{
+        const draw = (s)=>{
+          const w=Math.max(1,Math.round(img.width*s)), h=Math.max(1,Math.round(img.height*s));
+          const c=document.createElement('canvas'); c.width=w; c.height=h;
+          const x=c.getContext('2d'); x.imageSmoothingEnabled=true; x.imageSmoothingQuality='high';
+          x.drawImage(img,0,0,w,h); return c;
+        };
+        let scale = Math.min(1, ME/Math.max(img.width,img.height));
+        let c = draw(scale), q = 0.82, out = c.toDataURL('image/jpeg', q);
+        while(out.length > BUDGET && q > 0.5){ q -= 0.08; out = c.toDataURL('image/jpeg', q); }
+        while(out.length > BUDGET && scale > 0.4){ scale *= 0.85; c = draw(scale); q = 0.78; out = c.toDataURL('image/jpeg', q); }
+        res(out);
+      };
+      img.onerror=()=>res(null);
+      const fr=new FileReader();fr.onload=e=>img.src=e.target.result;fr.readAsDataURL(file);
+    });
+  }
+
+  // ===== tabs =====
+  const entTabs = document.getElementById('entTabs');
+  function renderTabs(){
+    entTabs.innerHTML = allEnt().map(e=>`<button class="ent-tab${e.key===cur?' active':''}${isConfigured(e.key)?' has':''}" data-k="${e.key}">${e.name}<span class="dot"></span></button>`).join('')
+      + `<button class="ent-add" id="entAdd" title="Agregar un entalle nuevo"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg> Entalle</button>`;
+    entTabs.querySelectorAll('.ent-tab').forEach(b=>b.onclick=()=>{ cur=b.dataset.k; renderTabs(); renderPanel(); });
+    document.getElementById('entAdd').onclick = addEntalle;
+  }
+
+  // ===== firma swatches =====
+  function renderFirma(){
+    const c = entCfg(cur);
+    const _e = allEnt().find(e=>e.key===cur); const def = _e ? _e.sig : '#cbe83a';
+    const firma = document.getElementById('firma');
+    const current = c.sig || null;
+    firma.querySelectorAll('.sw,.custom').forEach(n=>n.remove());
+    const frag = document.createDocumentFragment();
+    SIG_OPTIONS.forEach(hex=>{
+      const b=document.createElement('button');b.className='sw'+((current&&current.toLowerCase()===hex.toLowerCase())?' active':'');
+      b.style.background=hex;b.title=hex;
+      b.onclick=()=>{ c.sig=hex; save(); renderFirma(); toast('Color de acento aplicado'); };
+      frag.appendChild(b);
+    });
+    const custom=document.createElement('span');custom.className='custom';
+    const ci=document.createElement('input');ci.type='color';ci.value=current||def;
+    ci.oninput=()=>{ c.sig=ci.value; save(); renderFirma(); };
+    custom.appendChild(ci);
+    frag.appendChild(custom);
+    firma.insertBefore(frag, document.getElementById('firmaReset'));
+    // mark default note on reset
+    document.getElementById('firmaReset').classList.toggle('active', !current);
+  }
+  document.getElementById('firmaReset').onclick=()=>{ const c=entCfg(cur); delete c.sig; save(); renderFirma(); toast('Color por defecto'); };
+
+  // ===== hero & details =====
+  let detTarget = 0;
+  const heroSlot=document.getElementById('heroSlot'), heroInput=document.getElementById('heroInput'), detInput=document.getElementById('detInput');
+  function renderMedia(){
+    const c=entCfg(cur);
+    // hero
+    heroSlot.classList.toggle('filled', !!c.hero);
+    let himg=heroSlot.querySelector('img'); 
+    if(c.hero){ if(!himg){himg=document.createElement('img');heroSlot.appendChild(himg);} himg.src=c.hero; }
+    else if(himg){ himg.remove(); }
+    // details
+    const grid=document.getElementById('detailsGrid');
+    const d=c.details||[];
+    grid.innerHTML=[0,1,2].map(i=>`
+      <div class="det-slot${d[i]?' filled':''}" data-i="${i}">
+        ${d[i]?`<img src="${d[i]}">`:`<span class="ph">+ ${i+1}</span>`}
+        <button class="slot-x" data-rmdet="${i}" title="Quitar"><svg viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
+      </div>`).join('');
+    grid.querySelectorAll('.det-slot').forEach(s=>{
+      s.onclick=(e)=>{ if(e.target.closest('[data-rmdet]')) return; detTarget=+s.dataset.i; detInput.click(); };
+    });
+    grid.querySelectorAll('[data-rmdet]').forEach(b=>b.onclick=(e)=>{ e.stopPropagation(); const i=+b.dataset.rmdet; const c2=entCfg(cur); c2.details=c2.details||[]; c2.details.splice(i,1); save(); renderMedia(); });
+  }
+  heroSlot.onclick=(e)=>{ if(e.target.closest('#heroX')) return; heroInput.click(); };
+  document.getElementById('heroX').onclick=(e)=>{ e.stopPropagation(); const c=entCfg(cur); delete c.hero; save(); renderMedia(); };
+  heroInput.onchange=async()=>{ if(!heroInput.files[0])return; toast('Procesando…'); const d=await compress(heroInput.files[0]); if(d){ entCfg(cur).hero=d; save(); renderMedia(); toast('Foto principal lista'); } heroInput.value=''; };
+  detInput.onchange=async()=>{ if(!detInput.files[0])return; toast('Procesando…'); const d=await compress(detInput.files[0]); if(d){ const c=entCfg(cur); c.details=c.details||[]; c.details[detTarget]=d; save(); renderMedia(); toast('Detalle añadido'); } detInput.value=''; };
+
+  // ===== fotos de la paleta de colores (globales: se usan en todos los entalles) =====
+  const palInput = document.createElement('input');
+  palInput.type='file'; palInput.accept='image/*'; palInput.className='hidden-input';
+  document.body.appendChild(palInput);
+  let palTarget = null;
+  palInput.onchange = async ()=>{
+    if(!palInput.files[0] || !palTarget) return;
+    toast('Procesando…');
+    const d = await compress(palInput.files[0], 1200);
+    if(d){ cfg._pal = cfg._pal || {}; cfg._pal[palTarget] = d; save(); renderColorLists(); toast('Foto del color guardada'); }
+    palInput.value='';
+  };
+
+  // ===== colors availability =====
+  function renderColorLists(){
+    const c=entCfg(cur); c.colors=c.colors||{};
+    const pal = cfg._pal || {};
+    ['color','negra'].forEach(fam=>{
+      const sel = c.colors[fam]||[];
+      const el = document.getElementById(fam==='color'?'listColor':'listNegra');
+      el.innerHTML = palette()[fam].map(col=>`
+        <div class="ccell${sel.includes(col.id)?' on':''}" data-fam="${fam}" data-id="${col.id}">
+          <span class="chip" style="background:${col.hex}${pal[col.id]?`;background-image:url('${pal[col.id]}');background-size:cover;background-position:center`:''}"></span>
+          <span class="nm">${col.name}</span>
+          <span class="ck"><svg viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg></span>
+          <button class="cam${pal[col.id]?' has':''}" data-cam="${col.id}" title="${pal[col.id]?'Cambiar foto de '+col.name:'Subir foto de '+col.name}"><svg viewBox="0 0 24 24"><path d="M4 8h3l2-3h6l2 3h3v12H4z"/><circle cx="12" cy="13" r="3.5"/></svg></button>
+          ${pal[col.id]?`<button class="cam-x" data-camx="${col.id}" title="Quitar foto"><svg viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></svg></button>`:''}
+        </div>`).join('');
+      el.querySelectorAll('.ccell').forEach(cell=>cell.onclick=(e)=>{
+        if(e.target.closest('[data-cam]') || e.target.closest('[data-camx]')) return;
+        const id=cell.dataset.id; const arr=c.colors[fam]=c.colors[fam]||[];
+        const i=arr.indexOf(id); if(i>=0)arr.splice(i,1); else arr.push(id);
+        if(!arr.length) delete c.colors[fam];
+        save(); cell.classList.toggle('on');
+      });
+      el.querySelectorAll('[data-cam]').forEach(b=>b.onclick=(e)=>{ e.stopPropagation(); palTarget=b.dataset.cam; palInput.click(); });
+      el.querySelectorAll('[data-camx]').forEach(b=>b.onclick=(e)=>{
+        e.stopPropagation();
+        if(cfg._pal){ delete cfg._pal[b.dataset.camx]; if(!Object.keys(cfg._pal).length) delete cfg._pal; }
+        save(); renderColorLists(); toast('Foto del color quitada');
+      });
+    });
+  }
+  document.querySelectorAll('.selall').forEach(b=>b.onclick=()=>{
+    const fam=b.dataset.all; const c=entCfg(cur); c.colors=c.colors||{};
+    const cur2=c.colors[fam]||[];
+    if(cur2.length===palette()[fam].length){ delete c.colors[fam]; } else { c.colors[fam]=palette()[fam].map(x=>x.id); }
+    save(); renderColorLists();
+  });
+
+  function addEntalle(){
+    const name = (prompt('Nombre del nuevo entalle (ej. Cargo, Wide leg):')||'').trim();
+    if(!name) return;
+    let key = name.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'') || 'entalle';
+    if(allEnt().some(e=>e.key===key)) key += '-' + Date.now().toString(36).slice(-3);
+    cfg._entalles = cfg._entalles || [];
+    const sig = SIG_OPTIONS[(ENT_BASE.length + cfg._entalles.length) % SIG_OPTIONS.length];
+    cfg._entalles.push({key:key, name:name, sig:sig});
+    cur = key; save(); renderTabs(); renderPanel();
+    toast('Entalle "'+name+'" agregado');
+  }
+  document.getElementById('resetEnt').onclick=()=>{
+    const e = allEnt().find(x=>x.key===cur); const nm = e ? e.name : cur;
+    if(e && e.custom){
+      if(confirm('¿Eliminar el entalle "'+nm+'" y toda su configuración?')){
+        cfg._entalles = (cfg._entalles||[]).filter(x=>x.key!==cur);
+        delete cfg[cur]; cur = ENT_BASE[0].key; save(); renderTabs(); renderPanel(); toast('Entalle eliminado');
+      }
+      return;
+    }
+    if(confirm('¿Reiniciar la configuración de '+nm+'?')){ delete cfg[cur]; save(); renderPanel(); toast('Entalle reiniciado'); }
+  };
+
+  // ===== editor de colores (renombrar / agregar / eliminar) =====
+  let cmFam = 'color';
+  const cmodal = document.getElementById('cmodal');
+  function openColorEditor(fam){
+    cmFam = fam; ensurePalMeta();
+    document.getElementById('cmTitle').textContent = 'Colores · ' + (fam==='color' ? 'Versión Color' : 'Versión Negra');
+    renderCmBody(); cmodal.hidden = false;
+  }
+  function closeColorEditor(){ cmodal.hidden = true; renderColorLists(); }
+  function renderCmBody(){
+    const list = cfg._palMeta[cmFam];
+    const body = document.getElementById('cmBody');
+    if(!list.length){ body.innerHTML = '<div class="cm-empty">No hay colores en esta familia.<br>Agrega uno abajo.</div>'; return; }
+    body.innerHTML = list.map((c,i)=>`
+      <div class="cm-row" data-i="${i}">
+        <input type="color" class="cm-hex" value="${/^#[0-9a-fA-F]{6}$/.test(c.hex)?c.hex:'#888888'}" title="Tono">
+        <input type="text" class="cm-name" value="${(c.name||'').replace(/"/g,'&quot;')}" placeholder="Nombre del color">
+        <button class="cm-del" title="Eliminar"><svg viewBox="0 0 24 24"><path d="M3 6h18M8 6V4h8v2M6 6l1 14h10l1-14"/></svg></button>
+      </div>`).join('');
+    body.querySelectorAll('.cm-row').forEach(row=>{
+      const i = +row.dataset.i;
+      row.querySelector('.cm-hex').oninput = (e)=>{ cfg._palMeta[cmFam][i].hex = e.target.value; save(); renderColorLists(); };
+      row.querySelector('.cm-name').oninput = (e)=>{ cfg._palMeta[cmFam][i].name = e.target.value; save(); renderColorLists(); };
+      row.querySelector('.cm-del').onclick = ()=> deleteColor(cmFam, i);
+    });
+  }
+  function deleteColor(fam, i){
+    const col = cfg._palMeta[fam][i]; if(!col) return;
+    if(!confirm('¿Eliminar el color "'+(col.name||'sin nombre')+'"? Se quita de todas las fichas.')) return;
+    const id = col.id;
+    cfg._palMeta[fam].splice(i,1);
+    if(cfg._pal && cfg._pal[id]){ delete cfg._pal[id]; if(!Object.keys(cfg._pal).length) delete cfg._pal; }
+    Object.keys(cfg).forEach(k=>{ if(k[0]==='_') return; const cc=cfg[k]; if(cc && cc.colors && cc.colors[fam]){ cc.colors[fam]=cc.colors[fam].filter(x=>x!==id); if(!cc.colors[fam].length) delete cc.colors[fam]; } });
+    save(); renderCmBody(); renderColorLists(); toast('Color eliminado');
+  }
+  function addColor(){
+    ensurePalMeta();
+    const id = 'c-' + Date.now().toString(36).slice(-5);
+    cfg._palMeta[cmFam].push({ id:id, name:'Nuevo color', hex: cmFam==='color' ? '#9aa0a6' : '#3a3a3d' });
+    save(); renderCmBody(); renderColorLists();
+    const rows = document.querySelectorAll('#cmBody .cm-row');
+    const last = rows[rows.length-1];
+    if(last){ const ni = last.querySelector('.cm-name'); ni.focus(); ni.select(); }
+  }
+  document.querySelectorAll('.editlist').forEach(b=> b.onclick = ()=> openColorEditor(b.dataset.edit));
+  document.getElementById('cmAdd').onclick = addColor;
+  document.getElementById('cmDone').onclick = closeColorEditor;
+  document.getElementById('cmClose').onclick = closeColorEditor;
+  cmodal.onclick = (e)=>{ if(e.target===cmodal) closeColorEditor(); };
+
+  function renderPanel(){ renderFirma(); renderMedia(); renderColorLists(); }
+
+  // ===== publicar (borrador -> publicado) =====
+  const PUB_KEY = 'element_fichas_published_v1';
+  const PUB_AT  = 'element_fichas_published_at';
+  function draftStr(){ return localStorage.getItem(CFG_KEY) || '{}'; }
+  function isDirty(){ return draftStr() !== (localStorage.getItem(PUB_KEY) || '\u0000'); }
+  function agoTxt(ts){
+    const s=Math.floor((Date.now()-ts)/1000);
+    if(s<60) return 'recién'; const m=Math.floor(s/60); if(m<60) return 'hace '+m+' min';
+    const h=Math.floor(m/60); if(h<24) return 'hace '+h+' h'; const d=Math.floor(h/24); return 'hace '+d+' d';
+  }
+  function updatePubState(){
+    const el=document.getElementById('pubState'), btn=document.getElementById('publishBtn'); if(!el||!btn) return;
+    const at=+(localStorage.getItem(PUB_AT)||0);
+    if(!localStorage.getItem(PUB_KEY)){ el.innerHTML='<i class="dot off"></i> Sin publicar'; btn.disabled=false; }
+    else if(isDirty()){ el.innerHTML='<i class="dot warn"></i> Cambios sin publicar'; btn.disabled=false; }
+    else { el.innerHTML='<i class="dot on"></i> Publicado'+(at?' · '+agoTxt(at):''); btn.disabled=true; }
+  }
+  function publish(){
+    try{
+      localStorage.setItem(PUB_KEY, draftStr());
+      localStorage.setItem(PUB_AT, String(Date.now()));
+      updatePubState(); toast('Publicado — visible en la tienda');
+    }catch(e){ toast('Memoria llena'); }
+  }
+  document.getElementById('publishBtn').onclick = publish;
+
+  renderTabs(); renderPanel(); updatePubState();
+
+  // ===== sesión =====
+  (function(){
+    const u = ElementAuth.user() || 'admin';
+    const n = document.getElementById('sessName'), a = document.getElementById('sessAv');
+    if(n) n.textContent = u; if(a) a.textContent = (u[0]||'A').toUpperCase();
+    const o = document.getElementById('sessOut');
+    if(o) o.onclick = ()=>{ if(confirm('¿Cerrar sesión?')) ElementAuth.logout(); };
+  })();
+</script>
+</body>
+</html>

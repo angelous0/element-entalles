@@ -1,0 +1,202 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Acceso · Panel Element Premium</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<script>
+  // Si ya hay sesión activa, salta directo al panel.
+  (function(){
+    try{
+      var s = JSON.parse(localStorage.getItem('element_admin_session_v1'));
+      if(s && s.exp && s.exp > Date.now()){
+        var q = new URLSearchParams(location.search);
+        location.replace(q.get('next') || 'panel.html');
+      }
+    }catch(e){}
+  })();
+</script>
+<style>
+  :root{
+    --bg:#0a0a0a;--bg-2:#111;--surface:#161616;--surface-2:#1c1c1c;
+    --line:#262626;--line-2:#333;--text:#f5f5f5;--muted:#8a8a8a;--muted-2:#5e5e5e;
+    --accent:#cbe83a;--accent-ink:#0a0a0a;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;min-height:100%;background:var(--bg);color:var(--text);font-family:"Archivo",system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+  button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit}
+  a{color:inherit}
+
+  .stage{position:relative;min-height:100vh;min-height:100dvh;display:flex;align-items:center;justify-content:center;padding:28px 20px;overflow:hidden}
+  /* glows + wordmark de fondo */
+  .stage::before{content:"";position:absolute;inset:0;pointer-events:none;
+    background:
+      radial-gradient(60% 50% at 80% 0%, rgba(203,232,58,0.10), transparent 60%),
+      radial-gradient(55% 55% at 8% 100%, rgba(203,232,58,0.05), transparent 70%);}
+  .bgmark{position:absolute;left:50%;top:46%;transform:translate(-50%,-50%);width:min(1500px,150vw);opacity:0.035;pointer-events:none;user-select:none;z-index:0}
+  .bgmark img{width:100%;display:block;filter:none}
+
+  .card{position:relative;z-index:2;width:100%;max-width:404px;background:var(--surface);border:1px solid var(--line);
+    border-radius:20px;padding:34px 30px 28px;box-shadow:0 30px 80px -30px rgba(0,0,0,0.8)}
+
+  .brand{display:flex;align-items:center;justify-content:space-between;margin-bottom:26px}
+  .brand .logo{height:26px;width:auto}
+  .brand .pill{font-family:"JetBrains Mono",monospace;font-size:9.5px;letter-spacing:0.2em;text-transform:uppercase;
+    color:var(--accent);border:1px solid var(--line-2);border-radius:99px;padding:6px 11px}
+
+  .head h1{font-family:"Archivo",sans-serif;font-weight:900;letter-spacing:-0.02em;text-transform:uppercase;
+    font-size:27px;line-height:0.98;margin:0}
+  .head p{color:var(--muted);font-size:13px;line-height:1.55;margin:9px 0 0}
+
+  form{margin-top:24px;display:flex;flex-direction:column;gap:15px}
+  .field{display:flex;flex-direction:column;gap:7px}
+  .field label{font-family:"JetBrains Mono",monospace;font-size:10px;letter-spacing:0.16em;text-transform:uppercase;color:var(--muted)}
+  .inp{position:relative;display:flex;align-items:center}
+  .inp input{width:100%;background:var(--bg-2);border:1px solid var(--line);border-radius:11px;color:var(--text);
+    font-family:"Archivo",sans-serif;font-size:15px;padding:13px 14px;transition:border-color .15s,box-shadow .15s}
+  .inp input::placeholder{color:var(--muted-2)}
+  .inp input:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px rgba(203,232,58,0.12)}
+  .inp .toggle{position:absolute;right:6px;width:38px;height:38px;border-radius:9px;display:flex;align-items:center;justify-content:center;color:var(--muted)}
+  .inp .toggle:hover{color:var(--accent)}
+  .inp .toggle svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:1.8}
+
+  .row{display:flex;align-items:center;justify-content:space-between;margin-top:-2px}
+  .remember{display:flex;align-items:center;gap:9px;cursor:pointer;font-size:12.5px;color:var(--muted);user-select:none}
+  .remember .box{width:18px;height:18px;border-radius:6px;border:1px solid var(--line-2);background:var(--bg-2);display:flex;align-items:center;justify-content:center;transition:all .15s}
+  .remember .box svg{width:12px;height:12px;stroke:var(--accent-ink);fill:none;stroke-width:3;opacity:0}
+  .remember.on .box{background:var(--accent);border-color:var(--accent)}
+  .remember.on .box svg{opacity:1}
+  .row .help{font-family:"JetBrains Mono",monospace;font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted-2)}
+
+  .err{display:none;align-items:center;gap:8px;background:rgba(224,85,85,0.08);border:1px solid rgba(224,85,85,0.4);
+    color:#ff8b8b;border-radius:10px;padding:10px 12px;font-size:12.5px;line-height:1.4}
+  .err.show{display:flex}
+  .err svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2;flex-shrink:0}
+
+  .submit{display:flex;align-items:center;justify-content:center;gap:9px;background:var(--accent);color:var(--accent-ink);
+    border-radius:11px;padding:14px;font-family:"JetBrains Mono",monospace;font-size:12px;letter-spacing:0.14em;
+    text-transform:uppercase;font-weight:700;transition:transform .12s,filter .15s;margin-top:3px}
+  .submit:hover{transform:translateY(-2px)}
+  .submit:active{transform:translateY(0)}
+  .submit svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2.2}
+
+  .demo{margin-top:18px;border-top:1px solid var(--line);padding-top:16px;display:flex;align-items:flex-start;gap:10px}
+  .demo svg{width:15px;height:15px;stroke:var(--accent);fill:none;stroke-width:1.7;flex-shrink:0;margin-top:1px}
+  .demo .t{font-size:11.5px;line-height:1.55;color:var(--muted-2)}
+  .demo .t b{color:var(--muted);font-weight:600}
+  .demo code{font-family:"JetBrains Mono",monospace;color:var(--accent);background:var(--bg-2);border:1px solid var(--line);
+    border-radius:5px;padding:1px 6px;font-size:11px}
+  .demo .fill{margin-top:7px;font-family:"JetBrains Mono",monospace;font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted)}
+  .demo .fill:hover{color:var(--accent)}
+
+  .back{position:absolute;top:22px;left:22px;z-index:3;display:flex;align-items:center;gap:8px;
+    font-family:"JetBrains Mono",monospace;font-size:10px;letter-spacing:0.14em;text-transform:uppercase;color:var(--muted)}
+  .back:hover{color:var(--accent)}
+  .back svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2}
+</style>
+</head>
+<body>
+<a class="back" href="index.html"><svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg> Ver tienda</a>
+
+<div class="stage">
+  <div class="bgmark"><img src="assets/logo-element.png" alt=""/></div>
+
+  <div class="card">
+    <div class="brand">
+      <img class="logo" src="assets/logo-element.png" alt="Element Premium"/>
+      <span class="pill">Panel</span>
+    </div>
+
+    <div class="head">
+      <h1>Entrar a editar</h1>
+      <p>Acceso al panel para colgar y renovar fotos, y gestionar los colores y entalles del catálogo.</p>
+    </div>
+
+    <form id="form" novalidate>
+      <div class="field">
+        <label for="user">Usuario</label>
+        <div class="inp">
+          <input id="user" type="text" autocomplete="username" placeholder="tu usuario" autocapitalize="off" spellcheck="false"/>
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="pass">Clave</label>
+        <div class="inp">
+          <input id="pass" type="password" autocomplete="current-password" placeholder="••••••••"/>
+          <button type="button" class="toggle" id="toggle" title="Mostrar/ocultar">
+            <svg id="eye" viewBox="0 0 24 24"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <div class="row">
+        <button type="button" class="remember on" id="remember">
+          <span class="box"><svg viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg></span>
+          Mantener sesión
+        </button>
+        <span class="help">12 h</span>
+      </div>
+
+      <div class="err" id="err">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16h.01"/></svg>
+        <span id="errMsg">Usuario o clave incorrectos.</span>
+      </div>
+
+      <button type="submit" class="submit">
+        <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        Entrar al panel
+      </button>
+    </form>
+
+    <div class="demo">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 8h.01M11 12h1v4h1"/></svg>
+      <div class="t">
+        <b>Acceso de demostración.</b> Usuario <code>admin</code> · clave <code>element</code>. Al conectar el almacenamiento real se cambian por tus credenciales.
+        <div><button type="button" class="fill" id="fill">Rellenar demo →</button></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="admin-auth.js"></script>
+<script>
+  const $ = s => document.querySelector(s);
+  const userEl = $('#user'), passEl = $('#pass'), err = $('#err'), errMsg = $('#errMsg');
+
+  // mostrar / ocultar clave
+  $('#toggle').onclick = ()=>{
+    const showing = passEl.type === 'text';
+    passEl.type = showing ? 'password' : 'text';
+    $('#eye').innerHTML = showing
+      ? '<path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/>'
+      : '<path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/><path d="M3 3l18 18" stroke-width="2.2"/>';
+    passEl.focus();
+  };
+
+  const remember = $('#remember');
+  remember.onclick = ()=> remember.classList.toggle('on');
+
+  $('#fill').onclick = ()=>{ userEl.value='admin'; passEl.value='element'; err.classList.remove('show'); passEl.focus(); };
+
+  function fail(msg){ errMsg.textContent = msg; err.classList.add('show'); }
+
+  $('#form').addEventListener('submit', (e)=>{
+    e.preventDefault();
+    const u = userEl.value.trim(), p = passEl.value;
+    if(!u || !p){ fail('Completa usuario y clave.'); return; }
+    if(!ElementAuth.check(u, p)){ fail('Usuario o clave incorrectos.'); passEl.select(); return; }
+    ElementAuth.login(u);
+    const q = new URLSearchParams(location.search);
+    location.href = q.get('next') || ElementAuth.hubUrl;
+  });
+
+  userEl.addEventListener('input', ()=> err.classList.remove('show'));
+  passEl.addEventListener('input', ()=> err.classList.remove('show'));
+  userEl.focus();
+</script>
+</body>
+</html>

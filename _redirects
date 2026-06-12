@@ -1,0 +1,19 @@
+# URLs limpias para Cloudflare Pages / Netlify.
+# El codigo 200 = REWRITE (la URL en el navegador no cambia; se sirve el archivo destino).
+# La ficha detecta el entalle desde el ultimo segmento de la ruta, asi que /baggy renderiza Baggy, etc.
+
+/catalogo        /catalogo.html        200
+
+/baggy           /ficha.html           200
+/oversize        /ficha.html           200
+/flare           /ficha.html           200
+/mom             /ficha.html           200
+/regular         /ficha.html           200
+/semipitillo     /ficha.html           200
+/pitillo         /ficha.html           200
+/skinny          /ficha.html           200
+
+# Panel (tiene su propio login). Protegerlo a nivel host es opcional pero recomendado.
+/admin           /login.html           200
+/login           /login.html           200
+/panel           /panel.html           200

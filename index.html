@@ -1,0 +1,815 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Element Premium · Selección de entalles</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Archivo:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="preload" as="image" href="assets/fits/skinny-360/01.png" fetchpriority="high">
+<style>
+  :root{
+    --bg:#0a0a0a;
+    --bg-2:#111111;
+    --surface:#161616;
+    --surface-2:#1c1c1c;
+    --line:#262626;
+    --line-2:#333333;
+    --text:#f5f5f5;
+    --muted:#8a8a8a;
+    --muted-2:#5e5e5e;
+    --accent:#cbe83a;
+    --accent-ink:#0a0a0a;
+    --sig:#cbe83a;
+    --maxw:1320px;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;background:var(--bg);color:var(--text);font-family:"Archivo",system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+  body{overflow-x:hidden;min-height:100vh;display:flex;flex-direction:column}
+  img{max-width:100%;display:block}
+  a{color:inherit;text-decoration:none}
+  button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit}
+  .mono{font-family:"JetBrains Mono",ui-monospace,monospace}
+
+  /* Header */
+  header.top{
+    position:sticky;top:0;z-index:50;background:var(--accent);color:var(--accent-ink);
+  }
+  .top-inner{display:flex;align-items:center;justify-content:space-between;padding:14px 20px;max-width:var(--maxw);margin:0 auto}
+  .brand img{height:24px;width:auto;filter:brightness(0)}
+  .top-mid{font-family:"JetBrains Mono",monospace;font-size:11px;letter-spacing:0.2em;text-transform:uppercase;display:none}
+  @media (min-width:760px){.top-mid{display:block}}
+  .top-right{font-family:"JetBrains Mono",monospace;font-size:11px;letter-spacing:0.16em;text-transform:uppercase;display:flex;gap:18px;align-items:center}
+  .top-right a{display:flex;align-items:center;gap:7px}
+  .top-right svg{width:15px;height:15px;stroke:currentColor;fill:none;stroke-width:1.8}
+
+  /* Page title strip */
+  .intro{max-width:var(--maxw);margin:0 auto;width:100%;padding:30px 20px 6px;display:flex;align-items:flex-end;justify-content:space-between;gap:20px;flex-wrap:wrap}
+  @media (max-width:760px){
+    .intro{padding:14px 20px 2px}
+    .intro p{display:none}
+    .intro h1{font-size:24px}
+    .intro .eyebrow{margin-bottom:5px}
+  }
+  .intro h1{
+    font-family:"Archivo Black",sans-serif;text-transform:uppercase;letter-spacing:-0.02em;line-height:0.92;
+    font-size:clamp(30px,5.5vw,60px);margin:0;
+  }
+  .intro h1 em{font-style:normal;color:var(--accent)}
+  .intro .eyebrow{font-family:"JetBrains Mono",monospace;font-size:11px;letter-spacing:0.2em;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
+  .intro p{color:var(--muted);font-size:14px;line-height:1.55;max-width:42ch;margin:0}
+
+  /* Stage */
+  .selector{flex:1;display:flex;flex-direction:column;max-width:var(--maxw);margin:0 auto;width:100%;padding:0 20px}
+  .stage{
+    position:relative;flex:1;display:flex;flex-direction:column;gap:16px;
+    padding:10px 0;
+  }
+  @media (min-width:980px){
+    .stage{flex-direction:row;align-items:center;gap:36px}
+  }
+  .jean-area{
+    position:relative;flex:1;display:flex;align-items:center;justify-content:center;
+    min-height:44vh;
+  }
+  .jean-area::before{
+    content:"";position:absolute;inset:0;pointer-events:none;
+    background:radial-gradient(46% 60% at 50% 48%, color-mix(in srgb, var(--sig) 26%, transparent), transparent 70%);
+    transition:background .5s;
+  }
+  /* adjacent ghosts */
+  .ghost{position:absolute;top:50%;transform:translateY(-50%);opacity:0.18;filter:grayscale(0.4);pointer-events:none;height:200px;display:flex;align-items:center}
+  .ghost svg{height:100%;width:auto}
+  .ghost.prev{left:-16%}
+  .ghost.next{right:-16%}
+  @media (min-width:980px){
+    .ghost{height:230px}
+    .ghost.prev{left:-1%}
+    .ghost.next{right:-1%}
+  }
+
+  .jean-main{position:relative;z-index:2;height:min(440px,52vh);display:flex;align-items:center;justify-content:center;opacity:1;transition:transform .35s ease, opacity .35s ease;filter:drop-shadow(0 24px 40px rgba(0,0,0,0.55))}
+  .jean-main svg{height:100%;width:auto;max-width:100%}
+  .jean-main video.jean-video{height:100%;width:auto;max-width:100%;object-fit:contain;border-radius:16px;display:block}
+  .jean-main.swap{opacity:0;transform:scale(0.97)}
+
+  /* ===== Visor 360° (arrastra para girar) ===== */
+  .jean-spin{position:relative;flex:0 0 auto;height:min(440px,52vh);
+    width:calc(min(440px,52vh) * 466 / 700);aspect-ratio:466/700;max-width:100%;
+    touch-action:none;cursor:grab;-webkit-user-select:none;user-select:none}
+  .jean-spin.dragging{cursor:grabbing}
+  .jean-spin img{position:absolute;inset:0;height:100%;width:100%;object-fit:contain;
+    opacity:0;pointer-events:none;-webkit-user-drag:none;user-select:none}
+  .jean-spin img.on{opacity:1}
+  .spin-hint{position:absolute;left:50%;bottom:-2px;transform:translateX(-50%);
+    display:flex;align-items:center;gap:7px;padding:6px 12px;border-radius:999px;
+    background:rgba(12,16,22,0.72);backdrop-filter:blur(6px);
+    border:1px solid rgba(255,255,255,0.12);
+    color:#e9ecf0;font-size:11px;letter-spacing:.14em;text-transform:uppercase;
+    white-space:nowrap;pointer-events:none;transition:opacity .4s ease;z-index:4}
+  .spin-hint svg{width:14px;height:14px;fill:none;stroke:var(--sig,#d9a06c);stroke-width:2;
+    stroke-linecap:round;stroke-linejoin:round;animation:spinHint 2.4s linear infinite}
+  .jean-spin.interacted .spin-hint{opacity:0}
+  @keyframes spinHint{to{transform:rotate(360deg)}}
+  @media (prefers-reduced-motion: reduce){ .spin-hint svg{animation:none} }
+
+  /* arrows */
+  .nav-arrow{
+    position:absolute;z-index:5;top:50%;transform:translateY(-50%);
+    width:44px;height:44px;border-radius:50%;border:1px solid var(--line-2);background:rgba(20,20,20,0.7);
+    backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;color:var(--text);transition:all .2s;
+  }
+  .nav-arrow:hover{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+  .nav-arrow svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:2}
+  .nav-arrow.prev{left:-4px}
+  .nav-arrow.next{right:-4px}
+  @media (min-width:980px){.nav-arrow{width:48px;height:48px}}
+
+  /* Info card */
+  .info-card{
+    position:relative;z-index:4;width:100%;max-width:560px;margin:0 auto;
+    padding:4px 2px 0;text-align:center;
+  }
+  @media (min-width:980px){
+    .info-card{flex:0 0 360px;width:360px;max-width:none;margin:0;text-align:left;
+      background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:26px}
+  }
+  .info-card .ic-eyebrow{font-family:"JetBrains Mono",monospace;font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--sig);transition:color .4s}
+  .info-card h2{font-family:"Archivo Black",sans-serif;text-transform:uppercase;letter-spacing:-0.02em;font-size:clamp(40px,11vw,56px);line-height:0.92;margin:8px 0 0}
+  @media (min-width:980px){.info-card h2{font-size:34px}}
+  .info-card .tagline{font-family:"JetBrains Mono",monospace;font-size:11px;letter-spacing:0.12em;color:var(--muted);margin-top:8px;text-transform:uppercase}
+  .info-card p{color:var(--muted);font-size:14px;line-height:1.6;margin:14px auto 0;max-width:46ch}
+  @media (min-width:980px){.info-card p{margin-left:0;margin-right:0}}
+  .info-tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px;justify-content:center}
+  @media (min-width:980px){.info-tags{justify-content:flex-start}}
+  .info-tags span{
+    font-family:"JetBrains Mono",monospace;font-size:10px;letter-spacing:0.14em;text-transform:uppercase;color:var(--text);
+    border:1px solid var(--line-2);border-radius:99px;padding:7px 12px;background:var(--bg-2);
+  }
+  .ver-ficha{
+    margin-top:22px;display:flex;align-items:center;justify-content:center;gap:10px;width:100%;max-width:340px;margin-left:auto;margin-right:auto;
+    background:var(--accent);color:var(--accent-ink);border-radius:99px;padding:15px 22px;
+    font-family:"JetBrains Mono",monospace;font-size:12px;letter-spacing:0.16em;text-transform:uppercase;font-weight:700;
+    transition:transform .2s, background .2s;
+  }
+  @media (min-width:980px){.ver-ficha{max-width:none}}
+  .ver-ficha:hover{transform:translateY(-2px)}
+  .ver-ficha svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2.2}
+
+  /* Scale */
+  .scale{padding:22px 0 30px}
+  .scale-head{display:flex;justify-content:space-between;font-family:"JetBrains Mono",monospace;font-size:11px;letter-spacing:0.2em;text-transform:uppercase;color:var(--muted);margin-bottom:8px}
+  .scale-line{height:1px;background:linear-gradient(90deg,var(--line-2),var(--line),var(--line-2));position:relative;margin-bottom:6px}
+  .thumbs{
+    display:grid;grid-auto-flow:column;grid-auto-columns:1fr;gap:6px;
+  }
+  .thumb-btn{
+    display:flex;flex-direction:column;align-items:center;gap:8px;padding:10px 4px 6px;border-radius:12px;
+    transition:background .2s;position:relative;
+  }
+  .thumb-btn:hover{background:var(--surface)}
+  .thumb-btn svg{width:100%;height:auto;max-width:46px;opacity:0.55;transition:opacity .2s, transform .2s}
+  .thumb-btn .thumb-photo{width:auto;height:62px;max-width:54px;object-fit:contain;opacity:0.55;transition:opacity .2s, transform .2s;margin-bottom:-4px}
+  .thumb-btn.active .thumb-photo{opacity:1;transform:translateY(-2px)}
+  .thumb-btn .tname{font-family:"JetBrains Mono",monospace;font-size:9px;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);transition:color .2s;text-align:center;line-height:1.2}
+  .thumb-btn .tname .tsub{display:block;font-size:8px;letter-spacing:0.1em;opacity:0.7}
+  .thumb-btn.active svg{opacity:1;transform:translateY(-2px)}
+  .thumb-btn.active .tname{color:var(--text)}
+  .thumb-btn.active::after{
+    content:"";position:absolute;top:-7px;left:50%;transform:translateX(-50%);
+    width:6px;height:6px;border-radius:50%;background:var(--sig);transition:background .4s;
+  }
+  @media (max-width:760px){
+    .thumbs{display:flex;overflow-x:auto;gap:6px;scrollbar-width:none;-webkit-overflow-scrolling:touch;padding-bottom:4px}
+    .thumbs::-webkit-scrollbar{display:none}
+    .thumb-btn{flex:0 0 78px}
+    .thumb-btn svg{max-width:40px}
+  }
+
+  /* scroll cue */
+  .scroll-cue{display:flex;align-items:center;justify-content:center;gap:9px;padding:4px 0 22px;font-family:"JetBrains Mono",monospace;font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:var(--muted-2)}
+  .scroll-cue svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:1.8;animation:bob 1.8s ease-in-out infinite}
+  @keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(4px)}}
+
+  /* ===== Gallery (estilo selección) ===== */
+  .gallery{border-top:1px solid var(--line);background:var(--bg-2);padding-bottom:64px}
+  .gallery-bar{max-width:var(--maxw);margin:0 auto;width:100%;display:flex;align-items:flex-end;justify-content:space-between;gap:16px;padding:26px 20px 18px;flex-wrap:wrap}
+  .gb-left{display:flex;align-items:baseline;gap:14px;min-width:0}
+  .gb-name{font-family:"Archivo Black",sans-serif;text-transform:uppercase;letter-spacing:-0.01em;font-size:clamp(24px,4.4vw,38px);line-height:1;display:inline-flex;align-items:center}
+  .gb-name .gb-dot{width:11px;height:11px;border-radius:50%;background:var(--sig);margin-left:8px;transition:background .4s}
+  .gb-count{font-family:"JetBrains Mono",monospace;font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:var(--muted);white-space:nowrap}
+  .gb-right{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+  .gb-tabs{display:flex;gap:4px;background:var(--surface);border:1px solid var(--line);border-radius:99px;padding:4px}
+  .gb-tab{font-family:"JetBrains Mono",monospace;font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted);padding:9px 15px;border-radius:99px;transition:all .15s}
+  .gb-tab.active{background:var(--text);color:var(--bg)}
+  .gb-cat{display:inline-flex;align-items:center;gap:8px;font-family:"JetBrains Mono",monospace;font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:var(--text);border:1px solid var(--line-2);border-radius:99px;padding:11px 16px;transition:all .2s;white-space:nowrap}
+  .gb-cat:hover{border-color:var(--accent);color:var(--accent)}
+  .gb-cat svg{width:15px;height:15px;stroke:currentColor;fill:none;stroke-width:2}
+
+  .gallery-grid{max-width:var(--maxw);margin:0 auto;width:100%;display:grid;grid-template-columns:repeat(2,1fr);gap:7px;padding:0 20px}
+  @media (min-width:680px){.gallery-grid{grid-template-columns:repeat(3,1fr);gap:9px}}
+  @media (min-width:1000px){.gallery-grid{grid-template-columns:repeat(4,1fr)}}
+  .g-card{position:relative;overflow:hidden;border-radius:13px;background:var(--surface);aspect-ratio:3/4.3;display:block;border:1px solid var(--line)}
+  .g-card img{width:100%;height:100%;object-fit:cover;transition:transform .55s ease}
+  .g-card:hover img{transform:scale(1.045)}
+  .g-grad{position:absolute;inset:0;background:linear-gradient(to top,rgba(7,7,7,0.82) 0%,rgba(7,7,7,0.12) 36%,transparent 58%);pointer-events:none}
+  .g-meta{position:absolute;left:13px;bottom:12px;right:13px;display:flex;align-items:center;gap:8px;z-index:2}
+  .g-meta .sw{width:13px;height:13px;border-radius:50%;border:1px solid rgba(255,255,255,0.45);flex-shrink:0}
+  .g-meta .nm{font-family:"JetBrains Mono",monospace;font-size:11px;letter-spacing:0.07em;text-transform:uppercase;color:#fff;line-height:1.1}
+  .g-view{position:absolute;top:11px;right:11px;width:31px;height:31px;border-radius:50%;background:rgba(10,10,10,0.5);backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;opacity:0;transform:scale(.85);transition:all .2s;z-index:2}
+  .g-card:hover .g-view{opacity:1;transform:scale(1)}
+  .g-view svg{width:15px;height:15px;stroke:#fff;fill:none;stroke-width:2}
+  .gallery-foot{max-width:var(--maxw);margin:24px auto 0;width:100%;padding:0 20px;display:flex;justify-content:center}
+  .see-all{display:inline-flex;align-items:center;gap:11px;background:var(--accent);color:var(--accent-ink);border-radius:99px;padding:16px 28px;font-family:"JetBrains Mono",monospace;font-size:12px;letter-spacing:0.16em;text-transform:uppercase;font-weight:700;transition:transform .2s}
+  .see-all:hover{transform:translateY(-2px)}
+  .see-all svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2.2}
+
+  /* reduce motion */
+  @media (prefers-reduced-motion: reduce){
+    .jean-main, .ghost, .info-card .ic-eyebrow, .scroll-cue svg{transition:none;animation:none}
+  }
+  /* ===== Intro autoplay (móvil) + layout estilo galería ===== */
+  .intro-prompt{
+    position:absolute;z-index:8;left:50%;top:50%;transform:translate(-50%,-50%);
+    display:none;align-items:center;gap:10px;
+    background:rgba(10,10,10,0.82);backdrop-filter:blur(6px);color:#fff;
+    border:1px solid rgba(255,255,255,0.18);border-radius:99px;padding:15px 26px;
+    font-family:"JetBrains Mono",monospace;font-size:12px;letter-spacing:0.18em;text-transform:uppercase;font-weight:700;
+    box-shadow:0 14px 40px rgba(0,0,0,0.5);animation:promptPulse 1.8s ease-in-out infinite;cursor:pointer;white-space:nowrap;
+  }
+  .intro-prompt svg{width:16px;height:16px;stroke:var(--accent);fill:none;stroke-width:2}
+  @keyframes promptPulse{0%,100%{transform:translate(-50%,-50%) scale(1)}50%{transform:translate(-50%,-50%) scale(1.05)}}
+  body.intro-mode .intro-prompt{display:flex}
+  body.intro-mode .nav-arrow{opacity:0;pointer-events:none}
+  body.intro-mode .jean-area{cursor:pointer}
+  /* progress dots durante intro (móvil) */
+  .intro-dots{display:none;position:absolute;z-index:8;left:50%;bottom:6px;transform:translateX(-50%);gap:6px}
+  body.intro-mode .intro-dots{display:flex}
+  .intro-dots i{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,0.25);transition:background .3s,width .3s}
+  .intro-dots i.on{background:var(--sig);width:18px;border-radius:99px}
+
+  /* CTA exclusivo de móvil (debajo de las miniaturas) */
+  .mobile-cta{display:none}
+
+  @media (max-width:760px){
+    /* foto protagonista: quitar título y fantasmas */
+    .intro{display:none}
+    .ghost{display:none}
+    .scroll-cue{display:none}
+    .selector{padding:0 16px}
+    .stage{gap:6px;padding:4px 0}
+    .jean-area{min-height:0}
+    .jean-main{height:min(46vh,420px)}
+    .jean-spin{height:min(46vh,420px);width:calc(min(46vh,420px) * 466 / 700)}
+    .jean-main video.jean-video{height:100%}
+    /* tarjeta info compacta: solo nombre + tagline */
+    .info-card{padding:2px 2px 0}
+    .info-card .ic-eyebrow{font-size:11px;letter-spacing:0.22em}
+    .info-card h2{font-size:clamp(34px,12vw,52px);margin-top:4px}
+    .info-card .tagline{margin-top:6px}
+    .info-card p, .info-card .info-tags, .info-card .ver-ficha{display:none}
+    /* escala más pegada */
+    .scale{padding:14px 0 8px}
+    /* CTA móvil visible */
+    .mobile-cta{
+      display:flex;align-items:center;justify-content:center;gap:10px;width:100%;
+      background:var(--accent);color:var(--accent-ink);border-radius:99px;padding:15px 22px;margin:6px 0 18px;
+      font-family:"JetBrains Mono",monospace;font-size:12px;letter-spacing:0.14em;text-transform:uppercase;font-weight:700;
+    }
+    .mobile-cta svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2.2}
+    /* durante intro: solo ocultar el CTA (el nombre cicla como video) */
+    body.intro-mode .mobile-cta{visibility:hidden}
+  }
+</style>
+</head>
+<body>
+
+<template id="__bundler_thumbnail">
+  <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+    <rect width="200" height="200" fill="#0a0a0a"/>
+    <rect x="34" y="32" width="132" height="26" rx="5" fill="#cbe83a"/>
+    <text x="100" y="50" font-family="Archivo Black, sans-serif" font-size="13" fill="#0a0a0a" text-anchor="middle" font-weight="900" letter-spacing="1">ELEMENT</text>
+    <g stroke="#cbe83a" stroke-width="3" fill="none">
+      <path d="M78 78 L74 150 L92 150 L100 96 L108 150 L126 150 L122 78 Z"/>
+    </g>
+    <text x="100" y="178" font-family="Archivo Black, sans-serif" font-size="13" fill="#f5f5f5" text-anchor="middle" font-weight="900">ENTALLES</text>
+  </svg>
+</template>
+
+<header class="top">
+  <div class="top-inner">
+    <a class="brand" href="#"><img src="assets/logo-element.png" alt="Element Premium" /></a>
+    <span class="top-mid">Selección de entalles · Denim Premium 26</span>
+    <div class="top-right">
+      <a href="https://www.instagram.com/elementpremium.pe" target="_blank" rel="noopener" aria-label="Instagram">
+        <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="0.6" fill="currentColor"/></svg>
+      </a>
+      <a href="https://www.tiktok.com/@element_premium" target="_blank" rel="noopener" aria-label="TikTok">
+        <svg viewBox="0 0 24 24"><path d="M14 4v10.5a3.5 3.5 0 1 1-3.5-3.5"/><path d="M14 4c0 3 2 5 5 5"/></svg>
+      </a>
+    </div>
+  </div>
+</header>
+
+<div class="intro">
+  <div>
+    <div class="eyebrow">Encuentra tu corte</div>
+    <h1>Todos los<br/><em>entalles</em></h1>
+  </div>
+  <p>Del más ajustado al más holgado. Desliza por la escala o toca un modelo para conocerlo. Cada entalle, su esencia.</p>
+</div>
+
+<main class="selector">
+  <div class="stage" id="stage">
+    <div class="jean-area">
+      <button class="nav-arrow prev" id="prev" aria-label="Anterior">
+        <svg viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6"/></svg>
+      </button>
+
+      <div class="ghost prev" id="ghostPrev"></div>
+      <div class="jean-main" id="jeanMain"></div>
+      <div class="ghost next" id="ghostNext"></div>
+
+      <button class="intro-prompt" id="introPrompt" aria-label="Toca para empezar">
+        <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+        Toca para empezar
+      </button>
+      <div class="intro-dots" id="introDots"></div>
+
+      <button class="nav-arrow next" id="next" aria-label="Siguiente">
+        <svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg>
+      </button>
+    </div>
+
+    <aside class="info-card" id="infoCard">
+      <div class="ic-eyebrow" id="icEyebrow">Entalle 01 / 08</div>
+      <h2 id="icName">Skinny</h2>
+      <div class="tagline" id="icTagline">Ceñido total</div>
+      <p id="icDesc">—</p>
+      <div class="info-tags" id="icTags"></div>
+      <a class="ver-ficha" id="verFicha" href="#">
+        Ver ficha
+        <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </a>
+    </aside>
+  </div>
+
+  <div class="scale">
+    <div class="scale-head"><span>Ajustado</span><span>Holgado</span></div>
+    <div class="scale-line"></div>
+    <div class="thumbs" id="thumbs"></div>
+  </div>
+
+  <a class="mobile-cta" id="mobileCta" href="#">
+    Ver ficha
+    <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+  </a>
+
+  <div class="scroll-cue">
+    Mira los colores
+    <svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+  </div>
+</main>
+
+<section class="gallery" id="gallery">
+  <div class="gallery-bar">
+    <div class="gb-left">
+      <span class="gb-count" id="gbCount">12 tonos</span>
+    </div>
+    <div class="gb-right">
+      <div class="gb-tabs" id="gbTabs">
+        <button class="gb-tab active" data-fam="color">Versión Color</button>
+        <button class="gb-tab" data-fam="negra">Versión Negra</button>
+      </div>
+      <a class="gb-cat" id="gbCat" href="catalogo.html">Catálogo
+        <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </a>
+    </div>
+  </div>
+  <div class="gallery-grid" id="galleryGrid"></div>
+  <div class="gallery-foot">
+    <a class="see-all" id="seeAll" href="catalogo.html">Ver el catálogo completo
+      <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+    </a>
+  </div>
+</section>
+
+<script>
+  // ===== Resolutor de assets (incrusta data-URIs cuando existen, p.ej. en el archivo standalone) =====
+  function A(p){ return (window.__ASSETS && window.__ASSETS[p]) || p; }
+  (function(){
+    function fix(node){
+      if (node.nodeType !== 1) return;
+      const imgs = node.matches && node.matches('img[src^="assets/"]') ? [node] : [];
+      if (node.querySelectorAll) imgs.push(...node.querySelectorAll('img[src^="assets/"]'));
+      imgs.forEach(img => { const r = A(img.getAttribute('src')); if (r && r !== img.getAttribute('src')) img.src = r; });
+    }
+    const obs = new MutationObserver(muts => muts.forEach(m => m.addedNodes.forEach(fix)));
+    obs.observe(document.documentElement, { childList:true, subtree:true });
+    document.addEventListener('DOMContentLoaded', () => fix(document.body));
+    window.__fixAssets = fix;
+  })();
+
+  // Tight → Loose order
+  const FITS = [
+    { key:'skinny',      name:'Skinny',      tagline:'Ceñido total',        sig:'#ff5470',
+      spin:['assets/fits/skinny-360/01.png','assets/fits/skinny-360/02.png','assets/fits/skinny-360/03.png','assets/fits/skinny-360/04.png','assets/fits/skinny-360/05.png','assets/fits/skinny-360/06.png','assets/fits/skinny-360/07.png','assets/fits/skinny-360/08.png','assets/fits/skinny-360/09.png'],
+      thumb:'assets/fits/skinny-360/01.png',
+      desc:'Ceñido de cadera a tobillo. Segunda piel, máxima silueta y un look afilado sin concesiones.',
+      tags:['Ceñido','Tiro medio','Stretch'],
+      w:{waist:30, hip:34, knee:17, hem:14, inner:4} },
+    { key:'pitillo',     name:'Pitillo',     tagline:'Afilado y limpio',     sig:'#ff7a59',
+      spin:['assets/fits/pitillo-360/01.png','assets/fits/pitillo-360/02.png','assets/fits/pitillo-360/03.png','assets/fits/pitillo-360/04.png','assets/fits/pitillo-360/05.png','assets/fits/pitillo-360/06.png','assets/fits/pitillo-360/07.png','assets/fits/pitillo-360/08.png','assets/fits/pitillo-360/09.png','assets/fits/pitillo-360/10.png','assets/fits/pitillo-360/11.png'],
+      thumb:'assets/fits/pitillo-360/01.png',
+      desc:'Ajustado y afilado de cadera a tobillo. Líneas limpias y silueta marcada para un look pulido.',
+      tags:['Ajustado','Silueta marcada','Versátil'],
+      w:{waist:31, hip:35, knee:19, hem:16, inner:4} },
+    { key:'semipitillo', name:'Semipitillo', tagline:'Ajustado con aire',    sig:'#b88cf0',
+      spin:['assets/fits/semipitillo-360/01.png','assets/fits/semipitillo-360/02.png','assets/fits/semipitillo-360/03.png','assets/fits/semipitillo-360/04.png','assets/fits/semipitillo-360/05.png','assets/fits/semipitillo-360/06.png','assets/fits/semipitillo-360/07.png','assets/fits/semipitillo-360/08.png','assets/fits/semipitillo-360/09.png','assets/fits/semipitillo-360/10.png','assets/fits/semipitillo-360/11.png','assets/fits/semipitillo-360/12.png'],
+      thumb:'assets/fits/semipitillo-360/01.png',
+      desc:'Ajustado pero con aire al tobillo. El equilibrio entre lo cómodo del recto y lo afilado del pitillo.',
+      tags:['Slim','Tobillo limpio','Versátil'],
+      w:{waist:32, hip:36, knee:22, hem:19, inner:4} },
+    { key:'regular',     name:'Regular',     tagline:'Recto y atemporal',    sig:'#5b8cf5',
+      spin:['assets/fits/regular-360/01.png','assets/fits/regular-360/02.png','assets/fits/regular-360/03.png','assets/fits/regular-360/04.png','assets/fits/regular-360/05.png','assets/fits/regular-360/06.png','assets/fits/regular-360/07.png','assets/fits/regular-360/08.png','assets/fits/regular-360/09.png','assets/fits/regular-360/10.png','assets/fits/regular-360/11.png','assets/fits/regular-360/12.png'],
+      thumb:'assets/fits/regular-360/01.png',
+      desc:'Recto, parejo y atemporal. Ni ajustado ni holgado: el corte equilibrado que nunca falla.',
+      tags:['Recto','Equilibrado','Clásico'],
+      w:{waist:33, hip:38, knee:28, hem:25, inner:4} },
+    { key:'mom',         name:'Mom',         tagline:'Tiro alto noventero',  sig:'#5bc0a8',
+      spin:['assets/fits/mom-360/01.png','assets/fits/mom-360/02.png','assets/fits/mom-360/03.png','assets/fits/mom-360/04.png','assets/fits/mom-360/05.png','assets/fits/mom-360/06.png','assets/fits/mom-360/07.png','assets/fits/mom-360/08.png','assets/fits/mom-360/09.png','assets/fits/mom-360/10.png','assets/fits/mom-360/11.png','assets/fits/mom-360/12.png'],
+      thumb:'assets/fits/mom-cut.png',
+      desc:'Tiro alto, holgado en la cadera y ligeramente entallado al tobillo. El clásico noventero, cómodo y favorecedor.',
+      tags:['Tiro alto','Holgado','Favorecedor'],
+      w:{waist:32, hip:41, knee:26, hem:21, inner:5} },
+    { key:'flare',       name:'Flare',       tagline:'Slim',                 sig:'#e85d9b',
+      spin:['assets/fits/flare-360/01.png','assets/fits/flare-360/02.png','assets/fits/flare-360/03.png','assets/fits/flare-360/04.png','assets/fits/flare-360/05.png','assets/fits/flare-360/06.png','assets/fits/flare-360/07.png','assets/fits/flare-360/08.png'],
+      thumb:'assets/fits/flare-cut.png',
+      desc:'Ajustado arriba, abierto abajo. La campana que estiliza la pierna y le da movimiento retro al outfit.',
+      tags:['Campana','Tiro medio','Estiliza'],
+      w:{waist:32, hip:36, knee:21, hem:33, inner:5} },
+    { key:'flare-relax', name:'Flare',       tagline:'Relax',                sig:'#c95ba0',
+      spin:['assets/fits/flare-relax-360/01.png','assets/fits/flare-relax-360/02.png','assets/fits/flare-relax-360/03.png','assets/fits/flare-relax-360/04.png','assets/fits/flare-relax-360/05.png','assets/fits/flare-relax-360/06.png'],
+      thumb:'assets/fits/flare-relax-360/01.png',
+      desc:'La campana con caída más relajada: holgura cómoda en cadera y pierna, con la misma apertura retro abajo.',
+      tags:['Campana','Relajado','Estiliza'],
+      w:{waist:33, hip:39, knee:27, hem:34, inner:6} },
+    { key:'oversize',    name:'Oversize',    tagline:'Volumen estructurado', sig:'#d9a06c',
+      spin:['assets/fits/oversize-360/01.png','assets/fits/oversize-360/02.png','assets/fits/oversize-360/03.png','assets/fits/oversize-360/04.png','assets/fits/oversize-360/05.png','assets/fits/oversize-360/06.png','assets/fits/oversize-360/07.png','assets/fits/oversize-360/08.png','assets/fits/oversize-360/09.png','assets/fits/oversize-360/10.png'],
+      thumb:'assets/fits/oversize-360/01.png',
+      desc:'Una talla más, una actitud más. Volumen estructurado, comodidad real y presencia total.',
+      tags:['Volumen','Estructurado','Presencia'],
+      w:{waist:37, hip:45, knee:40, hem:37, inner:8} },
+    { key:'baggy',       name:'Baggy',       tagline:'Amplio streetwear',    sig:'#cbe83a',
+      spin:['assets/fits/baggy-360/01.png','assets/fits/baggy-360/02.png','assets/fits/baggy-360/03.png','assets/fits/baggy-360/04.png','assets/fits/baggy-360/05.png','assets/fits/baggy-360/06.png','assets/fits/baggy-360/07.png','assets/fits/baggy-360/08.png'],
+      thumb:'assets/fits/baggy-360/01.png',
+      desc:'Corte amplio, caída urbana y presencia streetwear. Para verse fuerte, sentirse cómodo y durar.',
+      tags:['Amplio','Caída urbana','Streetwear'],
+      w:{waist:34, hip:41, knee:34, hem:31, inner:6} }
+  ];
+
+  const DETAIL = 'ficha.html';
+  const CATALOG = 'catalogo.html';
+
+  // Paleta de colores (mismas fotos que la ficha)
+  const COLORS = {
+    color: [
+      {id:'hielo',name:'Hielo',hex:'#E8EEF2'},
+      {id:'celeste',name:'Celeste',hex:'#B3D2E8'},
+      {id:'celeste-contaminado',name:'Celeste cont.',hex:'#7E97A8'},
+      {id:'acero',name:'Acero',hex:'#6C7B8A'},
+      {id:'azul',name:'Azul',hex:'#2C4A72'},
+      {id:'maiz',name:'Maíz',hex:'#E5C76A'},
+      {id:'topo',name:'Topo',hex:'#9F8067'},
+      {id:'madera',name:'Madera',hex:'#7A5236'},
+      {id:'arena',name:'Arena',hex:'#D4BE94'},
+      {id:'oliva',name:'Oliva',hex:'#6E7148'},
+      {id:'vino',name:'Vino',hex:'#5E2A2E'},
+      {id:'mostaza',name:'Mostaza',hex:'#B68A2C'}
+    ],
+    negra: [
+      {id:'negro',name:'Negro',hex:'#0D0D0D'},
+      {id:'carbon',name:'Carbón',hex:'#22221F'},
+      {id:'plomo-oscuro',name:'Plomo osc.',hex:'#3A3A3D'},
+      {id:'plomo',name:'Plomo',hex:'#6B6E72'},
+      {id:'cafe',name:'Café',hex:'#3A2820'},
+      {id:'plata',name:'Plata',hex:'#C2C5C8'},
+      {id:'humo',name:'Humo',hex:'#56575A'},
+      {id:'grafito',name:'Grafito',hex:'#2E3033'},
+      {id:'tabaco',name:'Tabaco',hex:'#5C4530'},
+      {id:'arena-oscura',name:'Arena osc.',hex:'#8B7765'}
+    ]
+  };
+  let galFam = 'color';
+  const DENIM_A = '#4f74a6', DENIM_B = '#2b4d78', OUTLINE = '#0c1a2e', STITCH = '#d4af5a';
+
+  // Build a stylized jean SVG from a fit's width profile
+  function jeanSVG(f, { showTag = true } = {}){
+    const cx = 65, yWt = 14, yW = 30, yH = 66, yK = 152, yHem = 236, yCr = 100, g = f.w.inner;
+    const o = f.w;
+    const body =
+      `M ${cx-o.waist} ${yW}`+
+      ` L ${cx-o.hip} ${yH}`+
+      ` L ${cx-o.knee} ${yK}`+
+      ` L ${cx-o.hem} ${yHem}`+
+      ` L ${cx-g} ${yHem}`+
+      ` L ${cx-g} ${yCr}`+
+      ` L ${cx} ${yCr-8}`+
+      ` L ${cx+g} ${yCr}`+
+      ` L ${cx+g} ${yHem}`+
+      ` L ${cx+o.hem} ${yHem}`+
+      ` L ${cx+o.knee} ${yK}`+
+      ` L ${cx+o.hip} ${yH}`+
+      ` L ${cx+o.waist} ${yW} Z`;
+    const uid = 'g'+f.key;
+    return `
+    <svg viewBox="0 0 130 252" width="100%" aria-label="${f.name}">
+      <defs>
+        <linearGradient id="${uid}" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="${DENIM_A}"/>
+          <stop offset="1" stop-color="${DENIM_B}"/>
+        </linearGradient>
+      </defs>
+      <!-- body -->
+      <path d="${body}" fill="url(#${uid})" stroke="${OUTLINE}" stroke-width="2" stroke-linejoin="round"/>
+      <!-- waistband -->
+      <rect x="${cx-o.waist-1}" y="${yWt}" width="${2*o.waist+2}" height="${yW-yWt}" rx="3" fill="${DENIM_B}" stroke="${OUTLINE}" stroke-width="2"/>
+      <!-- belt line (signature) -->
+      <line x1="${cx-o.waist}" y1="${yW}" x2="${cx+o.waist}" y2="${yW}" stroke="${f.sig}" stroke-width="2.4"/>
+      <!-- belt loops -->
+      <line x1="${cx-o.waist+5}" y1="${yWt-1}" x2="${cx-o.waist+5}" y2="${yW+1}" stroke="${OUTLINE}" stroke-width="2"/>
+      <line x1="${cx}" y1="${yWt-1}" x2="${cx}" y2="${yW+1}" stroke="${OUTLINE}" stroke-width="2"/>
+      <line x1="${cx+o.waist-5}" y1="${yWt-1}" x2="${cx+o.waist-5}" y2="${yW+1}" stroke="${OUTLINE}" stroke-width="2"/>
+      <!-- fly stitch -->
+      <path d="M ${cx} ${yW} Q ${cx-3} ${(yW+yCr)/2} ${cx-1} ${yCr-6}" fill="none" stroke="${STITCH}" stroke-width="1.4" stroke-dasharray="3 3"/>
+      <!-- front pockets -->
+      <path d="M ${cx-o.hip+3} ${yH-1} Q ${cx-o.hip/2-2} ${yH+16} ${cx-7} ${yH-3}" fill="none" stroke="${STITCH}" stroke-width="1.2" stroke-dasharray="3 3"/>
+      <path d="M ${cx+o.hip-3} ${yH-1} Q ${cx+o.hip/2+2} ${yH+16} ${cx+7} ${yH-3}" fill="none" stroke="${STITCH}" stroke-width="1.2" stroke-dasharray="3 3"/>
+      <!-- inseam stitches -->
+      <line x1="${cx-g-1}" y1="${yCr+6}" x2="${cx-g-1}" y2="${yHem-3}" stroke="${STITCH}" stroke-width="1" stroke-dasharray="3 3" opacity="0.8"/>
+      <line x1="${cx+g+1}" y1="${yCr+6}" x2="${cx+g+1}" y2="${yHem-3}" stroke="${STITCH}" stroke-width="1" stroke-dasharray="3 3" opacity="0.8"/>
+      <!-- hem stitches -->
+      <line x1="${cx-o.hem+2}" y1="${yHem-5}" x2="${cx-g-1}" y2="${yHem-5}" stroke="${STITCH}" stroke-width="1" stroke-dasharray="3 3" opacity="0.8"/>
+      <line x1="${cx+g+1}" y1="${yHem-5}" x2="${cx+o.hem-2}" y2="${yHem-5}" stroke="${STITCH}" stroke-width="1" stroke-dasharray="3 3" opacity="0.8"/>
+      ${showTag ? `<!-- leather tag --><rect x="${cx+o.waist-12}" y="${yWt-7}" width="13" height="9" rx="1.5" fill="${f.sig}" stroke="${OUTLINE}" stroke-width="1"/>` : ''}
+    </svg>`;
+  }
+
+  let idx = 0;
+  let firstRender = true;
+
+  // Devuelve el video (si el entalle tiene) o el SVG del jean
+  // cache de blobs de video (evita recargas y soluciona la falta de range requests)
+  const videoBlobCache = {};
+  function hydrateVideo(){
+    const v = jeanMain.querySelector('video.jean-video[data-src]');
+    if (!v) return;
+    const src = v.getAttribute('data-src');
+    v.removeAttribute('data-src');
+    const apply = (url) => {
+      v.src = url;
+      v.play().catch(()=>{});
+    };
+    if (videoBlobCache[src]) { apply(videoBlobCache[src]); return; }
+    fetch(A(src))
+      .then(r => r.blob())
+      .then(b => { const url = URL.createObjectURL(b); videoBlobCache[src] = url; apply(url); })
+      .catch(() => { v.src = src; });
+  }
+
+  function mainMedia(f){
+    if (f.img){
+      return `<img class="jean-photo" src="${f.img}" alt="${f.name}">`;
+    }
+    if (f.spin){
+      return `<div class="jean-spin" role="img" aria-label="${f.name} — vista 360°">`+
+        f.spin.map((s,i) => `<img data-src="${s}" alt="${f.name} ${i+1}" draggable="false" decoding="async">`).join('')+
+        `<div class="spin-hint"><svg viewBox="0 0 24 24"><path d="M21 12a9 9 0 1 1-2.6-6.3"/><path d="M21 4v5h-5"/></svg>Arrastra para girar</div>`+
+      `</div>`;
+    }
+    if (f.video){
+      return `<video class="jean-video" data-src="${f.video}" autoplay muted loop playsinline preload="auto"></video>`;
+    }
+    return jeanSVG(f);
+  }
+
+  // ===== Visor 360°: precarga, arrastre para girar y giro-preview inicial =====
+  function hydrateSpin(){
+    if (window.__spin){ clearInterval(window.__spin.auto); clearTimeout(window.__spin.resume); }
+    window.__spin = { auto:null, resume:null };
+    const el = jeanMain.querySelector('.jean-spin');
+    if (!el) return;
+    const imgs = [...el.querySelectorAll('img')];
+    const N = imgs.length;
+    if (!N) return;
+    imgs.forEach(im => { const ds = im.getAttribute('data-src'); if (ds){ im.removeAttribute('data-src'); im.src = A(ds); } });
+
+    let frame = 0;
+    const show = (i) => { frame = ((i % N) + N) % N; imgs.forEach((im,k) => im.classList.toggle('on', k === frame)); };
+    show(0);
+
+    // giro automático continuo (turntable); se pausa al arrastrar y retoma al soltar
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const S = window.__spin;
+    const stopAuto = () => { if (S.auto){ clearInterval(S.auto); S.auto = null; } };
+    const startAuto = () => { if (S.auto || reduce) return; S.auto = setInterval(() => show(frame + 1), 200); };
+    const scheduleResume = () => { clearTimeout(S.resume); S.resume = setTimeout(startAuto, 1600); };
+    setTimeout(startAuto, 500);
+
+    // arrastre
+    const clientX = (e) => e.touches ? e.touches[0].clientX : e.clientX;
+    const stepPx = () => Math.max(16, el.clientWidth / (N * 1.1));
+    let dragging = false, startX = 0, startFrame = 0, moved = false;
+    const down = (e) => {
+      dragging = true; moved = false; startX = clientX(e); startFrame = frame;
+      el.classList.add('dragging','interacted'); stopAuto(); clearTimeout(S.resume);
+    };
+    const move = (e) => {
+      if (!dragging) return;
+      const dx = clientX(e) - startX;
+      if (Math.abs(dx) > 4) moved = true;
+      show(startFrame + Math.round(dx / stepPx()));
+      if (e.cancelable) e.preventDefault();
+    };
+    const up = () => { dragging = false; el.classList.remove('dragging'); scheduleResume(); };
+
+    el.addEventListener('pointerdown', (e) => { down(e); el.setPointerCapture?.(e.pointerId); });
+    el.addEventListener('pointermove', move);
+    el.addEventListener('pointerup', up);
+    el.addEventListener('pointercancel', up);
+    // evita que el swipe del stage cambie de entalle mientras se gira
+    ['touchstart','touchmove','touchend'].forEach(t => el.addEventListener(t, (e) => { if (dragging || moved) e.stopPropagation(); }, {passive:false}));
+  }
+
+  function hydrateMedia(){ hydrateVideo(); hydrateSpin(); }
+  const jeanMain = document.getElementById('jeanMain');
+  const ghostPrev = document.getElementById('ghostPrev');
+  const ghostNext = document.getElementById('ghostNext');
+  const stage = document.getElementById('stage');
+
+  function render(){
+    const f = FITS[idx];
+    document.documentElement.style.setProperty('--sig', f.sig);
+
+    // main jean: paint immediately on first render, animate swap afterwards
+    if (firstRender){
+      jeanMain.innerHTML = mainMedia(f);
+      hydrateMedia();
+      firstRender = false;
+    } else {
+      jeanMain.classList.add('swap');
+      setTimeout(() => {
+        jeanMain.innerHTML = mainMedia(f);
+        hydrateMedia();
+        // force reflow so the removal animates from the hidden state
+        void jeanMain.offsetWidth;
+        jeanMain.classList.remove('swap');
+      }, 160);
+    }
+
+    // ghosts
+    const prevF = FITS[(idx - 1 + FITS.length) % FITS.length];
+    const nextF = FITS[(idx + 1) % FITS.length];
+    ghostPrev.innerHTML = jeanSVG(prevF, { showTag:false });
+    ghostNext.innerHTML = jeanSVG(nextF, { showTag:false });
+
+    // info card
+    document.getElementById('icEyebrow').textContent = `Entalle ${String(idx+1).padStart(2,'0')} / ${String(FITS.length).padStart(2,'0')}`;
+    document.getElementById('icName').textContent = f.name;
+    document.getElementById('icTagline').textContent = f.tagline;
+    document.getElementById('icDesc').textContent = f.desc;
+    document.getElementById('icTags').innerHTML = f.tags.map(t => `<span>${t}</span>`).join('');
+    const vf = document.getElementById('verFicha');
+    vf.setAttribute('href', `${DETAIL}#${f.key}`);
+    vf.childNodes[0].nodeValue = `Ver ficha ${f.name} `;
+    const mc = document.getElementById('mobileCta');
+    mc.setAttribute('href', `${DETAIL}#${f.key}`);
+    mc.childNodes[0].nodeValue = `Ver ficha ${f.name} `;
+    updateDots();
+
+    // thumbs active
+    document.querySelectorAll('.thumb-btn').forEach((b,i) => b.classList.toggle('active', i === idx));
+
+    renderGallery();
+  }
+
+  // ===== Gallery por entalle =====
+  const galleryGrid = document.getElementById('galleryGrid');
+  function renderGallery(){
+    const f = FITS[idx];
+    const list = COLORS[galFam];
+    document.getElementById('gbCount').textContent = `${list.length} tonos · ${galFam==='color'?'Versión Color':'Versión Negra'}`;
+    document.getElementById('gbCat').setAttribute('href', `${DETAIL}#${f.key}`);
+    galleryGrid.innerHTML = list.map(c => `
+      <a class="g-card" href="${DETAIL}#${f.key}" aria-label="${f.name} en ${c.name}">
+        <img src="assets/colors/${c.id}.jpg" alt="${f.name} ${c.name}" loading="lazy">
+        <div class="g-grad"></div>
+        <div class="g-view"><svg viewBox="0 0 24 24"><path d="M7 17L17 7M9 7h8v8"/></svg></div>
+        <div class="g-meta"><span class="sw" style="background:${c.hex}"></span><span class="nm">${c.name}</span></div>
+      </a>`).join('');
+  }
+  document.getElementById('gbTabs').querySelectorAll('.gb-tab').forEach(t => {
+    t.addEventListener('click', () => {
+      galFam = t.dataset.fam;
+      document.querySelectorAll('.gb-tab').forEach(x => x.classList.toggle('active', x === t));
+      renderGallery();
+    });
+  });
+
+  // Build thumbnails
+  const thumbsEl = document.getElementById('thumbs');
+  const nameCounts = FITS.reduce((m,f)=>{m[f.name]=(m[f.name]||0)+1;return m;},{});
+  thumbsEl.innerHTML = FITS.map((f,i) => `
+    <button class="thumb-btn${f.thumb?' has-photo':''}" data-i="${i}" aria-label="${f.name} ${nameCounts[f.name]>1?f.tagline:''}">
+      ${f.thumb ? `<img class="thumb-photo" src="${f.thumb}" alt="${f.name}">` : jeanSVG(f, { showTag:false })}
+      <span class="tname">${f.name}${nameCounts[f.name]>1?`<span class="tsub">${f.tagline}</span>`:''}</span>
+    </button>`).join('');
+  thumbsEl.querySelectorAll('.thumb-btn').forEach(b => {
+    b.addEventListener('click', () => { exitIntro(); idx = +b.dataset.i; render(); });
+  });
+
+  document.getElementById('prev').addEventListener('click', () => { exitIntro(); idx = (idx - 1 + FITS.length) % FITS.length; render(); });
+  document.getElementById('next').addEventListener('click', () => { exitIntro(); idx = (idx + 1) % FITS.length; render(); });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowRight') { idx = (idx + 1) % FITS.length; render(); }
+    if (e.key === 'ArrowLeft')  { idx = (idx - 1 + FITS.length) % FITS.length; render(); }
+  });
+
+  // swipe on stage (mobile)
+  let sx = 0;
+  stage.addEventListener('touchstart', e => { sx = e.touches[0].clientX; }, {passive:true});
+  stage.addEventListener('touchend', e => {
+    const dx = (e.changedTouches[0]?.clientX || 0) - sx;
+    if (Math.abs(dx) > 45){ exitIntro(); idx = dx < 0 ? (idx+1)%FITS.length : (idx-1+FITS.length)%FITS.length; render(); }
+  });
+
+  // ===== Intro autoplay (móvil): los entalles pasan solos hasta tocar =====
+  const introPrompt = document.getElementById('introPrompt');
+  const introDots = document.getElementById('introDots');
+  introDots.innerHTML = FITS.map(() => '<i></i>').join('');
+  function updateDots(){
+    introDots.querySelectorAll('i').forEach((d,i) => d.classList.toggle('on', i === idx));
+  }
+  let introActive = false;
+  let introTimer = null;
+  function introTick(){
+    idx = (idx + 1) % FITS.length;
+    const f = FITS[idx];
+    document.documentElement.style.setProperty('--sig', f.sig);
+    jeanMain.classList.add('swap');
+    setTimeout(() => {
+      jeanMain.innerHTML = jeanSVG(f, { showTag:true });
+      void jeanMain.offsetWidth;
+      jeanMain.classList.remove('swap');
+    }, 150);
+    document.getElementById('icEyebrow').textContent = `Entalle ${String(idx+1).padStart(2,'0')} / ${String(FITS.length).padStart(2,'0')}`;
+    document.getElementById('icName').textContent = f.name;
+    document.getElementById('icTagline').textContent = f.tagline;
+    document.querySelectorAll('.thumb-btn').forEach((b,i) => b.classList.toggle('active', i === idx));
+    updateDots();
+  }
+  function startIntro(){
+    introActive = true;
+    firstRender = false;
+    document.body.classList.add('intro-mode');
+    idx = 0;
+    const f = FITS[0];
+    document.documentElement.style.setProperty('--sig', f.sig);
+    jeanMain.innerHTML = jeanSVG(f, { showTag:true });
+    document.getElementById('icEyebrow').textContent = `Entalle 01 / ${String(FITS.length).padStart(2,'0')}`;
+    document.getElementById('icName').textContent = f.name;
+    document.getElementById('icTagline').textContent = f.tagline;
+    document.querySelectorAll('.thumb-btn').forEach((b,i) => b.classList.toggle('active', i === 0));
+    updateDots();
+    introTimer = setInterval(introTick, 950);
+  }
+  function exitIntro(){
+    if (!introActive) return;
+    introActive = false;
+    clearInterval(introTimer);
+    document.body.classList.remove('intro-mode');
+  }
+  function stopIntro(){
+    if (!introActive) return;
+    exitIntro();
+    render();
+  }
+  introPrompt.addEventListener('click', stopIntro);
+  window.__introDemo = { startIntro, stopIntro, isActive: () => introActive, idx: () => idx };
+  document.querySelector('.jean-area').addEventListener('click', (e) => {
+    if (introActive && !e.target.closest('.nav-arrow')) stopIntro();
+  });
+
+  // start at Regular for a balanced first impression
+  idx = FITS.findIndex(f => f.key === 'regular');
+  if (idx < 0) idx = 0;
+  if (window.matchMedia('(max-width:760px)').matches){
+    render();          // pinta todo (galería etc.) en segundo plano
+    startIntro();      // y arranca el intro encima
+  } else {
+    render();
+  }
+</script>
+</body>
+</html>

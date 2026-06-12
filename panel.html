@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Panel · Element Premium</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<script src="admin-auth.js"></script>
+<script>ElementAuth.guard();</script>
+<style>
+  :root{
+    --bg:#0a0a0a;--bg-2:#111;--surface:#161616;--surface-2:#1c1c1c;
+    --line:#262626;--line-2:#333;--text:#f5f5f5;--muted:#8a8a8a;--muted-2:#5e5e5e;
+    --accent:#cbe83a;--accent-ink:#0a0a0a;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;background:var(--bg);color:var(--text);font-family:"Archivo",system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+  img{display:block;max-width:100%}
+  button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit}
+  a{color:inherit;text-decoration:none}
+
+  header.top{position:sticky;top:0;z-index:30;background:var(--accent);color:var(--accent-ink)}
+  .top-inner{max-width:1080px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;padding:13px 20px;gap:14px}
+  .top-inner .b{font-weight:900;letter-spacing:-0.01em;font-size:15px;display:flex;align-items:center;gap:10px}
+  .top-inner .b img{height:21px;filter:brightness(0)}
+  .sess{display:flex;align-items:center;gap:9px}
+  .who{display:flex;align-items:center;gap:8px;background:var(--accent-ink);color:var(--accent);border-radius:99px;padding:6px 12px 6px 7px;
+    font-family:"JetBrains Mono",monospace;font-size:10px;letter-spacing:0.12em;text-transform:uppercase}
+  .who .av{width:22px;height:22px;border-radius:50%;background:var(--accent);color:var(--accent-ink);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:11px}
+  .logout{display:flex;align-items:center;gap:7px;border:1.5px solid var(--accent-ink);border-radius:99px;padding:7px 13px;
+    font-family:"JetBrains Mono",monospace;font-size:10px;letter-spacing:0.12em;text-transform:uppercase;font-weight:700;transition:all .15s}
+  .logout:hover{background:var(--accent-ink);color:var(--accent)}
+  .logout svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2}
+
+  .wrap{max-width:1080px;margin:0 auto;padding:34px 20px 80px}
+  .intro h1{font-weight:900;letter-spacing:-0.02em;font-size:clamp(30px,5vw,46px);margin:0;text-transform:uppercase;line-height:0.95}
+  .intro p{color:var(--muted);font-size:14.5px;line-height:1.6;max-width:62ch;margin:13px 0 0}
+
+  .sec-label{font-family:"JetBrains Mono",monospace;font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:var(--muted);margin:38px 0 14px;display:flex;align-items:center;gap:10px}
+  .sec-label::after{content:"";flex:1;height:1px;background:var(--line)}
+
+  .cards{display:grid;grid-template-columns:1fr;gap:16px}
+  @media (min-width:760px){.cards{grid-template-columns:1fr 1fr}}
+  .card{position:relative;display:flex;flex-direction:column;gap:16px;background:var(--surface);border:1px solid var(--line);
+    border-radius:18px;padding:24px;transition:border-color .18s,transform .18s,background .18s;overflow:hidden}
+  .card:hover{border-color:var(--accent);transform:translateY(-3px)}
+  .card .ic{width:50px;height:50px;border-radius:13px;background:var(--bg-2);border:1px solid var(--line-2);display:flex;align-items:center;justify-content:center}
+  .card .ic svg{width:25px;height:25px;stroke:var(--accent);fill:none;stroke-width:1.7}
+  .card h3{font-family:"Archivo",sans-serif;font-weight:900;letter-spacing:-0.01em;text-transform:uppercase;font-size:21px;margin:0}
+  .card p{color:var(--muted);font-size:13.5px;line-height:1.55;margin:0;max-width:42ch}
+  .card .go{display:flex;align-items:center;gap:8px;font-family:"JetBrains Mono",monospace;font-size:11px;letter-spacing:0.14em;text-transform:uppercase;font-weight:700;color:var(--accent);margin-top:auto}
+  .card .go svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2;transition:transform .18s}
+  .card:hover .go svg{transform:translateX(4px)}
+  .card .tag{position:absolute;top:20px;right:20px;font-family:"JetBrains Mono",monospace;font-size:9.5px;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted-2);border:1px solid var(--line);border-radius:99px;padding:5px 10px}
+
+  .links{display:flex;flex-wrap:wrap;gap:10px}
+  .link{display:flex;align-items:center;gap:9px;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px 15px;
+    font-family:"JetBrains Mono",monospace;font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);transition:all .15s}
+  .link:hover{border-color:var(--accent);color:var(--text)}
+  .link svg{width:16px;height:16px;stroke:var(--accent);fill:none;stroke-width:1.8}
+
+  .note{margin-top:34px;display:flex;align-items:flex-start;gap:11px;background:var(--bg-2);border:1px solid var(--line);border-radius:14px;padding:16px 18px;color:var(--muted-2);font-size:12.5px;line-height:1.6}
+  .note svg{width:17px;height:17px;stroke:var(--accent);fill:none;stroke-width:1.7;flex-shrink:0;margin-top:1px}
+  .note b{color:var(--muted);font-weight:600}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="top-inner">
+    <span class="b"><img src="assets/logo-element.png" alt="Element"/> Panel</span>
+    <div class="sess">
+      <span class="who"><span class="av" id="av">A</span><span id="whoName">admin</span></span>
+      <button class="logout" id="logout"><svg viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/></svg> Salir</button>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+  <div class="intro">
+    <h1>Hola de nuevo</h1>
+    <p>Desde aquí gestionas el catálogo. Renueva fotos, marca colores y entalles, y todo se refleja en la tienda. Elige qué quieres editar.</p>
+  </div>
+
+  <div class="sec-label">Editar</div>
+  <div class="cards">
+    <a class="card" href="admin-fichas.html">
+      <span class="tag">Fotos · colores · entalles</span>
+      <div class="ic"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="9" cy="9" r="2"/><path d="M21 15l-5-5L5 21"/></svg></div>
+      <h3>Fichas por entalle</h3>
+      <p>Foto principal y de detalle de cada entalle, color de acento, los colores en que se vende y agregar entalles nuevos.</p>
+      <span class="go">Abrir <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+    </a>
+
+    <a class="card" href="admin-catalogo.html">
+      <span class="tag">Páginas del catálogo</span>
+      <div class="ic"><svg viewBox="0 0 24 24"><path d="M4 4h16v16H4z"/><path d="M4 9h16M9 4v16"/></svg></div>
+      <h3>Catálogo</h3>
+      <p>Sube y ordena las páginas del catálogo, ponles nombre y reemplaza imágenes cuando renueves la colección.</p>
+      <span class="go">Abrir <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+    </a>
+  </div>
+
+  <div class="sec-label">Ver en la tienda</div>
+  <div class="links">
+    <a class="link" href="index.html" target="_blank"><svg viewBox="0 0 24 24"><path d="M3 11l9-8 9 8M5 10v10h14V10"/></svg> Inicio</a>
+    <a class="link" href="catalogo.html" target="_blank"><svg viewBox="0 0 24 24"><path d="M4 4h16v16H4z"/><path d="M4 9h16M9 4v16"/></svg> Catálogo</a>
+    <a class="link" href="ficha.html" target="_blank"><svg viewBox="0 0 24 24"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg> Ficha de entalle</a>
+  </div>
+
+  <div class="note">
+    <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 8h.01M11 12h1v4h1"/></svg>
+    <span><b>Sobre el almacenamiento.</b> En esta demo, lo que subes se guarda en este navegador para que veas el flujo completo. Al conectar el almacenamiento real, las fotos quedan publicadas y al reemplazar una, la anterior se borra — no se acumulan fotos viejas.</span>
+  </div>
+</div>
+
+<script>
+  const u = (ElementAuth.user() || 'admin');
+  document.getElementById('whoName').textContent = u;
+  document.getElementById('av').textContent = (u[0] || 'A').toUpperCase();
+  document.getElementById('logout').onclick = ()=>{ if(confirm('¿Cerrar sesión?')) ElementAuth.logout(); };
+</script>
+</body>
+</html>

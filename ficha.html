@@ -1,0 +1,2202 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Baggy Jean · Element Premium</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Archivo:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0a0a0a;
+    --bg-2:#111111;
+    --surface:#161616;
+    --surface-2:#1c1c1c;
+    --line:#262626;
+    --line-2:#333333;
+    --text:#f5f5f5;
+    --muted:#8a8a8a;
+    --muted-2:#5e5e5e;
+    --accent:#cbe83a;
+    --accent-ink:#0a0a0a;
+    --page-glow:rgba(203,232,58,0.10);
+    --page-glow-2:rgba(203,232,58,0.04);
+    --page-sig:#cbe83a; /* signature accent per fit (Baggy = lime) */
+    --radius:14px;
+    --maxw:1180px;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;background:var(--bg);color:var(--text);font-family:"Archivo",system-ui,sans-serif;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+  body{overflow-x:hidden}
+  img{max-width:100%;display:block}
+  a{color:inherit;text-decoration:none}
+  button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit}
+
+  /* Typography */
+  .display{font-family:"Archivo Black",sans-serif;font-weight:900;letter-spacing:-0.02em;line-height:0.9;text-transform:uppercase}
+  .mono{font-family:"JetBrains Mono",ui-monospace,monospace;letter-spacing:0.02em}
+  .eyebrow{font-family:"JetBrains Mono",monospace;font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:var(--muted)}
+
+  /* Layout */
+  .wrap{width:100%;max-width:var(--maxw);margin:0 auto;padding:0 20px}
+  section{padding:48px 0;border-top:1px solid var(--line)}
+  section:first-of-type{border-top:none}
+  @media (min-width:900px){
+    section{padding:96px 0}
+  }
+
+  /* ===== Header ===== */
+  header.top{
+    position:sticky;top:0;z-index:50;
+    background:var(--accent);
+    color:var(--accent-ink);
+    border-bottom:1px solid #0a0a0a22;
+  }
+  .top-inner{
+    display:flex;align-items:center;justify-content:center;
+    padding:14px 20px;max-width:var(--maxw);margin:0 auto;
+  }
+  @media (min-width:900px){
+    .top-inner{justify-content:space-between}
+  }
+  .brand{display:flex;align-items:center;gap:10px}
+  .brand img{height:26px;width:auto;filter:brightness(0)}
+  .brand-text{font-family:"Archivo Black",sans-serif;font-size:13px;letter-spacing:0.04em;line-height:1}
+  .brand-text small{display:block;font-family:"JetBrains Mono",monospace;font-size:9px;font-weight:400;letter-spacing:0.3em;margin-top:3px;opacity:0.8}
+  /* Header nav as model selector */
+  .top-nav{display:none;align-items:center;gap:6px;font-family:"JetBrains Mono",monospace;font-size:11px;letter-spacing:0.14em;text-transform:uppercase}
+  .top-nav a{
+    position:relative;padding:7px 12px;border-radius:99px;
+    transition:background .15s, color .15s;
+  }
+  .top-nav a:hover{background:rgba(10,10,10,0.12)}
+  .top-nav a.active{
+    background:var(--accent-ink);color:var(--page-sig);
+  }
+  .top-nav a.soon{opacity:0.55}
+  .top-nav a.soon::after{
+    content:"•";margin-left:6px;opacity:0.6;
+  }
+  @media (min-width:900px){
+    .top-nav{display:flex}
+  }
+
+  /* Mobile model selector strip */
+  .model-strip{
+    display:flex;gap:8px;overflow-x:auto;padding:10px 16px;
+    background:#0f0f0f;border-bottom:1px solid var(--line);
+    scrollbar-width:none;-ms-overflow-style:none;
+    position:sticky;top:54px;z-index:48;
+  }
+  .model-strip::-webkit-scrollbar{display:none}
+  .model-strip a{
+    flex-shrink:0;
+    padding:9px 14px;border-radius:99px;
+    border:1px solid var(--line);background:var(--bg-2);
+    color:var(--muted);
+    font-family:"JetBrains Mono",monospace;font-size:10.5px;letter-spacing:0.16em;text-transform:uppercase;
+    transition:all .15s;
+    display:flex;align-items:center;gap:6px;
+  }
+  .model-strip a.active{background:var(--page-sig);color:var(--accent-ink);border-color:var(--page-sig)}
+  .model-strip a.soon{opacity:0.6}
+  .model-strip a.soon::after{
+    content:"•";opacity:0.7;font-size:14px;line-height:0;
+  }
+  @media (min-width:900px){
+    .model-strip{display:none}
+  }
+  .top-tag{
+    font-family:"JetBrains Mono",monospace;font-size:10px;letter-spacing:0.18em;text-transform:uppercase;
+    background:var(--accent-ink);color:var(--accent);padding:6px 10px;border-radius:99px
+  }
+  @media (max-width:899px){
+    .top-tag{font-size:9px;padding:5px 9px}
+  }
+
+  /* ===== Hero ===== */
+  .hero{padding-top:32px;text-align:center;position:relative}
+  .hero::before{
+    content:"";position:absolute;inset:0;pointer-events:none;z-index:0;
+    background:
+      radial-gradient(60% 70% at 90% 10%, var(--page-glow), transparent 60%),
+      radial-gradient(50% 60% at 5% 90%, var(--page-glow-2), transparent 70%);
+  }
+  .hero .wrap{position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;gap:24px}
+  .hero-grid{display:flex;flex-direction:column;gap:24px;width:100%;align-items:center}
+  .hero-text{display:flex;flex-direction:column;gap:18px;align-items:center;width:100%}
+  @media (min-width:900px){
+    .hero-grid{
+      display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center;text-align:left;
+      min-height:560px;
+    }
+    .hero-text{align-items:flex-start;gap:24px}
+    .hero .wrap{align-items:stretch}
+  }
+  .hero-tag{
+    display:inline-flex;align-items:center;gap:8px;
+    border:1px solid var(--line-2);border-radius:99px;padding:7px 14px;
+    font-family:"JetBrains Mono",monospace;font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--muted);
+  }
+  .hero-tag .dot{width:7px;height:7px;border-radius:50%;background:var(--accent)}
+  .hero-title-block{width:100%;max-width:760px;margin:0 auto;text-align:center}
+  @media (min-width:900px){.hero-title-block{text-align:left;margin:0}}
+  .hero h1{
+    margin:0;font-size:clamp(52px,13.5vw,108px);text-align:inherit;
+  }
+  @media (min-width:900px){.hero h1{font-size:clamp(60px,7vw,104px)}}
+  .hero h1 .fit-name{display:block;color:var(--accent);line-height:0.9}
+  .hero h1 .fit-suffix{display:block;color:#fff;font-size:0.56em;line-height:0.98;margin-top:0.06em}
+  .hero h1 .period{color:var(--accent)}
+  .hero h1.period{color:var(--accent)}
+  .hero-sub{
+    margin:18px auto 0;color:var(--muted);font-size:15px;line-height:1.55;max-width:560px;
+  }
+  @media (min-width:900px){
+    .hero-sub{font-size:22px;line-height:1.5;margin-left:0;margin-top:24px;max-width:520px;color:#c9c9c9}
+  }
+  @media (min-width:1200px){
+    .hero-sub{font-size:26px;line-height:1.45;max-width:560px}
+  }
+  /* Hero "vs" pill that links to other entalle */
+  .vs-pill{
+    margin-top:20px;display:inline-flex;flex-direction:column;gap:3px;
+    padding:10px 16px;border:1px solid var(--line);border-radius:14px;background:var(--surface);
+    text-decoration:none;color:inherit;transition:all .2s;
+    max-width:100%;
+  }
+  .vs-pill:hover{border-color:var(--accent);transform:translateY(-2px)}
+  /* En móvil se oculta para que la imagen aparezca a primera vista */
+  @media (max-width:899px){
+    .vs-pill{display:none}
+  }
+  /* ===== Modo edición (solo admin, ?admin en la URL) ===== */
+  .admin-bar{position:fixed;bottom:14px;left:50%;transform:translateX(-50%);z-index:95;display:flex;align-items:center;gap:10px;background:rgba(14,14,14,0.96);border:1px solid var(--accent);border-radius:99px;padding:9px 10px 9px 16px;font-family:"JetBrains Mono",monospace;font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:#f5f5f5;box-shadow:0 10px 30px rgba(0,0,0,0.5);max-width:94vw}
+  .admin-bar b{color:var(--accent)}
+  .admin-bar button{border:1px solid #333;background:#1c1c1c;color:#f5f5f5;border-radius:99px;padding:7px 12px;font-family:inherit;font-size:10px;letter-spacing:0.1em;text-transform:uppercase;cursor:pointer}
+  .admin-bar button:hover{border-color:var(--accent);color:var(--accent)}
+  [data-edit]{outline:1.5px dashed rgba(203,232,58,0.45);outline-offset:3px;border-radius:3px;cursor:text;transition:outline-color .15s}
+  [data-edit]:hover{outline-color:var(--accent)}
+  [data-edit]:focus{outline:2px solid var(--accent);outline-offset:3px}
+  .vs-eyebrow{font-family:"JetBrains Mono",monospace;font-size:9.5px;letter-spacing:0.2em;text-transform:uppercase;color:var(--muted)}
+  .vs-name{font-size:13px;color:var(--text);font-weight:500}
+
+  /* ===== Gallery (landing layout) ===== */
+  .gallery{
+    width:100%;display:flex;flex-direction:column;gap:14px;align-items:center;
+  }
+  @media (min-width:900px){
+    .gallery{align-items:stretch}
+  }
+  .gallery-main{
+    position:relative;border-radius:var(--radius);overflow:hidden;
+    background:#111;border:1px solid var(--line);
+    aspect-ratio:3/4;width:100%;
+    max-width:680px;margin:0 auto;
+  }
+  @media (min-width:900px){
+    .gallery-main{aspect-ratio:4/5;max-width:none;margin:0}
+  }
+  .gallery-main img{width:100%;height:100%;object-fit:cover}
+  .gallery-main .corner{
+    position:absolute;top:14px;left:14px;
+    background:var(--accent);color:var(--accent-ink);
+    font-family:"JetBrains Mono",monospace;font-size:10px;letter-spacing:0.2em;text-transform:uppercase;
+    padding:6px 10px;border-radius:99px;
+  }
+  .gallery-main .corner-r{
+    position:absolute;top:14px;right:14px;
+    background:rgba(10,10,10,0.7);backdrop-filter:blur(8px);
+    color:var(--text);
+    font-family:"JetBrains Mono",monospace;font-size:10px;letter-spacing:0.15em;text-transform:uppercase;
+    padding:6px 10px;border-radius:99px;border:1px solid var(--line-2);
+  }
+  .thumbs{
+    display:grid;grid-template-columns:repeat(3,1fr);gap:10px;
+    max-width:680px;margin:0 auto;width:100%;
+  }
+  @media (min-width:900px){
+    .thumbs{max-width:none;gap:14px;margin:0}
+  }
+  .thumb{
+    aspect-ratio:1;border-radius:10px;overflow:hidden;background:var(--surface);
+    border:1px solid var(--line);position:relative;cursor:pointer;transition:border-color .2s, transform .2s;
+    display:flex;align-items:center;justify-content:center;color:var(--muted-2);
+  }
+  .thumb:hover{border-color:var(--line-2);transform:translateY(-2px)}
+  .thumb.active{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent) inset}
+  .thumb img{width:100%;height:100%;object-fit:cover}
+  .thumb-ph{
+    width:100%;height:100%;
+    background:repeating-linear-gradient(135deg,#191919 0 8px,#141414 8px 16px);
+    display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;
+    font-family:"JetBrains Mono",monospace;font-size:9px;letter-spacing:0.2em;text-transform:uppercase;
+    color:var(--muted);text-align:center;padding:10px;
+  }
+  .thumb-ph .ph-label{color:var(--accent);font-weight:700;font-size:10px}
+  .thumb-ph .ph-hint{font-size:8px;opacity:0.6}
+
+  /* ===== Section heading ===== */
+  .sec-head{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;margin-bottom:28px;flex-wrap:wrap}
+  .sec-head h2{
+    font-family:"Archivo Black",sans-serif;font-weight:900;text-transform:uppercase;letter-spacing:-0.02em;
+    font-size:clamp(28px,5vw,52px);margin:8px 0 0;line-height:1;
+  }
+  .sec-head .num{
+    font-family:"JetBrains Mono",monospace;font-size:11px;letter-spacing:0.2em;color:var(--page-sig);
+  }
+  .sec-head .blurb{color:var(--muted);font-size:14px;max-width:380px;line-height:1.55}
+
+  /* ===== Why ===== */
+  .why{display:grid;gap:16px;grid-template-columns:1fr}
+  @media (min-width:700px){.why{grid-template-columns:repeat(2,1fr)}}
+  @media (min-width:1000px){.why{grid-template-columns:repeat(3,1fr)}}
+  .why-card{
+    background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);
+    padding:24px;display:flex;flex-direction:column;gap:14px;min-height:180px;
+    transition:transform .2s, border-color .2s, background .2s;
+  }
+  .why-card:hover{transform:translateY(-2px);border-color:var(--line-2);background:var(--surface-2)}
+  .why-num{
+    font-family:"Archivo Black",sans-serif;font-size:32px;color:var(--page-sig);line-height:1;
+  }
+  .why-card h3{margin:0;font-size:17px;font-weight:700;letter-spacing:-0.01em}
+  .why-card p{margin:0;color:var(--muted);font-size:14px;line-height:1.55}
+  .why-card .tag{
+    margin-top:auto;font-family:"JetBrains Mono",monospace;font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--muted-2);
+  }
+
+  /* ===== Specs ===== */
+  .specs{
+    display:grid;gap:24px;grid-template-columns:1fr;
+  }
+  @media (min-width:900px){
+    .specs{grid-template-columns:1.1fr 1fr;gap:48px}
+  }
+  .spec-list{border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;background:var(--surface)}
+  .spec-row{
+    display:grid;grid-template-columns:1fr auto;gap:16px;align-items:center;
+    padding:14px 18px;border-bottom:1px solid var(--line);
+  }
+  .spec-row:last-child{border-bottom:none}
+  .spec-row .label{font-family:"JetBrains Mono",monospace;font-size:11px;letter-spacing:0.15em;text-transform:uppercase;color:var(--muted)}
+  .spec-row .val{font-weight:700;font-size:14px;text-align:right}
+  .spec-side{display:flex;flex-direction:column;gap:18px}
+  .quote{
+    border-left:3px solid var(--accent);padding:6px 0 6px 18px;
+    font-family:"Archivo Black",sans-serif;text-transform:uppercase;letter-spacing:-0.01em;
+    font-size:clamp(20px,3vw,28px);line-height:1.1;
+  }
+  .quote em{font-style:normal;color:var(--accent)}
+  .spec-body{color:var(--muted);font-size:15px;line-height:1.6}
+
+  /* ===== Quality (technical-but-benefit) ===== */
+  .quality{
+    display:grid;gap:14px;grid-template-columns:1fr;
+  }
+  @media (min-width:700px){.quality{grid-template-columns:repeat(2,1fr)}}
+  @media (min-width:1100px){.quality{grid-template-columns:repeat(4,1fr)}}
+  .q-card{
+    background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);
+    padding:22px;display:flex;flex-direction:column;gap:12px;position:relative;overflow:hidden;
+    transition:transform .2s, border-color .2s;min-height:240px;
+  }
+  .q-card:hover{transform:translateY(-2px);border-color:var(--line-2)}
+  .q-card .q-ic{
+    width:44px;height:44px;border-radius:10px;background:var(--bg-2);border:1px solid var(--line-2);
+    display:flex;align-items:center;justify-content:center;
+  }
+  .q-card .q-ic svg{width:22px;height:22px;stroke:var(--accent);fill:none;stroke-width:1.6}
+  .q-card .q-eyebrow{
+    font-family:"JetBrains Mono",monospace;font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--muted);
+    margin-top:auto;
+  }
+  .q-card .q-spec{
+    font-family:"Archivo Black",sans-serif;text-transform:uppercase;letter-spacing:-0.01em;
+    font-size:22px;line-height:1.05;color:var(--text);
+  }
+  .q-card .q-spec em{font-style:normal;color:var(--page-sig)}
+  .q-card .q-benefit{color:var(--muted);font-size:14px;line-height:1.55;margin:0}
+
+  .quality-foot{
+    margin-top:28px;display:grid;gap:18px;grid-template-columns:1fr;
+    background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);
+    padding:22px;
+  }
+  @media (min-width:900px){.quality-foot{grid-template-columns:1fr auto;align-items:center;gap:28px;padding:28px 32px}}
+  .qf-tag{font-family:"JetBrains Mono",monospace;font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--page-sig)}
+  .qf-text{
+    font-family:"Archivo Black",sans-serif;text-transform:uppercase;letter-spacing:-0.01em;
+    font-size:clamp(20px,2.6vw,28px);line-height:1.05;margin-top:6px;
+  }
+  .qf-text em{font-style:normal;color:var(--page-sig)}
+  .qf-meta{display:flex;gap:24px;flex-wrap:wrap}
+  .qf-meta > div{display:flex;flex-direction:column;gap:2px}
+  .qf-meta .k{font-family:"JetBrains Mono",monospace;font-size:9px;letter-spacing:0.2em;text-transform:uppercase;color:var(--muted)}
+  .qf-meta .v{font-weight:700;font-size:14px;letter-spacing:-0.01em}
+
+  /* ===== Colors ===== */
+  .col-tabs{
+    display:flex;gap:8px;margin-bottom:24px;flex-wrap:wrap;
+  }
+  .col-tab{
+    flex:1;min-width:160px;
+    padding:14px 18px;border:1px solid var(--line);border-radius:12px;
+    font-family:"JetBrains Mono",monospace;font-size:11px;letter-spacing:0.16em;text-transform:uppercase;
+    color:var(--muted);background:var(--bg-2);transition:all .2s;text-align:left;
+    display:flex;flex-direction:column;gap:6px;
+  }
+  .col-tab .ct-eyebrow{font-size:9px;letter-spacing:0.22em;color:var(--muted-2)}
+  .col-tab .ct-name{font-family:"Archivo Black",sans-serif;font-size:16px;letter-spacing:-0.01em;text-transform:uppercase;color:var(--text)}
+  .col-tab.active{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+  .col-tab.active .ct-eyebrow{color:#0a0a0a99}
+  .col-tab.active .ct-name{color:var(--accent-ink)}
+  .col-tab .ct-count{margin-top:4px;font-size:10px;letter-spacing:0.18em}
+  .colors-grid{
+    display:grid;gap:12px;grid-template-columns:repeat(2,1fr);
+  }
+  @media (min-width:600px){.colors-grid{grid-template-columns:repeat(3,1fr)}}
+  @media (min-width:900px){.colors-grid{grid-template-columns:repeat(6,1fr);gap:14px}}
+  .color-card{
+    background:var(--surface);border:1px solid var(--line);border-radius:14px;
+    overflow:hidden;cursor:pointer;text-align:left;display:flex;flex-direction:column;
+    transition:border-color .2s, transform .2s;
+    padding:0;
+  }
+  .color-card:hover{transform:translateY(-2px);border-color:var(--line-2)}
+  .color-card.active{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent) inset}
+  .color-swatch{
+    aspect-ratio:4/5;width:100%;position:relative;
+    background:linear-gradient(140deg,var(--c1),var(--c2));overflow:hidden;
+  }
+  .color-swatch.with-img{background:#0b0b0b}
+  .color-swatch.with-img img{
+    width:100%;height:100%;object-fit:cover;object-position:center 72%;
+    display:block;transition:transform .4s ease;
+  }
+  .color-card:hover .color-swatch.with-img img{transform:scale(1.04)}
+  .color-swatch:not(.with-img)::after{
+    content:"";position:absolute;inset:0;
+    background:repeating-linear-gradient(90deg,rgba(255,255,255,0.03) 0 1px,transparent 1px 8px),
+               repeating-linear-gradient(0deg,rgba(0,0,0,0.06) 0 1px,transparent 1px 8px);
+  }
+  .color-swatch:not(.with-img)::before{
+    content:"";position:absolute;inset:auto 0 0 0;height:50%;
+    background:linear-gradient(180deg, transparent, rgba(0,0,0,0.25));
+  }
+  .zoom-icon{
+    position:absolute;top:10px;right:10px;width:30px;height:30px;
+    background:rgba(10,10,10,0.7);backdrop-filter:blur(8px);
+    border:1px solid rgba(255,255,255,0.12);border-radius:50%;
+    display:flex;align-items:center;justify-content:center;
+    color:#fff;pointer-events:none;opacity:0.85;transition:opacity .2s, transform .2s;z-index:2;
+  }
+  .color-card:hover .zoom-icon{opacity:1;transform:scale(1.05)}
+  .zoom-icon svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2}
+  .color-meta{
+    padding:12px 14px;display:flex;flex-direction:column;gap:3px;
+    border-top:1px solid var(--line);
+  }
+  .color-meta .n{font-weight:700;letter-spacing:0.02em;font-size:13px;text-transform:uppercase;color:var(--text)}
+  .color-meta .h{font-family:"JetBrains Mono",monospace;font-size:10px;letter-spacing:0.12em;color:var(--muted)}
+  .color-detail{
+    margin-top:18px;background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);
+    padding:20px;display:grid;grid-template-columns:auto 1fr;gap:18px;align-items:center;
+  }
+  @media (min-width:600px){.color-detail{padding:24px;gap:24px}}
+  .color-detail .chip{width:62px;height:84px;border-radius:12px;background:linear-gradient(140deg,#a8c4dc,#cfe0ec);border:1px solid var(--line-2);flex-shrink:0;background-size:cover;background-position:center 72%;cursor:default;transition:transform .2s;position:relative}
+  .color-detail .chip[data-zoomable="true"]{cursor:zoom-in}
+  .color-detail .chip[data-zoomable="true"]:hover{transform:scale(1.03)}
+  @media (min-width:600px){.color-detail .chip{width:90px;height:120px;background-size:cover;background-position:center 72%}}
+
+  /* ===== Lightbox ===== */
+  .lightbox{
+    position:fixed;inset:0;z-index:200;
+    background:rgba(0,0,0,0.92);backdrop-filter:blur(6px);
+    display:none;align-items:center;justify-content:center;
+    padding:16px;
+  }
+  .lightbox.open{display:flex}
+  .lightbox-inner{
+    position:relative;width:100%;height:100%;max-width:1200px;
+    display:flex;align-items:center;justify-content:center;
+    overflow:hidden;
+  }
+  .lightbox-img{
+    max-width:100%;max-height:100%;object-fit:contain;
+    user-select:none;-webkit-user-drag:none;
+    transition:transform .2s ease;
+    transform-origin:center center;
+    touch-action:none;
+    will-change:transform;
+    cursor:zoom-in;
+  }
+  .lightbox-img.zoomed{cursor:grab;transition:none}
+  .lightbox-img.zoomed:active{cursor:grabbing}
+  .lb-close{
+    position:absolute;top:18px;right:18px;width:44px;height:44px;
+    background:rgba(20,20,20,0.85);border:1px solid var(--line-2);border-radius:50%;
+    color:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;
+    z-index:3;transition:background .2s;
+  }
+  .lb-close:hover{background:var(--accent);color:var(--accent-ink)}
+  .lb-close svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:2}
+  .lb-caption{
+    position:absolute;left:50%;bottom:18px;transform:translateX(-50%);
+    background:rgba(20,20,20,0.85);border:1px solid var(--line-2);
+    color:#fff;padding:10px 18px;border-radius:99px;
+    font-family:"JetBrains Mono",monospace;font-size:11px;letter-spacing:0.16em;text-transform:uppercase;
+    display:flex;align-items:center;gap:10px;z-index:3;white-space:nowrap;
+  }
+  .lb-caption .dot{width:6px;height:6px;border-radius:50%;background:var(--accent)}
+  .lb-hint{
+    position:absolute;left:50%;top:18px;transform:translateX(-50%);
+    background:rgba(20,20,20,0.7);color:#a8a8a8;
+    padding:7px 14px;border-radius:99px;
+    font-family:"JetBrains Mono",monospace;font-size:10px;letter-spacing:0.14em;text-transform:uppercase;
+    z-index:3;pointer-events:none;
+  }
+  .lb-nav{
+    position:absolute;top:50%;transform:translateY(-50%);
+    width:44px;height:44px;border-radius:50%;
+    background:rgba(20,20,20,0.85);border:1px solid var(--line-2);
+    color:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;
+    z-index:3;transition:background .2s;
+  }
+  .lb-nav:hover{background:var(--accent);color:var(--accent-ink)}
+  .lb-nav.prev{left:18px}
+  .lb-nav.next{right:18px}
+  .lb-nav svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:2}
+  @media (max-width:600px){
+    .lb-nav{width:38px;height:38px}
+    .lb-nav.prev{left:8px}
+    .lb-nav.next{right:8px}
+    .lb-caption{font-size:9px;padding:8px 14px;bottom:14px}
+    .lb-hint{font-size:9px}
+  }
+  .color-detail h4{margin:0;font-family:"Archivo Black",sans-serif;font-size:20px;letter-spacing:-0.01em;text-transform:uppercase}
+  .color-detail .sub{font-family:"JetBrains Mono",monospace;font-size:11px;letter-spacing:0.15em;color:var(--accent);margin-top:4px;text-transform:uppercase}
+  .color-detail p{margin:8px 0 0;color:var(--muted);font-size:14px;line-height:1.55}
+  .colors-extras{
+    margin-top:14px;
+    display:grid;gap:10px;grid-template-columns:repeat(3,1fr);
+  }
+  @media (min-width:600px){.colors-extras{grid-template-columns:repeat(4,1fr)}}
+  @media (min-width:900px){.colors-extras{grid-template-columns:repeat(8,1fr);gap:12px}}
+  .colors-extras .color-card{border-radius:10px}
+  .colors-extras .color-swatch{aspect-ratio:4/5}
+  .colors-extras .color-meta{padding:8px 10px}
+  .colors-extras .color-meta .n{font-size:11px}
+  .colors-extras .color-meta .h{font-size:9px}
+  .expand-btn{
+    margin-top:16px;
+    background:transparent;border:1px solid var(--line-2);color:var(--text);
+    padding:12px 18px;border-radius:99px;
+    font-family:"JetBrains Mono",monospace;font-size:11px;letter-spacing:0.16em;text-transform:uppercase;
+    cursor:pointer;transition:all .2s;
+    display:inline-flex;align-items:center;gap:8px;
+  }
+  .expand-btn:hover{border-color:var(--accent);color:var(--accent)}
+  .expand-btn.open{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+
+  /* ===== Styles (Cómo se usa) ===== */
+  .styles-head{margin-bottom:20px;display:flex;flex-direction:column;gap:14px}
+  .styles-desc{color:var(--muted);font-size:15px;line-height:1.55;max-width:560px}
+  .styles-tabs{
+    display:flex;gap:10px;flex-wrap:wrap;margin-bottom:18px;
+  }
+  .style-tab{
+    flex:1;min-width:0;
+    padding:14px 18px;border:1px solid var(--line);border-radius:99px;
+    font-family:"JetBrains Mono",monospace;font-size:11px;letter-spacing:0.18em;text-transform:uppercase;
+    color:var(--text);background:var(--bg-2);transition:all .2s;text-align:center;cursor:pointer;
+  }
+  .style-tab.active{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+  .style-card{
+    background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);
+    overflow:hidden;display:flex;flex-direction:column;
+  }
+  .style-vis{
+    position:relative;padding:32px 24px;
+    background:radial-gradient(120% 80% at 75% 50%, rgba(203,232,58,0.10), transparent 60%), var(--bg-2);
+    border-bottom:1px solid var(--line);
+    display:grid;grid-template-columns:auto 1fr;gap:18px;align-items:center;min-height:240px;
+  }
+  @media (min-width:600px){.style-vis{padding:40px 36px;gap:32px}}
+  .style-pant{
+    width:108px;height:170px;flex-shrink:0;
+  }
+  @media (min-width:600px){.style-pant{width:130px;height:200px}}
+  .style-chips{display:flex;flex-direction:column;gap:10px;align-items:flex-start}
+  .style-chip{
+    background:rgba(20,20,20,0.6);border:1px solid var(--line-2);
+    color:var(--text);padding:10px 16px;border-radius:99px;
+    font-family:"JetBrains Mono",monospace;font-size:10.5px;letter-spacing:0.16em;text-transform:uppercase;
+    backdrop-filter:blur(8px);white-space:nowrap;
+  }
+  @media (min-width:600px){.style-chip{font-size:11.5px;padding:11px 18px}}
+  .style-info{padding:24px}
+  @media (min-width:600px){.style-info{padding:28px 32px 32px}}
+  .style-info h3{margin:0;font-family:"Archivo Black",sans-serif;font-size:22px;letter-spacing:-0.01em;text-transform:uppercase}
+  @media (min-width:600px){.style-info h3{font-size:26px}}
+  .style-info p{margin:10px 0 0;color:var(--muted);font-size:14px;line-height:1.6;max-width:60ch}
+  .style-colors{
+    margin-top:18px;display:flex;flex-wrap:wrap;gap:8px;align-items:center;
+  }
+  .style-colors .lbl{font-family:"JetBrains Mono",monospace;font-size:9px;letter-spacing:0.2em;text-transform:uppercase;color:var(--muted);margin-right:4px}
+  .style-colors .sw{
+    width:18px;height:24px;border-radius:4px;border:1px solid var(--line-2);
+  }
+
+  /* ===== Wash types ===== */
+  .wash-tabs{
+    display:flex;gap:8px;margin-bottom:24px;flex-wrap:wrap;
+  }
+  .wash-tab{
+    padding:10px 16px;border:1px solid var(--line);border-radius:99px;
+    font-family:"JetBrains Mono",monospace;font-size:11px;letter-spacing:0.16em;text-transform:uppercase;
+    color:var(--muted);background:var(--bg-2);transition:all .2s;
+  }
+  .wash-tab.active{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+  .wash-panel{
+    display:grid;gap:18px;grid-template-columns:1fr;
+    background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:20px;
+  }
+  @media (min-width:800px){.wash-panel{grid-template-columns:240px 1fr;gap:32px;padding:28px}}
+  .wash-vis{
+    aspect-ratio:1;border-radius:12px;background:linear-gradient(135deg,var(--c1),var(--c2));
+    position:relative;overflow:hidden;border:1px solid var(--line-2);
+  }
+  .wash-vis::after{
+    content:"";position:absolute;inset:12%;
+    background:repeating-linear-gradient(45deg,rgba(255,255,255,0.06) 0 2px,transparent 2px 8px);
+    border-radius:8px;mix-blend-mode:overlay;
+  }
+  .wash-vis .ph{
+    position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
+    font-family:"JetBrains Mono",monospace;font-size:10px;letter-spacing:0.2em;color:#0a0a0a99;text-transform:uppercase;
+  }
+  .wash-info h3{margin:0;font-family:"Archivo Black",sans-serif;font-size:28px;letter-spacing:-0.01em;text-transform:uppercase}
+  .wash-info .tagline{font-family:"JetBrains Mono",monospace;font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:var(--accent);margin-top:4px}
+  .wash-info p{color:var(--muted);font-size:14px;line-height:1.55;margin:14px 0}
+  .wash-info ul{margin:8px 0 0;padding:0;list-style:none;display:grid;gap:8px}
+  .wash-info li{display:flex;gap:10px;font-size:14px;align-items:flex-start}
+  .wash-info li::before{content:"";flex-shrink:0;width:6px;height:6px;border-radius:50%;background:var(--accent);margin-top:7px}
+
+  /* ===== Benefits list ===== */
+  .benefits{
+    display:grid;gap:14px;grid-template-columns:1fr;
+  }
+  @media (min-width:700px){.benefits{grid-template-columns:repeat(2,1fr)}}
+  .benefit{
+    display:flex;gap:14px;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:18px;
+  }
+  .benefit .ico{
+    width:36px;height:36px;flex-shrink:0;border-radius:8px;background:var(--bg-2);border:1px solid var(--line-2);
+    display:flex;align-items:center;justify-content:center;
+  }
+  .benefit svg{width:18px;height:18px;stroke:var(--accent);fill:none;stroke-width:1.8}
+  .benefit h4{margin:0;font-size:14px;font-weight:700}
+  .benefit p{margin:4px 0 0;font-size:13px;color:var(--muted);line-height:1.5}
+
+  /* ===== Build details (confección) ===== */
+  .build{
+    display:grid;gap:18px;grid-template-columns:1fr;
+  }
+  @media (min-width:900px){.build{grid-template-columns:1fr 1.1fr;gap:36px}}
+  .build-vis{
+    aspect-ratio:4/3;border-radius:var(--radius);background:#161616;border:1px solid var(--line);
+    position:relative;overflow:hidden;
+  }
+  .build-vis .ph{
+    position:absolute;inset:0;
+    background:repeating-linear-gradient(135deg,#1a1a1a 0 8px,#141414 8px 16px);
+    display:flex;align-items:center;justify-content:center;
+    font-family:"JetBrains Mono",monospace;font-size:11px;letter-spacing:0.2em;color:var(--muted-2);text-transform:uppercase;text-align:center;padding:24px
+  }
+  .build-vis .tag{
+    position:absolute;left:14px;bottom:14px;background:var(--accent);color:var(--accent-ink);
+    font-family:"JetBrains Mono",monospace;font-size:10px;letter-spacing:0.18em;padding:6px 10px;border-radius:99px;text-transform:uppercase
+  }
+  .build-list{display:grid;gap:12px;align-content:start}
+  .build-row{
+    display:grid;grid-template-columns:auto 1fr auto;gap:14px;align-items:center;
+    padding:16px 18px;background:var(--surface);border:1px solid var(--line);border-radius:12px;
+  }
+  .build-row .n{font-family:"JetBrains Mono",monospace;font-size:11px;color:var(--accent);letter-spacing:0.2em}
+  .build-row .t{font-weight:700;font-size:14px}
+  .build-row .d{font-size:12px;color:var(--muted);margin-top:3px}
+  .build-row .dot{width:8px;height:8px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 4px rgba(203,232,58,0.08)}
+
+  /* ===== Care icons ===== */
+  .care{
+    display:grid;gap:12px;grid-template-columns:repeat(2,1fr);
+  }
+  @media (min-width:600px){.care{grid-template-columns:repeat(4,1fr);gap:14px}}
+  .care-item{
+    background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:24px 18px;
+    display:flex;flex-direction:column;align-items:center;gap:14px;
+    transition:border-color .2s, transform .2s;
+  }
+  .care-item:hover{border-color:var(--line-2);transform:translateY(-2px)}
+  .care-item .ic-wrap{
+    width:58px;height:58px;border-radius:50%;background:var(--bg-2);border:1px solid var(--line-2);
+    display:flex;align-items:center;justify-content:center;
+  }
+  .care-item svg{width:30px;height:30px;stroke:var(--accent);fill:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+  .care-item svg text{font-family:"JetBrains Mono",monospace;font-size:6.5px;fill:var(--accent);stroke:none;font-weight:700}
+  .care-item .lbl{font-size:13px;color:var(--text);line-height:1.4;text-wrap:balance;font-weight:500;text-align:center}
+  .care-item .sub-lbl{font-family:"JetBrains Mono",monospace;font-size:9px;letter-spacing:0.18em;text-transform:uppercase;color:var(--muted);text-align:center;margin-top:-6px}
+
+  /* ===== Sizes ===== */
+  .sizes-wrap{display:grid;gap:24px;grid-template-columns:1fr}
+  @media (min-width:900px){.sizes-wrap{grid-template-columns:1fr 1.2fr;gap:36px;align-items:start}}
+  .size-pills{display:flex;gap:10px;flex-wrap:wrap}
+  .size-pill{
+    flex:1;min-width:64px;
+    aspect-ratio:1.1/1;border:1px solid var(--line);border-radius:12px;
+    background:var(--surface);
+    font-family:"Archivo Black",sans-serif;font-size:22px;letter-spacing:-0.01em;
+    color:var(--text);transition:all .2s;
+    display:flex;align-items:center;justify-content:center;
+  }
+  .size-pill:hover{border-color:var(--line-2)}
+  .size-pill.active{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+  .size-hint{font-family:"JetBrains Mono",monospace;font-size:11px;color:var(--muted);letter-spacing:0.1em;margin-top:14px;line-height:1.5}
+  .size-table{
+    background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;
+    font-size:13px;
+  }
+  .size-table table{width:100%;border-collapse:collapse}
+  .size-table th, .size-table td{
+    padding:12px 10px;text-align:center;border-bottom:1px solid var(--line);border-right:1px solid var(--line);
+  }
+  .size-table th:last-child, .size-table td:last-child{border-right:none}
+  .size-table tr:last-child td{border-bottom:none}
+  .size-table th{
+    font-family:"JetBrains Mono",monospace;font-size:10px;letter-spacing:0.15em;text-transform:uppercase;color:var(--muted);
+    background:var(--bg-2);font-weight:500
+  }
+  .size-table td:first-child{font-family:"JetBrains Mono",monospace;font-size:10px;letter-spacing:0.15em;text-transform:uppercase;color:var(--muted);background:var(--bg-2)}
+  .size-table td.hl{background:rgba(203,232,58,0.12);color:var(--accent)}
+  .size-table th.hl{background:rgba(203,232,58,0.18);color:var(--accent)}
+
+  /* ===== Guarantees / trust ===== */
+  .trust{
+    display:grid;gap:14px;grid-template-columns:repeat(2,1fr);
+  }
+  @media (min-width:800px){.trust{grid-template-columns:repeat(4,1fr)}}
+  .trust-item{
+    background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:22px 18px;
+    display:flex;flex-direction:column;gap:14px;
+  }
+  .trust-item svg{width:28px;height:28px;stroke:var(--accent);fill:none;stroke-width:1.6}
+  .trust-item .t{font-family:"Archivo Black",sans-serif;font-size:16px;text-transform:uppercase;letter-spacing:-0.01em;line-height:1.1}
+  .trust-item .d{font-size:12px;color:var(--muted);line-height:1.5}
+
+  /* ===== Footer ===== */
+  footer{
+    background:#0d0d0d;color:var(--text);margin-top:0;padding:48px 0 24px;border-top:1px solid var(--line);
+  }
+  .foot-inner{display:grid;gap:30px;text-align:left}
+  .foot-brand{display:flex;align-items:center;gap:14px}
+  .foot-brand img{height:42px}
+  .foot-tag{
+    font-family:"JetBrains Mono",monospace;font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:var(--muted);
+    padding:6px 10px;border:1px solid var(--line-2);border-radius:99px;
+  }
+  .foot-h{
+    font-family:"Archivo Black",sans-serif;text-transform:uppercase;letter-spacing:-0.01em;
+    font-size:clamp(28px,6vw,48px);line-height:0.95;max-width:14ch;
+  }
+  .foot-sub{font-size:14px;line-height:1.55;max-width:46ch;color:var(--muted)}
+  .foot-row{display:flex;justify-content:space-between;align-items:center;gap:18px;flex-wrap:wrap;padding-top:24px;border-top:1px solid var(--line);margin-top:30px}
+  /* Footer centered on mobile only */
+  @media (max-width:899px){
+    .foot-inner{text-align:center}
+    .foot-inner > div[style*="space-between"]{justify-content:center !important;flex-direction:column;gap:16px}
+    .foot-brand{justify-content:center}
+    .foot-h{margin-left:auto;margin-right:auto}
+    .foot-sub{margin-left:auto;margin-right:auto}
+    .foot-inner > div[style*="grid"] > div:last-child{justify-content:center !important}
+    .foot-row{justify-content:center;flex-direction:column;gap:20px;text-align:center}
+  }
+  .foot-row .small{font-family:"JetBrains Mono",monospace;font-size:10px;letter-spacing:0.18em;text-transform:uppercase}
+  .social{display:flex;gap:10px}
+  .social a{
+    width:42px;height:42px;border-radius:50%;background:rgba(255,255,255,0.08);color:var(--text);
+    display:flex;align-items:center;justify-content:center;transition:transform .2s;
+  }
+  .social a:hover{transform:translateY(-2px)}
+  .social svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:1.8}
+  .share-btn{
+    display:inline-flex;align-items:center;gap:10px;background:var(--accent);color:var(--accent-ink);
+    padding:14px 22px;border-radius:99px;font-family:"JetBrains Mono",monospace;font-size:12px;letter-spacing:0.18em;text-transform:uppercase;
+    transition:transform .2s;
+  }
+  .share-btn:hover{transform:translateY(-2px)}
+  .share-btn svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:1.8}
+
+  /* utility: noselect */
+  .ns{user-select:none;-webkit-user-select:none}
+
+  /* Toast */
+  .toast{
+    position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(20px);
+    background:var(--surface);border:1px solid var(--line-2);color:var(--text);
+    padding:12px 18px;border-radius:99px;font-family:"JetBrains Mono",monospace;font-size:11px;letter-spacing:0.16em;text-transform:uppercase;
+    opacity:0;pointer-events:none;transition:all .25s;z-index:100;
+  }
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+  /* Reveal on scroll */
+  .reveal{opacity:0;transform:translateY(16px);transition:opacity .6s, transform .6s}
+  .reveal.in{opacity:1;transform:none}
+
+  /* Sticky bottom info bar on mobile (distributor watermark) */
+  .dist-bar{
+    position:fixed;bottom:0;left:0;right:0;z-index:40;
+    background:rgba(10,10,10,0.85);backdrop-filter:blur(10px);
+    border-top:1px solid var(--line);
+    padding:10px 16px;
+    display:flex;justify-content:space-between;align-items:center;gap:12px;
+    font-family:"JetBrains Mono",monospace;font-size:10px;letter-spacing:0.16em;text-transform:uppercase;color:var(--muted);
+  }
+  .dist-bar .pulse{display:inline-flex;align-items:center;gap:8px;color:var(--text)}
+  .dist-bar .pulse::before{
+    content:"";width:7px;height:7px;border-radius:50%;background:var(--accent);
+    box-shadow:0 0 0 0 var(--accent);animation:pulse 1.8s infinite;
+  }
+  @keyframes pulse{
+    0%{box-shadow:0 0 0 0 rgba(203,232,58,0.5)}
+    70%{box-shadow:0 0 0 8px rgba(203,232,58,0)}
+    100%{box-shadow:0 0 0 0 rgba(203,232,58,0)}
+  }
+  @media (min-width:900px){.dist-bar{display:none}}
+
+  body{padding-bottom:0}
+</style>
+</head>
+<body>
+
+<template id="__bundler_thumbnail">
+  <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+    <rect width="200" height="200" fill="#0a0a0a"/>
+    <rect x="30" y="30" width="140" height="32" rx="6" fill="#cbe83a"/>
+    <text x="100" y="52" font-family="Archivo Black, sans-serif" font-size="14" fill="#0a0a0a" text-anchor="middle" font-weight="900" letter-spacing="1">ELEMENT</text>
+    <text x="100" y="110" font-family="Archivo Black, sans-serif" font-size="22" fill="#f5f5f5" text-anchor="middle" font-weight="900">BAGGY</text>
+    <text x="100" y="138" font-family="Archivo Black, sans-serif" font-size="22" fill="#f5f5f5" text-anchor="middle" font-weight="900">JEAN<tspan fill="#cbe83a">.</tspan></text>
+    <circle cx="100" cy="170" r="4" fill="#cbe83a"/>
+  </svg>
+</template>
+
+<!-- Static refs so the bundler inlines these assets even though they're loaded via JS -->
+<div aria-hidden="true" style="display:none">
+  <img id="src-hielo"               src="assets/colors/hielo.jpg"               alt="">
+  <img id="src-celeste"             src="assets/colors/celeste.jpg"             alt="">
+  <img id="src-celeste-contaminado" src="assets/colors/celeste-contaminado.jpg" alt="">
+  <img id="src-acero"               src="assets/colors/acero.jpg"               alt="">
+  <img id="src-azul"                src="assets/colors/azul.jpg"                alt="">
+  <img id="src-maiz"                src="assets/colors/maiz.jpg"                alt="">
+  <img id="src-topo"                src="assets/colors/topo.jpg"                alt="">
+  <img id="src-madera"              src="assets/colors/madera.jpg"              alt="">
+  <img id="src-arena"               src="assets/colors/arena.jpg"               alt="">
+  <img id="src-oliva"               src="assets/colors/oliva.jpg"               alt="">
+  <img id="src-vino"                src="assets/colors/vino.jpg"                alt="">
+  <img id="src-mostaza"             src="assets/colors/mostaza.jpg"             alt="">
+  <img id="src-negro"               src="assets/colors/negro.jpg"               alt="">
+  <img id="src-carbon"              src="assets/colors/carbon.jpg"              alt="">
+  <img id="src-plomo-oscuro"        src="assets/colors/plomo-oscuro.jpg"        alt="">
+  <img id="src-plomo"               src="assets/colors/plomo.jpg"               alt="">
+  <img id="src-cafe"                src="assets/colors/cafe.jpg"                alt="">
+  <img id="src-plata"               src="assets/colors/plata.jpg"               alt="">
+  <img id="src-humo"                src="assets/colors/humo.jpg"                alt="">
+  <img id="src-grafito"             src="assets/colors/grafito.jpg"             alt="">
+  <img id="src-tabaco"              src="assets/colors/tabaco.jpg"              alt="">
+  <img id="src-arena-oscura"        src="assets/colors/arena-oscura.jpg"        alt="">
+</div>
+
+<!-- ===== HEADER ===== -->
+<header class="top" data-screen-label="Header">
+  <div class="top-inner">
+    <a class="brand" href="index.html">
+      <img src="assets/logo-element.png" alt="Element Premium" />
+    </a>
+    <nav class="top-nav" id="topNav" aria-label="Otros entalles"></nav>
+    <span class="top-tag" aria-hidden="true" style="display:none"></span>
+  </div>
+</header>
+
+<!-- mobile model selector strip -->
+<nav class="model-strip" id="modelStrip" aria-label="Otros entalles"></nav>
+
+<!-- ===== HERO ===== -->
+<section class="hero" id="hero" data-screen-label="Hero">
+  <div class="wrap">
+    <div class="hero-grid">
+      <div class="hero-text">
+        <span class="hero-tag"><span class="dot"></span>Colección — Denim Premium 26</span>
+        <div class="hero-title-block">
+          <h1 class="display" id="heroTitle">Baggy<br />Jean<span class="period">.</span></h1>
+          <p class="hero-sub" id="heroSub">Corte amplio, caída urbana y presencia streetwear. Diseñado para verse fuerte, sentirse cómodo y durar uso tras uso.</p>
+          <a class="vs-pill" id="vsPill" href="#oversize">
+            <span class="vs-eyebrow">También disponible</span>
+            <span class="vs-name" id="vsName">Oversize → más estructurado, más volumen</span>
+          </a>
+        </div>
+      </div>
+
+      <div class="gallery" id="producto">
+        <div class="gallery-main">
+          <img id="mainImg" src="assets/hero-baggy.jpeg" alt="Baggy Jean Element Premium" />
+          <span class="corner">Look principal</span>
+          <span class="corner-r" id="mainCaption">Vista completa</span>
+        </div>
+        <div class="thumbs" id="thumbs">
+          <button class="thumb" data-idx="1" data-cap="Detalle · Bolsillo trasero">
+            <div class="thumb-ph">
+              <span class="ph-label">Bolsillo</span>
+              <span class="ph-hint">Imagen detalle</span>
+            </div>
+          </button>
+          <button class="thumb" data-idx="2" data-cap="Detalle · Costuras reforzadas">
+            <div class="thumb-ph">
+              <span class="ph-label">Costuras</span>
+              <span class="ph-hint">Imagen detalle</span>
+            </div>
+          </button>
+          <button class="thumb" data-idx="3" data-cap="Detalle · Caída del jean">
+            <div class="thumb-ph">
+              <span class="ph-label">Caída</span>
+              <span class="ph-hint">Imagen detalle</span>
+            </div>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== WHY ===== -->
+<section id="why" data-screen-label="Por qué">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div>
+        <div class="num" id="whyNum">01 — Por qué el Baggy</div>
+        <h2 id="whyH2">Lo que hace<br/>único al baggy</h2>
+      </div>
+    </div>
+
+    <div class="why" id="whyCards">
+      <div class="why-card reveal">
+        <div class="why-num">01</div>
+        <h3>No solo se ve bien el primer día</h3>
+        <p>Construcción pensada para mantener la silueta baggy original. La forma no se pierde con el lavado ni con el uso constante.</p>
+        <span class="tag">Forma duradera</span>
+      </div>
+      <div class="why-card reveal">
+        <div class="why-num">02</div>
+        <h3>Caída natural, no rígida</h3>
+        <p>El denim premium permite una caída urbana que acompaña el cuerpo en movimiento sin verse forzado. Mejora con el uso.</p>
+        <span class="tag">Comodidad real</span>
+      </div>
+      <div class="why-card reveal">
+        <div class="why-num">03</div>
+        <h3>Construido para durar</h3>
+        <p>Costuras dobles en zonas críticas, remaches metálicos y bolsillos reforzados. Pensado para aguantar el desgaste del día a día.</p>
+        <span class="tag">Durabilidad</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== QUALITY ===== -->
+<section id="quality" data-screen-label="Calidad">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div>
+        <div class="num">02 — Calidad</div>
+        <h2>Calidad que<br/>se siente</h2>
+      </div>
+    </div>
+
+    <div class="quality">
+      <div class="q-card reveal">
+        <div class="q-ic">
+          <svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="2"/><path d="M4 12h16M12 4v16"/></svg>
+        </div>
+        <div class="q-spec"><em>100%</em> algodón premium</div>
+        <p class="q-benefit">Tela densa, fresca y noble. Respira como debe respirar un denim de verdad.</p>
+        <span class="q-eyebrow">Tela</span>
+      </div>
+
+      <div class="q-card reveal">
+        <div class="q-ic">
+          <svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/><path d="M8 3l-2 18M16 3l2 18"/></svg>
+        </div>
+        <div class="q-spec">Costuras <em>dobles</em></div>
+        <p class="q-benefit">Doble pespunte en bolsillos, entrepierna y dobladillo. Donde otros se rompen, este aguanta.</p>
+        <span class="q-eyebrow">Construcción</span>
+      </div>
+
+      <div class="q-card reveal">
+        <div class="q-ic">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><circle cx="12" cy="12" r="9"/></svg>
+        </div>
+        <div class="q-spec">Remaches <em>metálicos</em></div>
+        <p class="q-benefit">En puntos de tensión críticos. Refuerzo que no ves pero que se siente lavado tras lavado.</p>
+        <span class="q-eyebrow">Refuerzo</span>
+      </div>
+
+      <div class="q-card reveal">
+        <div class="q-ic">
+          <svg viewBox="0 0 24 24"><path d="M6 8h12l-2 12H8L6 8z"/><path d="M9 8V5a3 3 0 0 1 6 0v3"/></svg>
+        </div>
+        <div class="q-spec">Lavado <em>industrial</em></div>
+        <p class="q-benefit">Proceso controlado por lote. Color uniforme y acabado que no destinta después de un par de lavadas.</p>
+        <span class="q-eyebrow">Acabado</span>
+      </div>
+    </div>
+
+    <div class="quality-foot reveal">
+      <div>
+        <div class="qf-tag">El resumen</div>
+        <div class="qf-text">No es un jean <em>más</em>. Es uno hecho para <em>durar</em>.</div>
+      </div>
+      <div class="qf-meta">
+        <div><span class="k">Composición</span><span class="v">100% Algodón</span></div>
+        <div><span class="k">Fit</span><span class="v">Baggy / Oversize</span></div>
+        <div><span class="k">Origen</span><span class="v">Hecho en Perú</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== COLORS ===== -->
+<section id="colores" data-screen-label="Colores">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div>
+        <div class="num">03 — Variantes</div>
+        <h2>Colores<br/>disponibles</h2>
+      </div>
+      <p class="blurb">Dos colecciones — tómalos como una paleta completa para combinar con cualquier outfit, de día o noche.</p>
+    </div>
+
+    <div class="col-tabs" id="colTabs">
+      <button class="col-tab active" data-fam="color">
+        <span class="ct-eyebrow">Colección 01</span>
+        <span class="ct-name">Versión Color</span>
+        <span class="ct-count">6 tonos</span>
+      </button>
+      <button class="col-tab" data-fam="negra">
+        <span class="ct-eyebrow">Colección 02</span>
+        <span class="ct-name">Versión Negra</span>
+        <span class="ct-count">6 tonos</span>
+      </button>
+    </div>
+
+    <div class="colors-grid" id="colorsGrid"></div>
+
+    <button class="expand-btn" id="expandPalette" type="button">▾ Ver paleta completa</button>
+    <div class="colors-extras" id="colorsExtras" style="display:none"></div>
+
+    <div class="color-detail" id="colorDetail">
+      <div class="chip" id="colorChip"></div>
+      <div>
+        <h4 id="colorTitle">Hilo</h4>
+        <div class="sub" id="colorSub">Versión Color · Crudo natural</div>
+        <p id="colorDesc">Tonalidad cruda y luminosa, fresca para outfits de verano. Combina perfecto con t-shirts blancas, beige y looks minimalistas.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== STYLES (Cómo se usa) ===== -->
+<section id="styles" data-screen-label="Cómo se usa">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div>
+        <div class="num">04 — Estilo del fit</div>
+        <h2 id="stylesH2">Cómo se<br/>usa un baggy</h2>
+      </div>
+    </div>
+
+    <div class="styles-head reveal">
+      <p class="styles-desc" id="stylesDesc">El baggy tiene una silueta amplia, con más aire en la pierna y una caída relajada. No busca marcar el cuerpo: busca presencia, movimiento y un look streetwear más pesado.</p>
+    </div>
+
+    <div class="styles-tabs" id="stylesTabs">
+      <button class="style-tab active" data-style="street">Street</button>
+      <button class="style-tab" data-style="limpio">Limpio</button>
+      <button class="style-tab" data-style="noche">Noche</button>
+    </div>
+
+    <div class="style-card reveal">
+      <div class="style-vis">
+        <svg class="style-pant" id="stylePant" viewBox="0 0 130 200" aria-hidden="true">
+          <rect id="pantWaist" x="22" y="4" width="86" height="14" rx="3" fill="#1a1a1a" stroke="#333" stroke-width="1"/>
+          <line id="pantBelt" x1="22" y1="18" x2="108" y2="18" stroke="#cbe83a" stroke-width="2"/>
+          <path id="legL" d="M22 18 L18 196 L60 196 L62 18 Z" fill="#b3d2e8" stroke="#0a0a0a" stroke-width="1"/>
+          <path id="legR" d="M68 18 L70 196 L112 196 L108 18 Z" fill="#b3d2e8" stroke="#0a0a0a" stroke-width="1"/>
+          <line x1="65" y1="22" x2="65" y2="196" stroke="#0a0a0a" stroke-width="2"/>
+        </svg>
+        <div class="style-chips" id="styleChips">
+          <span class="style-chip">Polo oversized</span>
+          <span class="style-chip">Hoodie pesado</span>
+          <span class="style-chip">Zapatilla chunky</span>
+        </div>
+      </div>
+      <div class="style-info">
+        <h3 id="styleTitle">Streetwear diario</h3>
+        <p id="styleDesc">Combínalo con polo oversized, hoodie y zapatillas chunky o skate shoes. Funciona muy bien con lavados claros y fríos.</p>
+        <div class="style-colors" id="styleColors">
+          <span class="lbl">Mejor con</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== WASH TYPES ===== -->
+<section id="lavados" data-screen-display-label="Lavados">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div>
+        <div class="num">05 — Tipos de lavado</div>
+        <h2>Acabados<br/>industriales</h2>
+      </div>
+      <p class="blurb">Cada lavado tiene un propósito estético distinto. Conoce las diferencias para elegir el que mejor encaja con tu estilo.</p>
+    </div>
+
+    <div class="wash-tabs" id="washTabs">
+      <button class="wash-tab active" data-wash="light">Light Vintage</button>
+      <button class="wash-tab" data-wash="dark">Dark Indigo</button>
+      <button class="wash-tab" data-wash="black">Black Wash</button>
+    </div>
+
+    <div class="wash-panel" id="washPanel">
+      <div class="wash-vis" id="washVis" style="--c1:#a8c4dc;--c2:#dfe9f0">
+        <span class="ph" id="washPh">LIGHT · 01</span>
+      </div>
+      <div class="wash-info">
+        <h3 id="washTitle">Light Vintage Wash</h3>
+        <div class="tagline" id="washTag">Tonalidad azul clara · Aspecto relajado</div>
+        <p id="washDesc">Un lavado claro con efecto desgastado uniforme. Aporta una estética urbana, relajada y fácil de combinar. Perfecto para outfits casuales de día.</p>
+        <ul id="washList">
+          <li>Tonalidad azul clara y luminosa</li>
+          <li>Aspecto relajado y urbano</li>
+          <li>Ideal para outfits streetwear de día</li>
+          <li>Combina con tonos crema, blanco y pastel</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== CARE ===== -->
+<section id="care" data-screen-label="Cuidados">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div>
+        <div class="num">06 — Cuidados</div>
+        <h2>Cuida tu<br/>prenda</h2>
+      </div>
+      <p class="blurb">Sigue estas indicaciones y el jean te durará temporadas, no solo meses.</p>
+    </div>
+
+    <div class="care">
+      <div class="care-item reveal">
+        <div class="ic-wrap">
+          <svg viewBox="0 0 24 24">
+            <path d="M3 7 L4.5 7 L6 18 Q6 19.5 7.5 19.5 L16.5 19.5 Q18 19.5 18 18 L19.5 7 L21 7"/>
+            <text x="12" y="14" text-anchor="middle">30°</text>
+          </svg>
+        </div>
+        <span class="sub-lbl">01 · Lavado</span>
+        <span class="lbl">Lavar al revés a máx. 30°C</span>
+      </div>
+
+      <div class="care-item reveal">
+        <div class="ic-wrap">
+          <svg viewBox="0 0 24 24">
+            <path d="M12 4 L20 19 L4 19 Z"/>
+            <path d="M7.5 9 L16.5 17 M16.5 9 L7.5 17"/>
+          </svg>
+        </div>
+        <span class="sub-lbl">02 · Blanqueador</span>
+        <span class="lbl">No usar lejía ni cloro</span>
+      </div>
+
+      <div class="care-item reveal">
+        <div class="ic-wrap">
+          <svg viewBox="0 0 24 24">
+            <rect x="4" y="5" width="16" height="14" rx="1"/>
+            <path d="M12 5 L12 19"/>
+            <path d="M4 5 L8 9 M8 5 L4 9" />
+          </svg>
+        </div>
+        <span class="sub-lbl">03 · Secado</span>
+        <span class="lbl">Secar a la sombra</span>
+      </div>
+
+      <div class="care-item reveal">
+        <div class="ic-wrap">
+          <svg viewBox="0 0 24 24">
+            <path d="M3.5 17 L20.5 17 L17.5 9 L6.5 9 Z"/>
+            <path d="M3.5 17 L3.5 18.5 L20.5 18.5 L20.5 17"/>
+            <circle cx="10" cy="13.5" r="0.6" fill="currentColor" stroke="none"/>
+            <circle cx="14" cy="13.5" r="0.6" fill="currentColor" stroke="none"/>
+          </svg>
+        </div>
+        <span class="sub-lbl">04 · Planchado</span>
+        <span class="lbl">Planchar por el revés, temp. media</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FOOTER ===== -->
+<footer data-screen-label="Footer">
+  <div class="wrap">
+    <div class="foot-inner">
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:18px;flex-wrap:wrap">
+        <div class="foot-brand">
+          <img src="assets/logo-element.png" alt="Element Premium"/>
+        </div>
+        <span class="foot-tag" id="footTag">Ficha técnica · Baggy</span>
+      </div>
+
+      <div style="display:grid;gap:30px;grid-template-columns:1fr">
+        <div>
+          <h3 class="foot-h">Denim diseñado para durar.</h3>
+          <p class="foot-sub" id="footSub">Una ficha pensada para que conozcas el Baggy a fondo: tela, construcción, colores y cuidados — todo en un solo lugar.</p>
+        </div>
+
+        <div style="display:flex;flex-wrap:wrap;gap:14px;align-items:center">
+          <button class="share-btn" id="shareBtn">
+            <svg viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 13.5l6.8 4M15.4 6.5l-6.8 4"/></svg>
+            Compartir ficha
+          </button>
+          <button class="share-btn" id="copyBtn" style="background:transparent;color:var(--text);border:1px solid var(--line-2)">
+            <svg viewBox="0 0 24 24"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"/></svg>
+            Copiar enlace
+          </button>
+        </div>
+      </div>
+
+      <div class="foot-row">
+        <span class="small">© Element Premium · Made in Perú</span>
+        <div class="social">
+          <a href="https://www.instagram.com/elementpremium.pe" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+            <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="0.6" fill="currentColor"/></svg>
+          </a>
+          <a href="https://www.tiktok.com/@element_premium" target="_blank" rel="noopener noreferrer" aria-label="TikTok">
+            <svg viewBox="0 0 24 24"><path d="M14 4v10.5a3.5 3.5 0 1 1-3.5-3.5"/><path d="M14 4c0 3 2 5 5 5"/></svg>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- mobile-only distributor strip removed -->
+
+<div class="toast" id="toast">Enlace copiado</div>
+
+<!-- ===== Lightbox ===== -->
+<div class="lightbox" id="lightbox" aria-hidden="true">
+  <button class="lb-close" id="lbClose" aria-label="Cerrar">
+    <svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg>
+  </button>
+  <span class="lb-hint" id="lbHint">Toca para hacer zoom · arrastra para mover</span>
+  <button class="lb-nav prev" id="lbPrev" aria-label="Anterior">
+    <svg viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6"/></svg>
+  </button>
+  <div class="lightbox-inner">
+    <img class="lightbox-img" id="lbImg" alt="" />
+  </div>
+  <button class="lb-nav next" id="lbNext" aria-label="Siguiente">
+    <svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg>
+  </button>
+  <div class="lb-caption" id="lbCaption"><span class="dot"></span><span id="lbCapText">—</span></div>
+</div>
+
+<script>
+  /* ===== Gallery (thumbs swap main image / show placeholder) ===== */
+  const thumbs = document.querySelectorAll('.thumb');
+  const mainImg = document.getElementById('mainImg');
+  const mainCaption = document.getElementById('mainCaption');
+  const mainEl = document.querySelector('.gallery-main');
+  const cornerEl = document.querySelector('.gallery-main .corner');
+
+  function resetMainToHero(){
+    mainImg.style.display = 'block';
+    mainImg.src = currentHeroSrc;
+    mainEl.style.background = '#111';
+    const ph = mainEl.querySelector('.main-ph');
+    if (ph) ph.remove();
+    cornerEl.textContent = 'Look principal';
+    mainCaption.textContent = 'Vista completa';
+  }
+
+  // Aplica foto principal + fotos de detalle del entalle (desde el panel)
+  // Media por defecto incorporada (sin depender del panel admin / localStorage)
+  const DEFAULT_MEDIA = {};
+
+  function applyEntalleMedia(key, ecfg){
+    ecfg = ecfg || {};
+    const dm = DEFAULT_MEDIA[key] || {};
+    currentHeroSrc = ecfg.hero || dm.hero || HERO_DEFAULT;
+    mainImg.style.display = 'block';
+    mainImg.src = currentHeroSrc;
+    mainEl.style.background = '#111';
+    const ph = mainEl.querySelector('.main-ph'); if (ph) ph.remove();
+    cornerEl.textContent = 'Look principal';
+    mainCaption.textContent = 'Vista completa';
+    const details = ecfg.details || dm.details || [];
+    thumbs.forEach((t,i) => {
+      t.classList.remove('active');
+      if (details[i]){
+        t.dataset.detail = details[i];
+        t.innerHTML = `<img src="${details[i]}" alt="Detalle ${i+1}" style="width:100%;height:100%;object-fit:cover">`;
+      } else {
+        t.dataset.detail = '';
+        const label = ['Bolsillo','Costuras','Caída'][i] || 'Detalle';
+        t.innerHTML = `<div class="thumb-ph"><span class="ph-label">${label}</span><span class="ph-hint">Imagen detalle</span></div>`;
+      }
+    });
+  }
+
+  thumbs.forEach(t => {
+    t.addEventListener('click', () => {
+      const isActive = t.classList.contains('active');
+      thumbs.forEach(x => x.classList.remove('active'));
+      if (isActive){ resetMainToHero(); return; }
+      t.classList.add('active');
+      // si hay foto de detalle real, mostrarla
+      if (t.dataset.detail){
+        mainImg.style.display = 'block';
+        mainImg.src = t.dataset.detail;
+        mainEl.style.background = '#111';
+        const ph0 = mainEl.querySelector('.main-ph'); if (ph0) ph0.remove();
+        cornerEl.textContent = 'Detalle';
+        mainCaption.textContent = t.dataset.cap || 'Detalle';
+        return;
+      }
+      // show placeholder detail in main
+      mainImg.style.display = 'none';
+      const captionText = t.dataset.cap;
+      const label = t.querySelector('.ph-label')?.textContent || 'Detalle';
+      mainEl.style.background = 'repeating-linear-gradient(135deg, #1a1a1a 0 14px, #141414 14px 28px)';
+      let ph = mainEl.querySelector('.main-ph');
+      if (!ph){
+        ph = document.createElement('div');
+        ph.className = 'main-ph';
+        ph.style.cssText = 'position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;color:#8a8a8a;font-family:"JetBrains Mono",monospace;font-size:11px;letter-spacing:0.2em;text-transform:uppercase;text-align:center;padding:32px;';
+        mainEl.appendChild(ph);
+      }
+      ph.innerHTML = `<div>placeholder · imagen detalle</div><strong style="color:#cbe83a;font-size:18px;letter-spacing:0.15em;font-family:'Archivo Black',sans-serif">${label}</strong>`;
+      cornerEl.textContent = label;
+      mainCaption.textContent = captionText;
+    });
+  });
+
+  /* ===== Colors ===== */
+  // Resolve image sources from static refs so the bundler-embedded data URLs work in the standalone build
+  const resolvedSrc = (id) => document.getElementById(id)?.getAttribute('src') || '';
+  const IMG = {
+    hielo:               resolvedSrc('src-hielo'),
+    celeste:             resolvedSrc('src-celeste'),
+    'celeste-contaminado': resolvedSrc('src-celeste-contaminado'),
+    acero:               resolvedSrc('src-acero'),
+    azul:                resolvedSrc('src-azul'),
+    maiz:                resolvedSrc('src-maiz'),
+    topo:                resolvedSrc('src-topo'),
+    madera:              resolvedSrc('src-madera'),
+    arena:               resolvedSrc('src-arena'),
+    oliva:               resolvedSrc('src-oliva'),
+    vino:                resolvedSrc('src-vino'),
+    mostaza:             resolvedSrc('src-mostaza'),
+    negro:               resolvedSrc('src-negro'),
+    carbon:              resolvedSrc('src-carbon'),
+    'plomo-oscuro':      resolvedSrc('src-plomo-oscuro'),
+    plomo:               resolvedSrc('src-plomo'),
+    cafe:                resolvedSrc('src-cafe'),
+    plata:               resolvedSrc('src-plata'),
+    humo:                resolvedSrc('src-humo'),
+    grafito:             resolvedSrc('src-grafito'),
+    tabaco:              resolvedSrc('src-tabaco'),
+    'arena-oscura':      resolvedSrc('src-arena-oscura')
+  };
+
+  const colorData = {
+    color: {
+      featured: [
+        { id:'hielo',              name:'Hielo',              hex:'#E8EEF2', c2:'#F5F8FA', img: IMG.hielo,                  sub:'Crudo frío',         desc:'Tonalidad fría casi blanca, fresca y luminosa. Perfecta para verano y looks minimalistas.' },
+        { id:'celeste',            name:'Celeste',            hex:'#B3D2E8', c2:'#D6E6F1', img: IMG.celeste,                sub:'Azul claro',          desc:'Azul claro relajado. Combina fácil con polos blancos, crema y cualquier sneaker.' },
+        { id:'celeste-contaminado',name:'Celeste contaminado',hex:'#7E97A8', c2:'#9CB1BE', img: IMG['celeste-contaminado'], sub:'Azul grisaceo',       desc:'Celeste con matiz gris. Un azul más urbano, menos saturado, más discreto.' },
+        { id:'acero',              name:'Acero',              hex:'#6C7B8A', c2:'#849099', img: IMG.acero,                  sub:'Azul metálico',      desc:'Gris azulado frío, con cuerpo y presencia. Versátil para día y noche.' },
+        { id:'azul',               name:'Azul',               hex:'#2C4A72', c2:'#3D5F8A', img: IMG.azul,                   sub:'Indigo clásico',     desc:'El azul denim de toda la vida — fuerte, profundo y nunca pasa de moda.' },
+        { id:'maiz',               name:'Maíz',               hex:'#E5C76A', c2:'#F0D684', img: IMG.maiz,                   sub:'Amarillo cálido',    desc:'Un tono que destaca. Para outfits que se animen a salirse del azul.' }
+      ],
+      extras: [
+        { id:'topo',     name:'Topo',     hex:'#9F8067', c2:'#B59986', img: IMG.topo,    sub:'Marrón grisaceo',  desc:'Neutro cálido entre marrón y gris. Versátil.' },
+        { id:'madera',   name:'Madera',   hex:'#7A5236', c2:'#92684A', img: IMG.madera,  sub:'Marrón profundo',  desc:'Marrón tierra con cuerpo y elegancia.' },
+        { id:'arena',    name:'Arena',    hex:'#D4BE94', c2:'#E2D0AC', img: IMG.arena,   sub:'Beige cálido',     desc:'Beige neutro tipo arena. Muy combinable.' },
+        { id:'oliva',    name:'Oliva',    hex:'#6E7148', c2:'#82855A', img: IMG.oliva,   sub:'Verde militar',     desc:'Verde oliva apagado, urbano y de pasarela.' },
+        { id:'vino',     name:'Vino',     hex:'#5E2A2E', c2:'#763D42', img: IMG.vino,    sub:'Rojo profundo',     desc:'Borgoña sobrio para outfits de otoño.' },
+        { id:'mostaza',  name:'Mostaza',  hex:'#B68A2C', c2:'#CFA040', img: IMG.mostaza, sub:'Amarillo terroso',  desc:'Amarillo apagado, cálido y elegante.' }
+      ]
+    },
+    negra: {
+      featured: [
+        { id:'negro',         name:'Negro',         hex:'#0D0D0D', c2:'#1A1A1A', img: IMG.negro,            sub:'Negro intenso',     desc:'Negro profundo y absoluto. Máximo contraste y minimalismo.' },
+        { id:'carbon',        name:'Carbón',        hex:'#22221F', c2:'#2E2E2A', img: IMG.carbon,           sub:'Negro cálido',     desc:'Negro con un matiz cálido sutil, más suave que el negro puro.' },
+        { id:'plomo-oscuro',  name:'Plomo oscuro',  hex:'#3A3A3D', c2:'#494C50', img: IMG['plomo-oscuro'],  sub:'Gris profundo',     desc:'Gris oscuro saturado, alternativa moderna al negro.' },
+        { id:'plomo',         name:'Plomo',         hex:'#6B6E72', c2:'#82868A', img: IMG.plomo,            sub:'Gris medio',        desc:'Gris medio neutral, perfecto para looks urbanos sobrios.' },
+        { id:'cafe',          name:'Café',          hex:'#3A2820', c2:'#503528', img: IMG.cafe,             sub:'Marrón oscuro',    desc:'Marrón chocolate intenso, alternativa elegante al negro.' },
+        { id:'plata',         name:'Plata',         hex:'#C2C5C8', c2:'#D7DADD', img: IMG.plata,            sub:'Gris claro metálico', desc:'Gris claro luminoso, versátil y moderno.' }
+      ],
+      extras: [
+        { id:'humo',         name:'Humo',         hex:'#56575A', c2:'#6B6C6F', img: IMG.humo,             sub:'Gris medio frío', desc:'Gris humo neutro.' },
+        { id:'grafito',      name:'Grafito',      hex:'#2E3033', c2:'#3F4145', img: IMG.grafito,          sub:'Gris muy oscuro', desc:'Gris casi negro con sutil tono azul.' },
+        { id:'tabaco',       name:'Tabaco',       hex:'#5C4530', c2:'#724F38', img: IMG.tabaco,           sub:'Marrón tabaco',  desc:'Marrón con calidez de tabaco.' },
+        { id:'arena-oscura', name:'Arena oscura', hex:'#8B7765', c2:'#9D8775', img: IMG['arena-oscura'],  sub:'Beige oscuro',    desc:'Beige sombrío, cálido pero discreto.' }
+      ]
+    }
+  };
+
+  const colorsGrid = document.getElementById('colorsGrid');
+  const colorsExtras = document.getElementById('colorsExtras');
+  const colorChip = document.getElementById('colorChip');
+  const colorTitle = document.getElementById('colorTitle');
+  const colorSub = document.getElementById('colorSub');
+  const colorDesc = document.getElementById('colorDesc');
+  const expandBtn = document.getElementById('expandPalette');
+  let currentFam = 'color';
+  let expanded = false;
+
+  /* ===== Config por entalle (desde el panel Admin Fichas) ===== */
+  const FICHAS_CFG_KEY = 'element_fichas_config_v1';
+  const FICHAS_PUB_KEY = 'element_fichas_published_v1';
+  let currentFitKey = 'baggy';
+  let fichasCfg = {};
+  // El cliente ve lo PUBLICADO. Con ?admin o ?preview, el dueño ve su borrador sin publicar.
+  const _fParams = new URLSearchParams(location.search);
+  const _previewMode = _fParams.has('admin') || _fParams.has('preview');
+  try {
+    const raw = _previewMode
+      ? (localStorage.getItem(FICHAS_CFG_KEY) || localStorage.getItem(FICHAS_PUB_KEY))
+      : (localStorage.getItem(FICHAS_PUB_KEY) || localStorage.getItem(FICHAS_CFG_KEY));
+    fichasCfg = JSON.parse(raw) || {};
+  } catch(e){ fichasCfg = {}; }
+  // Config incrustada al publicar (si existe); lo editado localmente por el admin tiene prioridad
+  if (window.ELEMENT_FICHAS_CFG) fichasCfg = Object.assign({}, window.ELEMENT_FICHAS_CFG, fichasCfg);
+  let adminMode = false;        // modo edición de textos (?admin)
+  let currentStyleKey = 'street';
+  // Captura la imagen principal ya incrustada (sirve para el archivo standalone)
+  const HERO_DEFAULT = (document.getElementById('mainImg') && document.getElementById('mainImg').getAttribute('src')) || 'assets/hero-baggy.jpeg';
+  let currentHeroSrc = HERO_DEFAULT;
+  const MASTER = {};
+  ['color','negra'].forEach(fam => {
+    [...colorData[fam].featured, ...colorData[fam].extras].forEach(c => { MASTER[c.id] = c; });
+  });
+  // Fotos de colores personalizadas (subidas desde el panel Admin Fichas)
+  const PAL_OV = fichasCfg._pal || {};
+  Object.keys(PAL_OV).forEach(id => { if (MASTER[id]) MASTER[id].img = PAL_OV[id]; });
+  function availColors(fam){
+    const cfg = fichasCfg[currentFitKey];
+    const ids = cfg && cfg.colors && cfg.colors[fam];
+    const list = (ids && ids.length) ? ids.map(id => MASTER[id]).filter(Boolean)
+                                     : [...colorData[fam].featured, ...colorData[fam].extras];
+    return { featured: list.slice(0,6), extras: list.slice(6) };
+  }
+  function sigHexToRgba(hex,a){ const h=(hex||'').replace('#',''); const f=h.length===3?h.split('').map(x=>x+x).join(''):h; const n=parseInt(f,16); if(isNaN(n)) return `rgba(203,232,58,${a})`; return `rgba(${(n>>16)&255},${(n>>8)&255},${n&255},${a})`; }
+
+  function makeCard(c, mini){
+    const zoomIcon = `<span class="zoom-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/><path d="M8 11h6M11 8v6"/></svg></span>`;
+    const swatch = c.img
+      ? `<div class="color-swatch with-img" data-zoomable="true"><img src="${c.img}" alt="${c.name}" loading="lazy"/>${zoomIcon}</div>`
+      : `<div class="color-swatch"></div>`;
+    return `<button class="color-card${mini?' mini':''}" data-id="${c.id}" style="--c1:${c.hex};--c2:${c.c2}">
+      ${swatch}
+      <div class="color-meta">
+        <span class="n">${c.name}</span>
+        <span class="h">${c.hex.toUpperCase()}</span>
+      </div>
+    </button>`;
+  }
+
+  function bindCardClicks(){
+    document.querySelectorAll('#colorsGrid .color-card, #colorsExtras .color-card').forEach(card => {
+      card.addEventListener('click', (ev) => {
+        document.querySelectorAll('.color-card').forEach(c => c.classList.remove('active'));
+        card.classList.add('active');
+        const c = MASTER[card.dataset.id];
+        if (c) selectColor(c);
+        // If click landed on the photo swatch, open lightbox
+        const onSwatch = ev.target.closest('.color-swatch.with-img');
+        if (onSwatch && c && c.img){
+          openLightbox(c);
+        }
+      });
+    });
+  }
+
+  function renderColors(fam){
+    currentFam = fam;
+    const av = availColors(fam);
+    const featured = av.featured;
+    const extras   = av.extras;
+    colorsGrid.innerHTML = featured.map((c,i) => makeCard(c)).join('');
+    colorsExtras.innerHTML = extras.map(c => makeCard(c, true)).join('');
+    expandBtn.textContent = `▾ Ver paleta completa (+${extras.length} tonos)`;
+    expanded = false;
+    colorsExtras.style.display = 'none';
+    expandBtn.classList.remove('open');
+    expandBtn.style.display = extras.length ? '' : 'none';
+    colorsGrid.querySelector('.color-card')?.classList.add('active');
+    if (featured[0]) selectColor(featured[0]);
+    bindCardClicks();
+  }
+
+  function selectColor(c){
+    if (!c) return;
+    if (c.img) {
+      colorChip.style.background = `#0b0b0b center 72%/cover no-repeat url('${c.img}')`;
+      colorChip.setAttribute('data-zoomable','true');
+      colorChip.dataset.colorId = c.id;
+    } else {
+      colorChip.style.background = `linear-gradient(140deg,${c.hex},${c.c2})`;
+      colorChip.removeAttribute('data-zoomable');
+      colorChip.dataset.colorId = '';
+    }
+    colorTitle.textContent = c.name;
+    colorSub.textContent = `Versión ${currentFam === 'color' ? 'Color' : 'Negra'} · ${c.sub}`;
+    colorDesc.textContent = c.desc;
+  }
+
+  colorChip.addEventListener('click', () => {
+    if (colorChip.getAttribute('data-zoomable') !== 'true') return;
+    const all = [...colorData[currentFam].featured, ...colorData[currentFam].extras];
+    const c = all.find(x => x.id === colorChip.dataset.colorId);
+    if (c) openLightbox(c);
+  });
+
+  document.querySelectorAll('.col-tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      document.querySelectorAll('.col-tab').forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+      renderColors(tab.dataset.fam);
+    });
+  });
+
+  expandBtn.addEventListener('click', () => {
+    expanded = !expanded;
+    colorsExtras.style.display = expanded ? 'grid' : 'none';
+    expandBtn.classList.toggle('open', expanded);
+    const extras = colorData[currentFam].extras;
+    expandBtn.textContent = expanded
+      ? `▴ Ocultar paleta completa`
+      : `▾ Ver paleta completa (+${extras.length} tonos)`;
+  });
+
+  renderColors('color');
+
+  /* ===== FIT ENGINE (todos los entalles en un archivo) ===== */
+  // Paletas reutilizables para recomendaciones de estilo
+  const CS = {
+    light: [{hex:'#E8EEF2',name:'Hielo'},{hex:'#B3D2E8',name:'Celeste'},{hex:'#6C7B8A',name:'Acero'}],
+    mid:   [{hex:'#2C4A72',name:'Azul'},{hex:'#6B6E72',name:'Plomo'},{hex:'#E5C76A',name:'Maíz'}],
+    dark:  [{hex:'#0D0D0D',name:'Negro'},{hex:'#22221F',name:'Carbón'},{hex:'#3A2820',name:'Café'}]
+  };
+  // Siluetas del pantalón para la ilustración (waist + 2 piernas)
+  const PANTS = {
+    baggy:       { wx:22, ww:86, l:'M22 18 L18 196 L60 196 L62 18 Z',                 r:'M68 18 L70 196 L112 196 L108 18 Z' },
+    oversize:    { wx:14, ww:102,l:'M14 18 L10 196 L60 196 L62 18 Z',                 r:'M68 18 L70 196 L120 196 L116 18 Z' },
+    flare:       { wx:26, ww:78, l:'M26 18 L34 112 L18 196 L52 196 L48 112 L58 18 Z', r:'M72 18 L82 112 L78 196 L112 196 L96 112 L104 18 Z' },
+    'flare-relax':{ wx:24, ww:82, l:'M24 18 L32 116 L14 196 L54 196 L48 116 L60 18 Z', r:'M70 18 L82 116 L76 196 L116 196 L98 116 L106 18 Z' },
+    mom:         { wx:26, ww:78, l:'M26 18 L30 196 L52 196 L60 18 Z',                 r:'M70 18 L78 196 L100 196 L104 18 Z' },
+    regular:     { wx:28, ww:74, l:'M28 18 L26 196 L54 196 L58 18 Z',                 r:'M72 18 L76 196 L104 196 L102 18 Z' },
+    semipitillo: { wx:32, ww:66, l:'M32 18 L36 196 L54 196 L58 18 Z',                 r:'M72 18 L76 196 L94 196 L98 18 Z' },
+    pitillo:     { wx:34, ww:62, l:'M34 18 L42 196 L54 196 L58 18 Z',                 r:'M72 18 L76 196 L88 196 L96 18 Z' },
+    skinny:      { wx:36, ww:58, l:'M36 18 L46 196 L56 196 L60 18 Z',                 r:'M70 18 L74 196 L84 196 L94 18 Z' }
+  };
+
+  const FITS = {
+    baggy: {
+      name:'Baggy', word:'Baggy', suffix:'Jean', order:1,
+      sig:'#cbe83a', glow:'rgba(203,232,58,0.10)', glow2:'rgba(203,232,58,0.04)',
+      sub:'Aire en la pierna, peso en la caída. El corte amplio que domina la calle: cómodo todo el día, con una presencia que no necesita esforzarse.',
+      vs:{fit:'oversize', text:'Oversize → más estructurado, más volumen'},
+      whyNum:'01 — Por qué el Baggy', whyH2:'Lo que hace<br/>único al baggy',
+      why:[
+        {h:'La forma que compras es la que se queda', p:'Denim con cuerpo que sostiene la silueta amplia lavada tras lavada. Tu baggy del primer día sigue siendo el mismo a los seis meses.', t:'Forma duradera'},
+        {h:'Cae, no cuelga', p:'La diferencia entre un baggy y un pantalón grande está en la caída: tela con peso que acompaña el paso sin verse desordenada.', t:'Caída real'},
+        {h:'Hecho para la calle de verdad', p:'Costuras dobles, remaches metálicos y bolsillos reforzados que aguantan llaves, celular y el ritmo de todos los días.', t:'Durabilidad'}
+      ],
+      stylesH2:'Cómo se<br/>usa un baggy',
+      stylesDesc:'El baggy no marca el cuerpo: lo libera. Más aire en la pierna, más movimiento al caminar y una silueta que se reconoce a una cuadra de distancia.',
+      styles:{
+        street:{title:'Streetwear diario', desc:'Polo oversized o hoodie pesado y zapatilla chunky. Proporciones generosas de pies a cabeza: el uniforme de la calle.', chips:['Polo oversized','Hoodie pesado','Zapatilla chunky'], colors:CS.light},
+        limpio:{title:'Casual elevado', desc:'Camisa lisa, bomber ligera y sneakers blancos impecables. El volumen se mantiene, el look sube de nivel.', chips:['Camisa lisa','Bomber ligera','Sneakers limpios'], colors:CS.mid},
+        noche:{title:'Look nocturno', desc:'T-shirt negra, chaqueta tech y botín oscuro. Silueta amplia en tonos profundos: presencia sin levantar la voz.', chips:['T-shirt negra','Chaqueta tech','Botín oscuro'], colors:CS.dark}
+      }
+    },
+    oversize: {
+      name:'Oversize', word:'Oversize', suffix:null, order:2,
+      sig:'#d9a06c', glow:'rgba(217,160,108,0.12)', glow2:'rgba(217,160,108,0.05)',
+      sub:'Una talla más de tela, varias tallas más de actitud. Volumen con estructura: cae con intención, no por accidente.',
+      vs:{fit:'baggy', text:'Baggy → más relajado, menos estructurado'},
+      whyNum:'01 — Por qué el Oversize', whyH2:'Volumen que<br/>se nota',
+      why:[
+        {h:'Volumen con arquitectura', p:'No es tela suelta: es una silueta construida. Cae con peso y forma propia, y no se desarma con el movimiento.', t:'Presencia'},
+        {h:'La proporción es el truco', p:'Brilla junto a prendas entalladas arriba. El contraste entre lo ceñido y lo amplio es lo que hace que el outfit funcione.', t:'Proporción'},
+        {h:'Nacido para el layering', p:'Hoodies, chaquetas largas, sobretodos: mientras más capas, mejor luce. Para outfits con peso visual.', t:'Capas'}
+      ],
+      stylesH2:'Cómo se<br/>usa un oversize',
+      stylesDesc:'El oversize lleva el volumen como lenguaje. Estructura marcada, proporción dominante y una regla de oro: lo amplio abajo pide línea limpia arriba.',
+      styles:{
+        street:{title:'Street con balance', desc:'Tee ajustada o polo entallado, hoodie corto o bomber liviana. La fórmula: volumen abajo, línea limpia arriba.', chips:['Polo entallado','Hoodie corto','Sneaker bajo'], colors:CS.light},
+        limpio:{title:'Smart casual', desc:'Camisa metida con cinturón visible para anclar la cintura, mocasín o sneaker limpio. Volumen ordenado, intención clara.', chips:['Camisa tucked','Cinturón visible','Mocasín / sneaker'], colors:CS.mid},
+        noche:{title:'Monocromático nocturno', desc:'Tee fitted oscura, sobretodo largo y botín cuadrado. Un solo tono de pies a cabeza: el volumen hace el resto.', chips:['Tee fitted oscura','Sobretodo largo','Botín cuadrado'], colors:CS.dark}
+      }
+    },
+    flare: {
+      name:'Flare Slim', word:'Flare', suffix:'Slim', order:3,
+      sig:'#e85d9b', glow:'rgba(232,93,155,0.12)', glow2:'rgba(232,93,155,0.05)',
+      sub:'Ceñido hasta la rodilla, abierto hasta el suelo. La campana setentera que alarga la pierna y le pone ritmo a cada paso.',
+      vs:{fit:'flare-relax', text:'Flare Relax → misma campana, caída más holgada'},
+      whyNum:'01 — Por qué el Flare Slim', whyH2:'La campana<br/>que estiliza',
+      why:[
+        {h:'Piernas más largas, sin trucos', p:'El ajuste en el muslo y la apertura en la basta alargan la silueta al instante. Geometría pura trabajando a tu favor.', t:'Silueta'},
+        {h:'Camina con ritmo propio', p:'La campana se mueve contigo y le da swing a cada paso. Un guiño setentero que nunca termina de irse.', t:'Actitud'},
+        {h:'El aliado de la plataforma', p:'La basta amplia cubre el botín o la plataforma y suma centímetros sin que se note el esfuerzo.', t:'Versátil'}
+      ],
+      stylesH2:'Cómo se<br/>usa un flare',
+      stylesDesc:'El flare es contraste puro: pegado arriba, libre abajo. Pide prendas entalladas en el torso para que la campana sea la única protagonista.',
+      styles:{
+        street:{title:'Retro casual', desc:'Tee entallada o crop, chaqueta corta y botín de plataforma. Arriba compacto, abajo en movimiento.', chips:['Tee entallada','Chaqueta corta','Botín plataforma'], colors:CS.light},
+        limpio:{title:'Elegante setentero', desc:'Camisa fina metida, cinturón delgado y plataforma. La silueta se alarga sola: limpia, retro y elegante.', chips:['Camisa fina tucked','Cinturón fino','Plataforma'], colors:CS.mid},
+        noche:{title:'Disco nocturno', desc:'Top ceñido, blazer estructurado y botín. Luz baja, campana en movimiento: el flare hace el resto.', chips:['Top ceñido','Blazer','Botín oscuro'], colors:CS.dark}
+      }
+    },
+    'flare-relax': {
+      name:'Flare Relax', word:'Flare', suffix:'Relax', order:3.5,
+      sig:'#c95ba0', glow:'rgba(201,91,160,0.12)', glow2:'rgba(201,91,160,0.05)',
+      sub:'La misma campana retro, con una caída más relajada. Holgura cómoda en cadera y pierna que mantiene la apertura abierta sin perder el aire.',
+      vs:{fit:'flare', text:'Flare Slim → ceñido al muslo, silueta más marcada'},
+      whyNum:'01 — Por qué el Flare Relax', whyH2:'Campana<br/>relajada',
+      why:[
+        {h:'Holgura que se agradece', p:'Más espacio en cadera y muslo para moverte todo el día sin que la prenda apriete. Comodidad real, sin renunciar a la campana.', t:'Comodidad'},
+        {h:'La campana sigue mandando', p:'La apertura en la basta se mantiene: alarga la pierna y le da swing al paso, ahora con una caída más suelta y natural.', t:'Silueta'},
+        {h:'Streetwear sin esfuerzo', p:'El equilibrio entre lo retro y lo relajado. Combina con prendas amplias arriba para un look urbano y cómodo.', t:'Versátil'}
+      ],
+      stylesH2:'Cómo se<br/>usa un flare',
+      stylesDesc:'El flare relax pide equilibrio: deja que la campana respire con prendas medianas arriba, ni muy ceñidas ni muy amplias.',
+      styles:{
+        street:{title:'Retro casual', desc:'Tee holgada, chaqueta corta y zapatilla blanca. Caída suelta de arriba a abajo, cómoda y con actitud.', chips:['Tee holgada','Chaqueta corta','Zapatilla blanca'], colors:CS.light},
+        limpio:{title:'Setentero relajado', desc:'Camisa fluida semi-metida, cinturón fino y plataforma. La campana cae natural y la silueta se alarga sola.', chips:['Camisa fluida','Cinturón fino','Plataforma'], colors:CS.mid},
+        noche:{title:'Disco nocturno', desc:'Top medio, blazer suelto y botín. Movimiento en la campana, comodidad en la caída.', chips:['Top medio','Blazer suelto','Botín oscuro'], colors:CS.dark}
+      }
+    },
+    mom: {
+      name:'Mom', word:'Mom', suffix:'Jean', order:4,
+      sig:'#5bc0a8', glow:'rgba(91,192,168,0.12)', glow2:'rgba(91,192,168,0.05)',
+      sub:'Tiro alto, cadera relajada y tobillo recogido. El clásico de los noventa que nunca dejó de favorecer.',
+      vs:{fit:'regular', text:'Regular → recto parejo, tiro medio'},
+      whyNum:'01 — Por qué el Mom', whyH2:'El clásico<br/>noventero',
+      why:[
+        {h:'La cintura manda', p:'El tiro alto define la cintura y ordena toda la silueta. Ese es el secreto por el que el mom le queda bien a todo el mundo.', t:'Cintura'},
+        {h:'Holgado, nunca desarmado', p:'Aire en cadera y muslo con un leve recogido al tobillo. La comodidad de un jean suelto con la forma de uno pensado.', t:'Comodidad'},
+        {h:'El comodín del clóset', p:'Tee básica, blusa, hoodie o blazer: el mom conversa con todo lo que ya tienes colgado.', t:'Versátil'}
+      ],
+      stylesH2:'Cómo se<br/>usa un mom',
+      stylesDesc:'El mom vive del tiro alto: todo lo que se mete dentro del pantalón marca la cintura y estiliza. Suelto donde conviene, definido donde importa.',
+      styles:{
+        street:{title:'Casual noventero', desc:'Tee básica metida, chaqueta denim o bomber y sneaker retro. Noventero sin disfraz: cómodo y con carácter.', chips:['Tee metida','Chaqueta denim','Sneaker retro'], colors:CS.light},
+        limpio:{title:'Minimal chic', desc:'Crewneck fino metido, cinturón y mocasín o bailarina. Minimal, prolijo y favorecedor sin esfuerzo.', chips:['Crewneck tucked','Cinturón','Mocasín'], colors:CS.mid},
+        noche:{title:'Noche relajada', desc:'Top oscuro metido, blazer oversize y botín. Relajado de cintura para abajo, afilado de cintura para arriba.', chips:['Top metido','Blazer oversize','Botín'], colors:CS.dark}
+      }
+    },
+    regular: {
+      name:'Regular', word:'Regular', suffix:'Jean', order:5,
+      sig:'#5b8cf5', glow:'rgba(91,140,245,0.12)', glow2:'rgba(91,140,245,0.05)',
+      sub:'Recto, parejo y sin fecha de vencimiento. El corte que no persigue tendencias porque no las necesita.',
+      vs:{fit:'mom', text:'Mom → tiro alto, más holgado en cadera'},
+      whyNum:'01 — Por qué el Regular', whyH2:'El corte<br/>que nunca falla',
+      why:[
+        {h:'El punto medio exacto', p:'Ni aprieta ni sobra. Una caída recta y pareja que sienta bien a casi cualquier cuerpo, sin pedir nada a cambio.', t:'Equilibrio'},
+        {h:'Inmune a las temporadas', p:'Las siluetas van y vienen; el recto se queda. Una inversión que vas a usar año tras año sin que se sienta vieja.', t:'Clásico'},
+        {h:'De la oficina al fin de semana', p:'Sube a smart casual con una camisa y baja a relajado con una tee. El jean más fácil de combinar del catálogo.', t:'Versátil'}
+      ],
+      stylesH2:'Cómo se<br/>usa un regular',
+      stylesDesc:'El regular es la base neutra del clóset: una línea recta y limpia sobre la que cualquier estilo se construye sin fricción.',
+      styles:{
+        street:{title:'Casual atemporal', desc:'Tee o polo, chaqueta liviana y sneaker. La fórmula que funciona un lunes, un sábado y dentro de cinco años.', chips:['Tee / polo','Chaqueta liviana','Sneaker'], colors:CS.light},
+        limpio:{title:'Smart casual', desc:'Camisa metida, blazer o cardigan y zapato limpio. Oficina relajada sin pensarlo dos veces.', chips:['Camisa','Blazer','Zapato limpio'], colors:CS.mid},
+        noche:{title:'Clásico nocturno', desc:'Camisa oscura, abrigo y botín. Sobrio y seguro: la elegancia de no complicarse.', chips:['Camisa oscura','Abrigo','Botín'], colors:CS.dark}
+      }
+    },
+    semipitillo: {
+      name:'Semipitillo', word:'Semi<br>pitillo', suffix:null, order:6,
+      sig:'#b88cf0', glow:'rgba(184,140,240,0.12)', glow2:'rgba(184,140,240,0.05)',
+      sub:'Sigue la pierna sin perseguirla. El punto justo entre la comodidad del recto y el filo del pitillo.',
+      vs:{fit:'pitillo', text:'Pitillo → más ajustado, más afilado'},
+      whyNum:'01 — Por qué el Semipitillo', whyH2:'Ajustado<br/>con aire',
+      why:[
+        {h:'Ajusta sin apretar', p:'Acompaña la línea de la pierna pero deja espacio para vivir: caminar, sentarse, repetir. Ajuste de jornada completa.', t:'Ajuste'},
+        {h:'Tobillo despejado', p:'La basta deja respirar al calzado: el sneaker o el botín se lucen completos, sin tela amontonada encima.', t:'Limpio'},
+        {h:'Va con todo el clóset', p:'Equilibra prendas amplias arriba y acompaña las entalladas. El término medio que nunca desentona.', t:'Versátil'}
+      ],
+      stylesH2:'Cómo se<br/>usa un semipitillo',
+      stylesDesc:'El semipitillo afina la silueta sin comprometerla. Línea limpia, tobillo libre y la flexibilidad de ir a donde el outfit lo lleve.',
+      styles:{
+        street:{title:'Street afilado', desc:'Hoodie amplio arriba, línea afinada abajo y sneaker a la vista. El contraste hace el look.', chips:['Hoodie amplio','Sneaker bajo','Gorra'], colors:CS.light},
+        limpio:{title:'Smart slim', desc:'Camisa o crewneck, chaqueta slim y zapato limpio. Una línea continua y prolija de la cintura al tobillo.', chips:['Camisa','Chaqueta slim','Zapato limpio'], colors:CS.mid},
+        noche:{title:'Nocturno afinado', desc:'Tee oscura, cuero o blazer y botín. El ajuste alarga la silueta justo lo necesario.', chips:['Tee oscura','Cuero / blazer','Botín'], colors:CS.dark}
+      }
+    },
+    pitillo: {
+      name:'Pitillo', word:'Pitillo', suffix:'Jean', order:7,
+      sig:'#ff7a59', glow:'rgba(255,122,89,0.12)', glow2:'rgba(255,122,89,0.05)',
+      sub:'Una línea continua de la cadera al tobillo. Afilado, limpio y listo para cualquier contraste que le pongas encima.',
+      vs:{fit:'skinny', text:'Skinny → ceñido total, segunda piel'},
+      whyNum:'01 — Por qué el Pitillo', whyH2:'Líneas<br/>afiladas',
+      why:[
+        {h:'Silueta dibujada', p:'Sigue la pierna con precisión y cierra el look por abajo. Una línea pulida que ordena todo lo que lleves encima.', t:'Silueta'},
+        {h:'El mejor socio del volumen', p:'Hoodies anchos, abrigos largos, puffers: cuanto más volumen arriba, más sentido tiene el filo abajo.', t:'Contraste'},
+        {h:'De día y de noche', p:'Con sneaker es casual; con botín fino es elegante. El mismo jean, dos intenciones distintas.', t:'Versátil'}
+      ],
+      stylesH2:'Cómo se<br/>usa un pitillo',
+      stylesDesc:'El pitillo es la línea afilada del catálogo. Brilla en contraste: dale volumen y capas arriba, y deja que el filo cierre el look por abajo.',
+      styles:{
+        street:{title:'Contraste streetwear', desc:'Hoodie oversized o abrigo largo y sneaker. Todo el volumen arriba, toda la línea abajo.', chips:['Hoodie oversized','Abrigo largo','Sneaker'], colors:CS.light},
+        limpio:{title:'Pulido y moderno', desc:'Camisa metida, blazer entallado y zapato fino. Pulido de punta a punta.', chips:['Camisa tucked','Blazer slim','Zapato fino'], colors:CS.mid},
+        noche:{title:'Noche elegante', desc:'Tee oscura, chaqueta de cuero y botín afilado. Líneas limpias para luz baja.', chips:['Tee oscura','Cuero','Botín afilado'], colors:CS.dark}
+      }
+    },
+    skinny: {
+      name:'Skinny', word:'Skinny', suffix:'Jean', order:8,
+      sig:'#ff5470', glow:'rgba(255,84,112,0.12)', glow2:'rgba(255,84,112,0.05)',
+      sub:'Ceñido del primer al último centímetro. Segunda piel, silueta máxima y cero concesiones.',
+      vs:{fit:'pitillo', text:'Pitillo → ajustado pero menos ceñido'},
+      whyNum:'01 — Por qué el Skinny', whyH2:'Segunda<br/>piel',
+      why:[
+        {h:'La silueta más afilada', p:'Marca la pierna completa, de la cadera al tobillo. Nada en el catálogo dibuja una línea más definida.', t:'Silueta'},
+        {h:'Stretch que acompaña', p:'El denim elástico se mueve contigo: ceñido a la vista, cómodo en el cuerpo. Sin sensación de molde.', t:'Stretch'},
+        {h:'El lienzo del outfit', p:'Cuanto más ajustado abajo, más libertad arriba: capas, volumen, abrigos largos. El skinny sostiene cualquier experimento.', t:'Versátil'}
+      ],
+      stylesH2:'Cómo se<br/>usa un skinny',
+      stylesDesc:'El skinny es la base más limpia para construir encima: pide volumen, capas y contraste arriba, y devuelve la silueta más estilizada del catálogo.',
+      styles:{
+        street:{title:'Volumen arriba', desc:'Oversized, puffer o abrigo largo con sneaker chunky o botín. La regla es una: todo el volumen arriba.', chips:['Oversized','Puffer / abrigo','Sneaker chunky'], colors:CS.light},
+        limpio:{title:'Afilado y prolijo', desc:'Crewneck o camisa, blazer largo y botín fino. Vertical, prolijo y estilizado al máximo.', chips:['Crewneck','Blazer largo','Botín fino'], colors:CS.mid},
+        noche:{title:'Total black noche', desc:'Tee negra, cuero y botín. El skinny pone la silueta, el negro pone el resto.', chips:['Tee negra','Cuero','Botín'], colors:CS.dark}
+      }
+    }
+  };
+
+  // ---- Entalles nuevos creados desde el panel: generan una ficha completa con textos por defecto ----
+  function defaultFit(key, name, sig){
+    const glow = sigHexToRgba(sig, 0.12), glow2 = sigHexToRgba(sig, 0.05);
+    return {
+      name:name, word:name, suffix:null, order:100,
+      sig:sig, glow:glow, glow2:glow2,
+      sub:'Un nuevo entalle de la colección Element Premium. Edita esta descripción desde la ficha (modo admin) para contar su corte, su caída y su actitud.',
+      vs:{fit:'baggy', text:'Baggy → el corte amplio que domina la calle'},
+      whyNum:'01 — Por qué el '+name, whyH2:'Un corte<br/>con carácter',
+      why:[
+        {h:'Corte cuidado', p:'Confeccionado con el estándar Element Premium: denim con cuerpo, costuras firmes y una caída pensada para durar.', t:'Calidad'},
+        {h:'Listo para combinar', p:'Una silueta versátil que conversa con el resto de tu clóset, de día y de noche.', t:'Versátil'},
+        {h:'Pensado para el uso real', p:'Cómodo de la mañana a la noche, con detalles que aguantan el ritmo de todos los días.', t:'Durabilidad'}
+      ],
+      stylesH2:'Cómo se<br/>usa el '+name,
+      stylesDesc:'Una base sólida sobre la que construir cualquier outfit. Edita estos textos desde la ficha (modo admin) para describir sus mejores combinaciones.',
+      styles:{
+        street:{title:'Streetwear diario', desc:'Combínalo con prendas relajadas y zapatilla cómoda para el día a día.', chips:['Tee','Hoodie','Sneaker'], colors:CS.light},
+        limpio:{title:'Casual elevado', desc:'Camisa y zapato limpio para subir el look sin complicarte.', chips:['Camisa','Chaqueta','Zapato limpio'], colors:CS.mid},
+        noche:{title:'Look nocturno', desc:'Tonos oscuros y prendas estructuradas para la noche.', chips:['Tee oscura','Abrigo','Botín'], colors:CS.dark}
+      }
+    };
+  }
+  (function mergeCustomFits(){
+    const customs = (fichasCfg && fichasCfg._entalles) || [];
+    let ord = 100;
+    customs.forEach(e=>{
+      if(!e || !e.key || FITS[e.key]) return;
+      FITS[e.key] = defaultFit(e.key, e.name || e.key, e.sig || '#cbe83a');
+      FITS[e.key].order = ord++;
+    });
+  })();
+
+  let currentFit = FITS.baggy;
+  currentFitKey = 'baggy';
+
+  // ----- Style tabs read from the active fit -----
+  function applyStyle(key){
+    const s = currentFit.styles[key];
+    if (!s) return;
+    currentStyleKey = key;
+    const ovS = ((fichasCfg[currentFitKey] || {}).texts || {}).styles || {};
+    const ov = ovS[key] || {};
+    document.getElementById('styleTitle').textContent = ov.title || s.title;
+    document.getElementById('styleDesc').textContent = ov.desc || s.desc;
+    document.getElementById('styleChips').innerHTML = s.chips.map(c => `<span class="style-chip">${c}</span>`).join('');
+    const colorsRow = document.getElementById('styleColors');
+    colorsRow.innerHTML = '<span class="lbl">Mejor con</span>' + s.colors.map(c => `<span class="sw" style="background:${c.hex}" title="${c.name}"></span>`).join('');
+    const legL = document.getElementById('legL');
+    const legR = document.getElementById('legR');
+    if (legL) legL.setAttribute('fill', s.pantColor || '#b3d2e8');
+    if (legR) legR.setAttribute('fill', s.pantColor || '#b3d2e8');
+    if (adminMode) enableEditing();
+  }
+  // map style key -> pant leg color
+  FITS && Object.values(FITS).forEach(f => {
+    f.styles.street.pantColor = '#b3d2e8';
+    f.styles.limpio.pantColor = '#2c4a72';
+    f.styles.noche.pantColor  = '#1a1a1a';
+  });
+
+  document.querySelectorAll('.style-tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      document.querySelectorAll('.style-tab').forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+      applyStyle(tab.dataset.style);
+    });
+  });
+
+  // ----- Build the model navigation -----
+  function buildNav(){
+    const sorted = Object.entries(FITS).sort((a,b) => a[1].order - b[1].order);
+    const linkHtml = (key, f) => `<a href="#${key}" data-fit="${key}">${f.name}</a>`;
+    const html = sorted.map(([key,f]) => linkHtml(key,f)).join('');
+    document.getElementById('topNav').innerHTML = html;
+    document.getElementById('modelStrip').innerHTML = html;
+    document.querySelectorAll('#topNav a, #modelStrip a').forEach(a => {
+      a.addEventListener('click', (e) => {
+        // allow normal hash nav; just update view
+        const key = a.dataset.fit;
+        if (FITS[key]){ e.preventDefault(); location.hash = key; applyFit(key); }
+      });
+    });
+  }
+  function markNavActive(key){
+    document.querySelectorAll('#topNav a, #modelStrip a').forEach(a => {
+      a.classList.toggle('active', a.dataset.fit === key);
+      if (a.dataset.fit === key) a.setAttribute('aria-current','page'); else a.removeAttribute('aria-current');
+    });
+  }
+
+  // ----- Apply a full fit -----
+  function applyFit(key){
+    const f = FITS[key];
+    if (!f) return;
+    currentFit = f; currentFitKey = key;
+    const ecfg = fichasCfg[key] || {};
+    const sigColor = ecfg.sig || f.sig;
+    const root = document.documentElement.style;
+    root.setProperty('--page-sig', sigColor);
+    root.setProperty('--page-glow', ecfg.sig ? sigHexToRgba(sigColor,0.12) : f.glow);
+    root.setProperty('--page-glow-2', ecfg.sig ? sigHexToRgba(sigColor,0.05) : f.glow2);
+
+    document.title = `${f.name} · Element Premium`;
+    const per = '<span class="period">.</span>';
+    document.getElementById('heroTitle').innerHTML = f.suffix
+      ? `<span class="fit-name">${f.word}</span><span class="fit-suffix">${f.suffix}${per}</span>`
+      : `<span class="fit-name">${f.word}${per}</span>`;
+    const TX = ecfg.texts || {};
+    document.getElementById('heroSub').textContent = TX.sub || f.sub;
+
+    // vs pill
+    const vs = FITS[f.vs.fit];
+    document.getElementById('vsPill').setAttribute('href', `#${f.vs.fit}`);
+    document.getElementById('vsName').textContent = f.vs.text;
+
+    // why
+    document.getElementById('whyNum').textContent = f.whyNum;
+    document.getElementById('whyH2').innerHTML = f.whyH2;
+    const whyList = f.why.map((w,i) => Object.assign({}, w, (TX.why && TX.why[i]) || {}));
+    document.getElementById('whyCards').innerHTML = whyList.map((w,i) => `
+      <div class="why-card reveal in">
+        <div class="why-num">0${i+1}</div>
+        <h3>${w.h}</h3>
+        <p>${w.p}</p>
+        <span class="tag">${w.t}</span>
+      </div>`).join('');
+
+    // styles section
+    document.getElementById('stylesH2').innerHTML = f.stylesH2;
+    document.getElementById('stylesDesc').textContent = TX.stylesDesc || f.stylesDesc;
+
+    // pant silhouette
+    const pant = PANTS[key] || PANTS.regular;
+    const waist = document.getElementById('pantWaist');
+    const belt = document.getElementById('pantBelt');
+    if (waist){ waist.setAttribute('x', pant.wx); waist.setAttribute('width', pant.ww); }
+    if (belt){ belt.setAttribute('x1', pant.wx); belt.setAttribute('x2', pant.wx + pant.ww); belt.setAttribute('stroke', sigColor); }
+    document.getElementById('legL').setAttribute('d', pant.l);
+    document.getElementById('legR').setAttribute('d', pant.r);
+
+    // footer
+    document.getElementById('footTag').textContent = `Ficha técnica · ${f.name}`;
+    document.getElementById('footSub').textContent = `Una ficha pensada para que conozcas el ${f.name} a fondo: tela, construcción, colores y cuidados — todo en un solo lugar.`;
+
+    // reset style tab to street
+    document.querySelectorAll('.style-tab').forEach((t,i) => t.classList.toggle('active', i===0));
+    applyStyle('street');
+
+    // ---- Panel: foto principal, detalles y paleta por entalle ----
+    applyEntalleMedia(key, ecfg);
+    const negraTab = document.querySelector('.col-tab[data-fam="negra"]');
+    if (negraTab) negraTab.style.display = availColors('negra').featured.length ? '' : 'none';
+    const colorTab = document.querySelector('.col-tab[data-fam="color"]');
+    let fam = currentFam || 'color';
+    if (fam === 'negra' && !availColors('negra').featured.length) fam = 'color';
+    if (fam === 'color' && !availColors('color').featured.length) fam = 'negra';
+    document.querySelectorAll('.col-tab').forEach(t => t.classList.toggle('active', t.dataset.fam === fam));
+    renderColors(fam);
+
+    markNavActive(key);
+    if (adminMode) enableEditing();
+    window.scrollTo({ top: 0, behavior: 'instant' in document.documentElement.style ? 'instant' : 'auto' });
+  }
+
+  buildNav();
+  // initial fit: hash (#baggy) o ruta limpia (midominio.com/baggy)
+  let initialKey = (location.hash || '').replace('#','');
+  if (!FITS[initialKey]){
+    const seg = decodeURIComponent((location.pathname.split('/').filter(Boolean).pop() || '')).toLowerCase().replace(/\.html$/,'');
+    if (FITS[seg]) initialKey = seg;
+  }
+  applyFit(FITS[initialKey] ? initialKey : 'baggy');
+  window.addEventListener('hashchange', () => {
+    const k = (location.hash || '').replace('#','');
+    if (FITS[k]) applyFit(k);
+  });
+
+  /* ===== Lightbox logic ===== */
+  const lightbox = document.getElementById('lightbox');
+  const lbImg = document.getElementById('lbImg');
+  const lbCapText = document.getElementById('lbCapText');
+  const lbClose = document.getElementById('lbClose');
+  const lbPrev = document.getElementById('lbPrev');
+  const lbNext = document.getElementById('lbNext');
+  const lbHint = document.getElementById('lbHint');
+
+  let lbList = [];
+  let lbIndex = 0;
+  let lbScale = 1, lbTx = 0, lbTy = 0;
+  let pinchStartDist = 0, pinchStartScale = 1;
+  let dragStartX = 0, dragStartY = 0, dragStartTx = 0, dragStartTy = 0, isDragging = false;
+
+  function openLightbox(c){
+    lbList = [...colorData[currentFam].featured, ...colorData[currentFam].extras].filter(x => x.img);
+    lbIndex = Math.max(0, lbList.findIndex(x => x.id === c.id));
+    showLbAt(lbIndex);
+    lightbox.classList.add('open');
+    lightbox.setAttribute('aria-hidden','false');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeLightbox(){
+    lightbox.classList.remove('open');
+    lightbox.setAttribute('aria-hidden','true');
+    document.body.style.overflow = '';
+    resetZoom();
+  }
+  function showLbAt(i){
+    if (!lbList.length) return;
+    lbIndex = (i + lbList.length) % lbList.length;
+    const c = lbList[lbIndex];
+    lbImg.src = c.img;
+    lbImg.alt = c.name;
+    lbCapText.textContent = `${c.name} · ${c.sub} · ${lbIndex+1} / ${lbList.length}`;
+    resetZoom();
+  }
+  function resetZoom(){
+    lbScale = 1; lbTx = 0; lbTy = 0;
+    lbImg.style.transform = '';
+    lbImg.classList.remove('zoomed');
+  }
+  function applyTransform(){
+    lbImg.style.transform = `translate(${lbTx}px, ${lbTy}px) scale(${lbScale})`;
+    lbImg.classList.toggle('zoomed', lbScale > 1.02);
+  }
+  function toggleZoom(cx, cy){
+    if (lbScale > 1.02){ resetZoom(); return; }
+    lbScale = 2.4;
+    const rect = lbImg.getBoundingClientRect();
+    // Offset so the tapped point stays under the finger/cursor
+    const offsetX = (cx - (rect.left + rect.width/2));
+    const offsetY = (cy - (rect.top + rect.height/2));
+    lbTx = -offsetX * (lbScale - 1);
+    lbTy = -offsetY * (lbScale - 1);
+    clampPan();
+    applyTransform();
+  }
+  function clampPan(){
+    const rect = lbImg.getBoundingClientRect();
+    const baseW = rect.width / lbScale;
+    const baseH = rect.height / lbScale;
+    const maxTx = Math.max(0, (rect.width - baseW) / 2);
+    const maxTy = Math.max(0, (rect.height - baseH) / 2);
+    lbTx = Math.max(-maxTx, Math.min(maxTx, lbTx));
+    lbTy = Math.max(-maxTy, Math.min(maxTy, lbTy));
+  }
+
+  // Close
+  lbClose.addEventListener('click', closeLightbox);
+  lightbox.addEventListener('click', (e) => { if (e.target === lightbox || e.target.classList.contains('lightbox-inner')) closeLightbox(); });
+  document.addEventListener('keydown', (e) => {
+    if (!lightbox.classList.contains('open')) return;
+    if (e.key === 'Escape') closeLightbox();
+    if (e.key === 'ArrowRight') showLbAt(lbIndex + 1);
+    if (e.key === 'ArrowLeft')  showLbAt(lbIndex - 1);
+  });
+  lbPrev.addEventListener('click', () => showLbAt(lbIndex - 1));
+  lbNext.addEventListener('click', () => showLbAt(lbIndex + 1));
+
+  // Click / double-tap to zoom
+  let lastTap = 0;
+  lbImg.addEventListener('click', (e) => {
+    e.stopPropagation();
+    toggleZoom(e.clientX, e.clientY);
+  });
+
+  // Wheel zoom (desktop)
+  lbImg.addEventListener('wheel', (e) => {
+    e.preventDefault();
+    const delta = -e.deltaY * 0.0015;
+    const newScale = Math.max(1, Math.min(4, lbScale + delta * lbScale));
+    if (newScale === lbScale) return;
+    lbScale = newScale;
+    if (lbScale <= 1.02){ lbTx = 0; lbTy = 0; }
+    clampPan();
+    applyTransform();
+  }, { passive: false });
+
+  // Pointer drag to pan (when zoomed)
+  lbImg.addEventListener('pointerdown', (e) => {
+    if (lbScale <= 1.02) return;
+    isDragging = true;
+    dragStartX = e.clientX; dragStartY = e.clientY;
+    dragStartTx = lbTx; dragStartTy = lbTy;
+    lbImg.setPointerCapture?.(e.pointerId);
+  });
+  lbImg.addEventListener('pointermove', (e) => {
+    if (!isDragging) return;
+    lbTx = dragStartTx + (e.clientX - dragStartX);
+    lbTy = dragStartTy + (e.clientY - dragStartY);
+    clampPan();
+    applyTransform();
+  });
+  const endDrag = (e) => { if (isDragging){ isDragging = false; lbImg.releasePointerCapture?.(e.pointerId); } };
+  lbImg.addEventListener('pointerup', endDrag);
+  lbImg.addEventListener('pointercancel', endDrag);
+
+  // Pinch-to-zoom on touch
+  const activeTouches = new Map();
+  lbImg.addEventListener('touchstart', (e) => {
+    for (const t of e.changedTouches) activeTouches.set(t.identifier, { x: t.clientX, y: t.clientY });
+    if (activeTouches.size === 2){
+      const [a, b] = [...activeTouches.values()];
+      pinchStartDist = Math.hypot(a.x - b.x, a.y - b.y);
+      pinchStartScale = lbScale;
+    }
+  }, { passive: true });
+  lbImg.addEventListener('touchmove', (e) => {
+    for (const t of e.changedTouches){
+      if (activeTouches.has(t.identifier)) activeTouches.set(t.identifier, { x: t.clientX, y: t.clientY });
+    }
+    if (activeTouches.size === 2 && pinchStartDist > 0){
+      e.preventDefault();
+      const [a, b] = [...activeTouches.values()];
+      const dist = Math.hypot(a.x - b.x, a.y - b.y);
+      lbScale = Math.max(1, Math.min(4, pinchStartScale * (dist / pinchStartDist)));
+      if (lbScale <= 1.02){ lbTx = 0; lbTy = 0; }
+      clampPan();
+      applyTransform();
+    }
+  }, { passive: false });
+  lbImg.addEventListener('touchend', (e) => {
+    for (const t of e.changedTouches) activeTouches.delete(t.identifier);
+    if (activeTouches.size < 2) pinchStartDist = 0;
+  });
+  lbImg.addEventListener('touchcancel', (e) => {
+    for (const t of e.changedTouches) activeTouches.delete(t.identifier);
+    if (activeTouches.size < 2) pinchStartDist = 0;
+  });
+
+  // Swipe to navigate (when not zoomed)
+  let swipeStartX = 0, swipeStartT = 0;
+  lightbox.addEventListener('touchstart', (e) => {
+    if (lbScale > 1.02 || e.touches.length !== 1) return;
+    swipeStartX = e.touches[0].clientX;
+    swipeStartT = Date.now();
+  }, { passive: true });
+  lightbox.addEventListener('touchend', (e) => {
+    if (lbScale > 1.02) return;
+    const dx = (e.changedTouches[0]?.clientX || 0) - swipeStartX;
+    const dt = Date.now() - swipeStartT;
+    if (dt < 500 && Math.abs(dx) > 50){
+      if (dx < 0) showLbAt(lbIndex + 1); else showLbAt(lbIndex - 1);
+    }
+  });
+
+  /* ===== Wash tabs ===== */
+  const washMap = {
+    light: {
+      title: 'Light Vintage Wash',
+      tag: 'Tonalidad azul clara · Aspecto relajado',
+      desc: 'Lavado claro con efecto desgastado uniforme. Aporta una estética urbana, relajada y fácil de combinar. Perfecto para outfits casuales de día.',
+      list: ['Tonalidad azul clara y luminosa','Aspecto relajado y urbano','Ideal para outfits streetwear de día','Combina con tonos crema, blanco y pastel'],
+      grad: 'linear-gradient(135deg,#a8c4dc,#dfe9f0)', ph: 'LIGHT · 01'
+    },
+    dark: {
+      title: 'Dark Indigo Wash',
+      tag: 'Azul profundo · Apariencia sofisticada',
+      desc: 'Acabado azul indigo intenso con apariencia más limpia y formal. Mantiene la silueta baggy con una caída marcada. Versatil para uso diurno y nocturno.',
+      list: ['Azul profundo y saturado','Apariencia limpia y sofisticada','Fácil de combinar día y noche','Caída marcada y estructurada'],
+      grad: 'linear-gradient(135deg,#1a2f48,#3a5577)', ph: 'DARK · 02'
+    },
+    black: {
+      title: 'Black Wash',
+      tag: 'Negro intenso · Estética nocturna',
+      desc: 'Acabado negro profundo con una estética moderna y minimalista. Máxima versatilidad para combinaciones monocromáticas y looks de noche.',
+      list: ['Acabado negro intenso','Estética moderna y minimalista','Versatilidad para looks nocturnos','Combinaciones monocromáticas perfectas'],
+      grad: 'linear-gradient(135deg,#0d0d0d,#262626)', ph: 'BLACK · 03'
+    }
+  };
+  document.querySelectorAll('.wash-tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      document.querySelectorAll('.wash-tab').forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+      const w = washMap[tab.dataset.wash];
+      document.getElementById('washTitle').textContent = w.title;
+      document.getElementById('washTag').textContent = w.tag;
+      document.getElementById('washDesc').textContent = w.desc;
+      document.getElementById('washPh').textContent = w.ph;
+      document.getElementById('washVis').style.background = w.grad;
+      const list = document.getElementById('washList');
+      list.innerHTML = w.list.map(i => `<li>${i}</li>`).join('');
+    });
+  });
+
+  /* ===== Sizes ===== */
+  document.querySelectorAll('.size-pill').forEach(p => {
+    p.addEventListener('click', () => {
+      document.querySelectorAll('.size-pill').forEach(x => x.classList.remove('active'));
+      p.classList.add('active');
+      const col = p.dataset.size;
+      document.querySelectorAll('#sizeTable [data-col]').forEach(el => el.classList.remove('hl'));
+      document.querySelectorAll(`#sizeTable [data-col="${col}"]`).forEach(el => el.classList.add('hl'));
+    });
+  });
+
+  /* ===== Share ===== */
+  const toast = document.getElementById('toast');
+  function showToast(msg){
+    toast.textContent = msg;
+    toast.classList.add('show');
+    clearTimeout(window.__t);
+    window.__t = setTimeout(()=>toast.classList.remove('show'), 1800);
+  }
+  document.getElementById('shareBtn').addEventListener('click', async () => {
+    const data = { title: 'Baggy Jean · Element Premium', text: 'Ficha técnica del Baggy Jean Element Premium', url: location.href };
+    if (navigator.share) {
+      try { await navigator.share(data); } catch(e){}
+    } else {
+      try { await navigator.clipboard.writeText(location.href); showToast('Enlace copiado'); } catch(e){ showToast('No se pudo compartir'); }
+    }
+  });
+  document.getElementById('copyBtn').addEventListener('click', async () => {
+    try { await navigator.clipboard.writeText(location.href); showToast('Enlace copiado'); }
+    catch(e){ showToast('No se pudo copiar'); }
+  });
+
+  /* ===== Reveal on scroll ===== */
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
+    });
+  }, { threshold: 0.08 });
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+  /* ===== Modo edición de textos (solo admin) =====
+     Abrir la ficha agregando ?admin al final de la URL e ingresar la clave.
+     Los cambios se guardan en este navegador (igual que el panel Admin Fichas). */
+  const ADMIN_KEY = 'element2026';
+
+  function enableEditing(){
+    if (!adminMode) return;
+    const reg = (el, path) => { if (el){ el.setAttribute('contenteditable','true'); el.setAttribute('data-edit', path); el.setAttribute('spellcheck','false'); } };
+    reg(document.getElementById('heroSub'), 'sub');
+    reg(document.getElementById('stylesDesc'), 'stylesDesc');
+    document.querySelectorAll('#whyCards .why-card').forEach((card,i) => {
+      reg(card.querySelector('h3'), `why.${i}.h`);
+      reg(card.querySelector('p'), `why.${i}.p`);
+      reg(card.querySelector('.tag'), `why.${i}.t`);
+    });
+    reg(document.getElementById('styleTitle'), 'style.title');
+    reg(document.getElementById('styleDesc'), 'style.desc');
+  }
+
+  function saveEdit(path, val){
+    if (!fichasCfg[currentFitKey]) fichasCfg[currentFitKey] = {};
+    const ec = fichasCfg[currentFitKey];
+    if (!ec.texts) ec.texts = {};
+    const t = ec.texts;
+    if (path === 'sub') t.sub = val;
+    else if (path === 'stylesDesc') t.stylesDesc = val;
+    else if (path.indexOf('why.') === 0){
+      const parts = path.split('.');
+      if (!t.why) t.why = [];
+      if (!t.why[parts[1]]) t.why[parts[1]] = {};
+      t.why[parts[1]][parts[2]] = val;
+    } else if (path.indexOf('style.') === 0){
+      const f2 = path.split('.')[1];
+      if (!t.styles) t.styles = {};
+      if (!t.styles[currentStyleKey]) t.styles[currentStyleKey] = {};
+      t.styles[currentStyleKey][f2] = val;
+    }
+    try { localStorage.setItem(FICHAS_CFG_KEY, JSON.stringify(fichasCfg)); showToast('Texto guardado'); }
+    catch(err){ showToast('Memoria llena'); }
+  }
+
+  document.addEventListener('focusout', (e) => {
+    if (!adminMode || !e.target || !e.target.getAttribute) return;
+    const path = e.target.getAttribute('data-edit');
+    if (path) saveEdit(path, e.target.innerText.trim());
+  });
+
+  (function initAdminMode(){
+    const byParam = new URLSearchParams(location.search).has('admin');
+    const byPath = /\/admin\/?$/.test(location.pathname);
+    if (!byParam && !byPath) return;
+    if (sessionStorage.getItem('element_admin_ok') !== '1'){
+      const k = prompt('Clave de administrador:');
+      if (k !== ADMIN_KEY) return;
+      sessionStorage.setItem('element_admin_ok','1');
+    }
+    adminMode = true;
+    const bar = document.createElement('div');
+    bar.className = 'admin-bar';
+    bar.innerHTML = '<span>✏️ <b>Modo edición</b> · toca un texto y escribe</span><button id="admExport" type="button">Exportar</button><button id="admExit" type="button">Salir</button>';
+    document.body.appendChild(bar);
+    bar.querySelector('#admExport').addEventListener('click', () => {
+      const blob = new Blob([JSON.stringify(fichasCfg, null, 2)], {type:'application/json'});
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob); a.download = 'element-fichas-config.json';
+      document.body.appendChild(a); a.click(); a.remove();
+      setTimeout(() => URL.revokeObjectURL(a.href), 4000);
+      showToast('Config exportada');
+    });
+    bar.querySelector('#admExit').addEventListener('click', () => { location.href = location.pathname + location.hash; });
+    enableEditing();
+  })();
+</script>
+
+</body>
+</html>
