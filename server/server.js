@@ -130,7 +130,8 @@ app.post('/api/media', requireAuth, upload.single('file'), async (req, res) => {
       .resize(2000, 2000, { fit: 'inside', withoutEnlargement: true })
       .webp({ quality: 82 })
       .toFile(outAbs);
-    res.json({ ok: true, url: '/media/' + slot + '.webp' });
+    // version en la URL: al reemplazar una foto cambia la URL -> rompe el cache del navegador
+    res.json({ ok: true, url: '/media/' + slot + '.webp?v=' + Date.now() });
   } catch (e) { res.status(500).json({ error: 'image-failed', detail: e.message }); }
 });
 app.delete('/api/media', requireAuth, async (req, res) => {
@@ -157,6 +158,7 @@ async function serveFicha(_req, res) {
   try {
     const cfg = await loadConfig();
     const html = await fsp.readFile(path.join(SITE_DIR, 'ficha.html'), 'utf8');
+    res.set('Cache-Control', 'no-cache'); // siempre la config publicada mas reciente
     res.type('html').send(injectGlobals(html, { ELEMENT_FICHAS_CFG: cfg.fichas || {} }));
   } catch (e) { res.status(500).send('ficha error: ' + e.message); }
 }
@@ -165,6 +167,7 @@ async function serveCatalogo(_req, res) {
     const cfg = await loadConfig();
     const pages = (cfg.catalog && Array.isArray(cfg.catalog.pages)) ? cfg.catalog.pages : null;
     const html = await fsp.readFile(path.join(SITE_DIR, 'catalogo.html'), 'utf8');
+    res.set('Cache-Control', 'no-cache'); // siempre el catalogo publicado mas reciente
     res.type('html').send(injectGlobals(html, { ELEMENT_CATALOG: pages }));
   } catch (e) { res.status(500).send('catalogo error: ' + e.message); }
 }
