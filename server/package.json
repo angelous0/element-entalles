@@ -1,0 +1,15 @@
+{
+  "name": "element-backend",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Backend de Element Premium: sirve el sitio + API de panel (login, config, imagenes)",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.19.2",
+    "multer": "^2.0.1",
+    "sharp": "^0.33.5"
+  }
+}

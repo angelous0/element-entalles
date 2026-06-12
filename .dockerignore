@@ -5,3 +5,10 @@ build.py
 .dockerignore
 .git
 .gitignore
+.DS_Store
+*.log
+node_modules
+server/node_modules
+data
+server/data
+server/public

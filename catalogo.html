@@ -198,7 +198,7 @@
 
 <script>
   const src = id => document.getElementById(id).getAttribute('src');
-  const PAGES = [
+  const PAGES = (window.ELEMENT_CATALOG && window.ELEMENT_CATALOG.length) ? window.ELEMENT_CATALOG : [
     { img: src('src-1'), label:'Baggy' },
     { img: src('src-2'), label:'Baggy' },
     { img: src('src-3'), label:'Oversize' },

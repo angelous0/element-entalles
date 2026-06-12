@@ -1,61 +1,32 @@
-/* ============================================================
-   Element Premium — capa de sesión para el panel (prototipo)
-   ------------------------------------------------------------
-   Esto es un guard de demostración del lado del navegador: sirve
-   para ver y validar el flujo de "entrar para editar". La seguridad
-   real (que solo tú puedas editar de verdad) llega al conectar el
-   almacenamiento/backend, que es un paso aparte.
-   ============================================================ */
+/* admin-auth.js — control de sesion del panel, respaldado por el BACKEND.
+   Reemplaza la version "demo" del export: el login real ocurre contra /api/login
+   y la fuente de verdad es la cookie httpOnly `el_sess` del servidor.
+   `el_auth`/`el_user` son cookies legibles solo para UX (mostrar nombre / guard rapido).
+   El login en si lo intercepta element-backend.js (llamada async al servidor).
+   NOTA: este archivo lo mantiene el repo; build.py NO lo sobreescribe con el del export. */
 (function () {
-  var SESS_KEY = 'element_admin_session_v1';
-  var LOGIN = 'login.html';
-  var HUB = 'panel.html';
-  // Credenciales de demostración. Cámbialas cuando se conecte el backend real.
-  var DEMO_USER = 'admin';
-  var DEMO_PASS = 'element';
-  var TTL = 1000 * 60 * 60 * 12; // 12 horas
-
+  function cookie(name){
+    var m = document.cookie.match(new RegExp('(?:^|; )' + name + '=([^;]*)'));
+    return m ? decodeURIComponent(m[1]) : null;
+  }
   var Auth = {
-    key: SESS_KEY,
-    loginUrl: LOGIN,
-    hubUrl: HUB,
-    demoUser: DEMO_USER,
-    demoPass: DEMO_PASS,
-
-    get: function () {
-      try { return JSON.parse(localStorage.getItem(SESS_KEY)); } catch (e) { return null; }
+    loginUrl: 'login.html',
+    hubUrl: 'panel.html',
+    user: function(){ return cookie('el_user') || 'admin'; },
+    valid: function(){ return cookie('el_auth') === '1'; },
+    check: function(){ return false; },   // el login real lo hace element-backend.js
+    login: function(){},                   // no-op de compatibilidad
+    logout: function(){
+      fetch('/api/logout', { method:'POST', credentials:'same-origin' })
+        .catch(function(){})
+        .then(function(){ location.href = 'login.html'; });
     },
-    valid: function () {
-      var s = this.get();
-      return !!(s && s.exp && s.exp > Date.now());
-    },
-    user: function () {
-      var s = this.get();
-      return (s && s.user) ? s.user : null;
-    },
-    check: function (user, pass) {
-      return user.trim().toLowerCase() === DEMO_USER && pass === DEMO_PASS;
-    },
-    login: function (user) {
-      var s = { user: (user || DEMO_USER).trim(), at: Date.now(), exp: Date.now() + TTL };
-      localStorage.setItem(SESS_KEY, JSON.stringify(s));
-      return s;
-    },
-    logout: function () {
-      localStorage.removeItem(SESS_KEY);
-      location.href = LOGIN;
-    },
-    /* Llamar en <head> de cada página protegida. Si no hay sesión,
-       redirige al login recordando a dónde quería ir el usuario. */
-    guard: function () {
-      if (!this.valid()) {
-        var here = location.pathname.split('/').pop() || '';
-        location.replace(LOGIN + '?next=' + encodeURIComponent(here));
-        return false;
-      }
-      return true;
+    guard: function(){
+      if (this.valid()) return true;
+      var here = (location.pathname.split('/').pop() || '');
+      location.replace('login.html?next=' + encodeURIComponent(here));
+      return false;
     }
   };
-
   window.ElementAuth = Auth;
 })();

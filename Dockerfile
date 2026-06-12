@@ -1,16 +1,22 @@
-# Sitio estatico Element Premium servido con Nginx (listo para Easypanel)
-FROM nginx:alpine
+# Element Premium — backend Node (sirve el sitio + API del panel). Listo para Easypanel.
+FROM node:20-bookworm-slim
+WORKDIR /app
 
-# Config del servidor: URLs limpias + entrada al panel
-COPY nginx.conf /etc/nginx/conf.d/default.conf
+# dependencias (capa cacheable)
+COPY server/package.json server/package-lock.json* ./
+RUN npm install --omit=dev
 
-# Credenciales para el candado OPCIONAL del servidor (ver nginx.conf / README)
-COPY .htpasswd /etc/nginx/.htpasswd
+# servidor
+COPY server/server.js ./
 
-# Recursos
-COPY assets /usr/share/nginx/html/assets
+# sitio estatico -> ./public  (HTML/JS de la raiz + assets/)
+COPY *.html *.js ./public/
+COPY assets ./public/assets
 
-# Paginas + scripts (publico + panel con login). Glob = robusto a cambios del set de archivos.
-COPY *.html *.js /usr/share/nginx/html/
-
+ENV NODE_ENV=production PORT=80 DATA_DIR=/data
 EXPOSE 80
+
+# /data debe ser un VOLUMEN persistente en Easypanel (config + imagenes subidas)
+VOLUME ["/data"]
+
+CMD ["node", "server.js"]

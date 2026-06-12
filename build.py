@@ -29,8 +29,29 @@ FILE_MAP = {
     "Login - Element Premium.html":           "login.html",
     "Panel Admin - Element Premium.html":     "panel.html",
 }
-JS_REWRITE = ["admin-auth.js"]      # se copia y se le reescriben los enlaces
 JS_OPTIONAL = ["assets-data.js"]    # se copia tal cual SI existe (puede no estar)
+
+# Archivos que mantiene el REPO (NO se copian del export): la version del backend.
+#   admin-auth.js      -> control de sesion respaldado por el servidor
+#   element-backend.js -> puente paneles<->backend (inyectado en los paneles)
+REPO_KEPT = ["admin-auth.js", "element-backend.js"]
+
+# Paginas del panel donde se inyecta element-backend.js (en el <head>)
+PANELS = {"login.html", "panel.html", "admin-fichas.html", "admin-catalogo.html"}
+
+def post_process(outname, html):
+    """Inyecta la conexion al backend sin tocar el codigo generado por el disenador."""
+    # 1) paneles: cargar element-backend.js
+    if outname in PANELS and "element-backend.js" not in html:
+        html = html.replace("</head>", '  <script src="element-backend.js"></script>\n</head>', 1)
+    # 2) catalogo publico: que prefiera el catalogo del servidor (window.ELEMENT_CATALOG),
+    #    dejando las paginas estaticas como fallback.
+    if outname == "catalogo.html" and "window.ELEMENT_CATALOG" not in html:
+        html = html.replace(
+            "const PAGES = [",
+            "const PAGES = (window.ELEMENT_CATALOG && window.ELEMENT_CATALOG.length) ? window.ELEMENT_CATALOG : [",
+            1)
+    return html
 
 # reescritura de enlaces: lo mas especifico primero (p.ej. "Catálogo" dentro de "Admin Catálogo")
 REWRITE = [
@@ -95,19 +116,18 @@ def main():
     src=Source(src_path)
     print("Fuente: %s\n" % src_path)
 
-    # 1) HTML -> slug + enlaces reescritos
+    # 1) HTML -> slug + enlaces reescritos + inyeccion del backend
     for orig,out in FILE_MAP.items():
         html=src.read_text(orig)
         if html is None: print("  !! falta %s — omitido" % orig); continue
-        open(os.path.join(HERE,out),"w",encoding="utf-8").write(apply_rewrite(html))
-        print("  %-20s <- %s" % (out, orig))
+        html = post_process(out, apply_rewrite(html))
+        open(os.path.join(HERE,out),"w",encoding="utf-8").write(html)
+        tag = "  +backend" if (out in PANELS or out=="catalogo.html") else ""
+        print("  %-20s <- %s%s" % (out, orig, tag))
 
-    # 2) admin-auth.js (con enlaces reescritos)
-    for js in JS_REWRITE:
-        d=src.read_text(js)
-        if d is None: print("  !! falta %s — omitido" % js); continue
-        open(os.path.join(HERE,js),"w",encoding="utf-8").write(apply_rewrite(d))
-        print("  %s" % js)
+    # 2) admin-auth.js / element-backend.js los mantiene el repo (NO se copian del export)
+    for js in REPO_KEPT:
+        print("  %-20s (repo, backend)" % js if os.path.exists(os.path.join(HERE,js)) else "  !! falta %s en el repo" % js)
 
     # 3) assets-data.js (opcional: copiar si existe; si no, quitar el viejo)
     for js in JS_OPTIONAL:
