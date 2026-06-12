@@ -51,6 +51,9 @@ def post_process(outname, html):
             "const PAGES = [",
             "const PAGES = (window.ELEMENT_CATALOG && window.ELEMENT_CATALOG.length) ? window.ELEMENT_CATALOG : [",
             1)
+    # 3) panel de catalogo: el boton ahora PUBLICA (lo maneja element-backend.js)
+    if outname == "admin-catalogo.html":
+        html = html.replace("Generar y descargar", "Publicar")
     return html
 
 # reescritura de enlaces: lo mas especifico primero (p.ej. "Catálogo" dentro de "Admin Catálogo")

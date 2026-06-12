@@ -119,6 +119,16 @@
       .catch(function () { fail('No hay conexion con el servidor.'); });
   }, true);
 
+  // El boton del catalogo ("Generar y descargar" / "Publicar catalogo") ahora PUBLICA
+  // al servidor (sube las paginas y guarda la config) en vez de descargar un archivo.
+  document.addEventListener('click', function (e) {
+    var b = e.target && e.target.closest && e.target.closest('#genBtn');
+    if (!b) return;
+    e.preventDefault(); e.stopPropagation();   // no descargar archivo
+    note('Publicando catalogo…');
+    push();
+  }, true);
+
   function onReady(fn){ if (document.readyState !== 'loading') fn(); else document.addEventListener('DOMContentLoaded', fn); }
   onReady(function () {
     if (isLoginPage()) {
