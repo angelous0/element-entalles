@@ -594,6 +594,13 @@
     return jeanSVG(f);
   }
 
+  // Foto fija de frente (primer frame del 360) para la intro — evita mostrar la silueta dibujada
+  function introStill(f){
+    const src = (f.spin && f.spin[0]) || f.thumb || null;
+    if (!src) return jeanSVG(f, { showTag:true });
+    return `<div class="jean-spin intro-still" role="img" aria-label="${f.name}"><img class="on" src="${src}" alt="${f.name}" draggable="false"></div>`;
+  }
+
   // ===== Visor 360°: precarga, arrastre para girar y giro-preview inicial =====
   function hydrateSpin(){
     if (window.__spin){ clearInterval(window.__spin.auto); clearTimeout(window.__spin.resume); }
@@ -759,7 +766,7 @@
     document.documentElement.style.setProperty('--sig', f.sig);
     jeanMain.classList.add('swap');
     setTimeout(() => {
-      jeanMain.innerHTML = jeanSVG(f, { showTag:true });
+      jeanMain.innerHTML = introStill(f);
       void jeanMain.offsetWidth;
       jeanMain.classList.remove('swap');
     }, 150);
@@ -773,10 +780,12 @@
     introActive = true;
     firstRender = false;
     document.body.classList.add('intro-mode');
+    // Precargar las fotos frontales para que el ciclo no parpadee
+    FITS.forEach(f => { const s=(f.spin&&f.spin[0])||f.thumb; if(s){ const im=new Image(); im.src=s; } });
     idx = 0;
     const f = FITS[0];
     document.documentElement.style.setProperty('--sig', f.sig);
-    jeanMain.innerHTML = jeanSVG(f, { showTag:true });
+    jeanMain.innerHTML = introStill(f);
     document.getElementById('icEyebrow').textContent = `Entalle 01 / ${String(FITS.length).padStart(2,'0')}`;
     document.getElementById('icName').textContent = f.name;
     document.getElementById('icTagline').textContent = f.tagline;
