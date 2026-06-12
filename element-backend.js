@@ -17,22 +17,26 @@
   var rawSet = localStorage.setItem.bind(localStorage);
   var rawGet = localStorage.getItem.bind(localStorage);
 
-  // ---- 1) SEED sincrono desde el servidor (antes del script del panel) ----
-  try {
-    var x = new XMLHttpRequest();
-    x.open('GET', '/api/config', false); // sincrono a proposito: herramienta interna
-    x.send(null);
-    if (x.status >= 200 && x.status < 300) {
-      var cfg = JSON.parse(x.responseText || '{}');
-      if (cfg.fichas) { var f = JSON.stringify(cfg.fichas); rawSet(DRAFT, f); rawSet(PUB, f); }
-      if (cfg.catalog && cfg.catalog.pages) {
-        var pages = cfg.catalog.pages.map(function (p, i) {
-          return { id: p.id || ('p' + i), img: p.img, label: p.label || '' };
-        });
-        rawSet(CAT, JSON.stringify(pages));
+  // ---- 1) SEED sincrono desde el servidor ----
+  // Solo en los paneles que de verdad usan localStorage (fichas / catalogo).
+  // En login.html y panel.html NO se hace, para no bloquear la carga (pantalla en blanco).
+  if (/admin-fichas|admin-catalogo/.test(location.pathname)) {
+    try {
+      var x = new XMLHttpRequest();
+      x.open('GET', '/api/config', false); // sincrono: herramienta interna
+      x.send(null);
+      if (x.status >= 200 && x.status < 300) {
+        var cfg = JSON.parse(x.responseText || '{}');
+        if (cfg.fichas) { var f = JSON.stringify(cfg.fichas); rawSet(DRAFT, f); rawSet(PUB, f); }
+        if (cfg.catalog && cfg.catalog.pages) {
+          var pages = cfg.catalog.pages.map(function (p, i) {
+            return { id: p.id || ('p' + i), img: p.img, label: p.label || '' };
+          });
+          rawSet(CAT, JSON.stringify(pages));
+        }
       }
-    }
-  } catch (e) { /* sin backend: el panel sigue con su localStorage local */ }
+    } catch (e) { /* sin backend: el panel sigue con su localStorage local */ }
+  }
 
   // ---- 2) SYNC al servidor al publicar fichas / cambiar catalogo ----
   var timer = null;
@@ -129,17 +133,27 @@
     push();
   }, true);
 
+  // limpia las cookies/sesion de UX obsoletas (rompe bucles login<->panel)
+  function clearStaleAuth(){
+    document.cookie = 'el_auth=; Path=/; Max-Age=0; SameSite=Lax';
+    document.cookie = 'el_user=; Path=/; Max-Age=0; SameSite=Lax';
+    try { localStorage.removeItem('element_admin_session_v1'); } catch (e) {} // sesion demo vieja
+  }
   function onReady(fn){ if (document.readyState !== 'loading') fn(); else document.addEventListener('DOMContentLoaded', fn); }
   onReady(function () {
     if (isLoginPage()) {
-      if (authed()) location.replace(qp('next') || 'panel.html'); // ya logueado -> al panel
+      // ¿hay sesion REAL en el servidor? (no confiar solo en la cookie de UX -> evita bucles)
+      fetch('/api/session', { credentials:'same-origin' })
+        .then(function(r){ return r.json(); })
+        .then(function(d){ if (d.user) location.replace(qp('next') || 'panel.html'); else clearStaleAuth(); })
+        .catch(function(){});
       return;
     }
-    // pagina protegida: respaldo del guard, valida la sesion real en el servidor
+    // pagina protegida: valida la sesion real; si no hay, limpia lo viejo y va al login
     fetch('/api/session', { credentials:'same-origin' })
       .then(function(r){ return r.json(); })
       .then(function(d){
-        if (!d.user) { var here = location.pathname.split('/').pop() || ''; location.replace('login.html?next=' + encodeURIComponent(here)); }
+        if (!d.user) { clearStaleAuth(); var here = location.pathname.split('/').pop() || ''; location.replace('login.html?next=' + encodeURIComponent(here)); }
       }).catch(function(){});
   });
 })();
