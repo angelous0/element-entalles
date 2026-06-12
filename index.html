@@ -443,13 +443,13 @@
       desc:'Tiro alto, holgado en la cadera y ligeramente entallado al tobillo. El clásico noventero, cómodo y favorecedor.',
       tags:['Tiro alto','Holgado','Favorecedor'],
       w:{waist:32, hip:41, knee:26, hem:21, inner:5} },
-    { key:'flare',       name:'Flare',       tagline:'Slim',                 sig:'#e85d9b',
+    { key:'flare',       name:'Flare',       variant:'Slim',  tagline:'Campana ceñida retro', sig:'#e85d9b',
       spin:['assets/fits/flare-360/01.png','assets/fits/flare-360/02.png','assets/fits/flare-360/03.png','assets/fits/flare-360/04.png','assets/fits/flare-360/05.png','assets/fits/flare-360/06.png','assets/fits/flare-360/07.png','assets/fits/flare-360/08.png'],
       thumb:'assets/fits/flare-cut.png',
       desc:'Ajustado arriba, abierto abajo. La campana que estiliza la pierna y le da movimiento retro al outfit.',
       tags:['Campana','Tiro medio','Estiliza'],
       w:{waist:32, hip:36, knee:21, hem:33, inner:5} },
-    { key:'flare-relax', name:'Flare',       tagline:'Relax',                sig:'#c95ba0',
+    { key:'flare-relax', name:'Flare',       variant:'Relax', tagline:'Campana de caída holgada', sig:'#c95ba0',
       spin:['assets/fits/flare-relax-360/01.png','assets/fits/flare-relax-360/02.png','assets/fits/flare-relax-360/03.png','assets/fits/flare-relax-360/04.png','assets/fits/flare-relax-360/05.png','assets/fits/flare-relax-360/06.png'],
       thumb:'assets/fits/flare-relax-360/01.png',
       desc:'La campana con caída más relajada: holgura cómoda en cadera y pierna, con la misma apertura retro abajo.',
@@ -601,6 +601,9 @@
     return `<div class="jean-spin intro-still" role="img" aria-label="${f.name}"><img class="on" src="${src}" alt="${f.name}" draggable="false"></div>`;
   }
 
+  // Título grande: incluye la variante cuando existe (p.ej. "Flare Slim", "Flare Relax")
+  function bigName(f){ return f.variant ? `${f.name} ${f.variant}` : f.name; }
+
   // ===== Visor 360°: precarga, arrastre para girar y giro-preview inicial =====
   function hydrateSpin(){
     if (window.__spin){ clearInterval(window.__spin.auto); clearTimeout(window.__spin.resume); }
@@ -683,7 +686,7 @@
 
     // info card
     document.getElementById('icEyebrow').textContent = `Entalle ${String(idx+1).padStart(2,'0')} / ${String(FITS.length).padStart(2,'0')}`;
-    document.getElementById('icName').textContent = f.name;
+    document.getElementById('icName').textContent = bigName(f);
     document.getElementById('icTagline').textContent = f.tagline;
     document.getElementById('icDesc').textContent = f.desc;
     document.getElementById('icTags').innerHTML = f.tags.map(t => `<span>${t}</span>`).join('');
@@ -726,11 +729,10 @@
 
   // Build thumbnails
   const thumbsEl = document.getElementById('thumbs');
-  const nameCounts = FITS.reduce((m,f)=>{m[f.name]=(m[f.name]||0)+1;return m;},{});
   thumbsEl.innerHTML = FITS.map((f,i) => `
-    <button class="thumb-btn${f.thumb?' has-photo':''}" data-i="${i}" aria-label="${f.name} ${nameCounts[f.name]>1?f.tagline:''}">
+    <button class="thumb-btn${f.thumb?' has-photo':''}" data-i="${i}" aria-label="${f.name} ${f.variant||''}">
       ${f.thumb ? `<img class="thumb-photo" src="${f.thumb}" alt="${f.name}">` : jeanSVG(f, { showTag:false })}
-      <span class="tname">${f.name}${nameCounts[f.name]>1?`<span class="tsub">${f.tagline}</span>`:''}</span>
+      <span class="tname">${f.name}${f.variant?`<span class="tsub">${f.variant}</span>`:''}</span>
     </button>`).join('');
   thumbsEl.querySelectorAll('.thumb-btn').forEach(b => {
     b.addEventListener('click', () => { exitIntro(); idx = +b.dataset.i; render(); });
@@ -771,7 +773,7 @@
       jeanMain.classList.remove('swap');
     }, 150);
     document.getElementById('icEyebrow').textContent = `Entalle ${String(idx+1).padStart(2,'0')} / ${String(FITS.length).padStart(2,'0')}`;
-    document.getElementById('icName').textContent = f.name;
+    document.getElementById('icName').textContent = bigName(f);
     document.getElementById('icTagline').textContent = f.tagline;
     document.querySelectorAll('.thumb-btn').forEach((b,i) => b.classList.toggle('active', i === idx));
     updateDots();
@@ -787,7 +789,7 @@
     document.documentElement.style.setProperty('--sig', f.sig);
     jeanMain.innerHTML = introStill(f);
     document.getElementById('icEyebrow').textContent = `Entalle 01 / ${String(FITS.length).padStart(2,'0')}`;
-    document.getElementById('icName').textContent = f.name;
+    document.getElementById('icName').textContent = bigName(f);
     document.getElementById('icTagline').textContent = f.tagline;
     document.querySelectorAll('.thumb-btn').forEach((b,i) => b.classList.toggle('active', i === 0));
     updateDots();
