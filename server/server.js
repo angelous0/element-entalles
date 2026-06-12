@@ -27,7 +27,7 @@ const SECRET     = process.env.SESSION_SECRET || 'dev-insecure-change-me';
 const TTL_MS     = 12 * 60 * 60 * 1000; // 12 h
 
 // entalles base (para rutas limpias /baggy, /oversize, ...)
-const DEFAULT_FITS = ['baggy','oversize','flare','flare-relax','mom','regular','semipitillo','pitillo','skinny'];
+const DEFAULT_FITS = ['baggy','oversize','flare-slim','flare-relax','mom','regular','semipitillo','pitillo','skinny'];
 
 // ---- preparar /data --------------------------------------------------------
 try { fs.mkdirSync(MEDIA_DIR, { recursive: true }); }
@@ -177,6 +177,7 @@ app.get(['/catalogo', '/catalogo.html'], serveCatalogo);
 app.get('/ficha.html', serveFicha);
 app.get(['/admin', '/login'], (_req, res) => res.sendFile(path.join(SITE_DIR, 'login.html')));
 app.get('/panel', (_req, res) => res.sendFile(path.join(SITE_DIR, 'panel.html')));
+app.get('/flare', (_req, res) => res.redirect(302, '/flare-slim')); // URL vieja -> nueva
 
 // rutas limpias por entalle (/baggy, /oversize, ... + entalles personalizados de la config)
 app.get('/:slug', async (req, res, next) => {

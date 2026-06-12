@@ -54,6 +54,13 @@ def post_process(outname, html):
     # 3) panel de catalogo: el boton ahora PUBLICA (lo maneja element-backend.js)
     if outname == "admin-catalogo.html":
         html = html.replace("Generar y descargar", "Publicar")
+    # 4) renombrar la clave del entalle "Flare Slim": flare -> flare-slim (URL /flare-slim).
+    #    OJO: no tocar 'flare-relax', 'flare-360', 'flare-cut' ni el texto descriptivo.
+    if outname == "index.html":
+        html = html.replace("'flare'", "'flare-slim'")          # key:'flare' -> key:'flare-slim'
+    if outname == "ficha.html":
+        html = html.replace("flare:", "'flare-slim':")          # 2 claves de objeto
+        html = html.replace("'flare'", "'flare-slim'")          # fit:'flare' y refs
     return html
 
 # reescritura de enlaces: lo mas especifico primero (p.ej. "Catálogo" dentro de "Admin Catálogo")
