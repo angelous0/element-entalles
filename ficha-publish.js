@@ -58,7 +58,7 @@
   var t1 = null;
   var obs = new MutationObserver(function () {
     clearTimeout(t1);
-    t1 = setTimeout(function () { applyOverrides(); if (adminOn) makeEditable(); }, 70);
+    t1 = setTimeout(function () { applyOverrides(); if (adminOn) { makeEditable(); fixAdminBar(); } }, 70);
   });
   function ready(fn) { if (document.readyState !== 'loading') fn(); else document.addEventListener('DOMContentLoaded', fn); }
   ready(function () { loadOV(); applyOverrides(); obs.observe(document.body, { childList: true, subtree: true, characterData: true }); });
@@ -85,7 +85,25 @@
       + '.cms-editable:hover{outline-color:#cbe83a}.cms-editable:focus{outline:2px solid #cbe83a;outline-offset:3px}';
     document.head.appendChild(st);
     makeEditable();
+    setTimeout(fixAdminBar, 300);
   });
+
+  // ajusta la barra de edicion: oculta "Exportar" (obsoleto), agrega "Publicar"
+  // y aclara que se publica solo al tocar afuera.
+  function fixAdminBar() {
+    var bar = document.querySelector('.admin-bar');
+    if (!bar || bar.dataset.elFixed) return;
+    bar.dataset.elFixed = '1';
+    var exp = bar.querySelector('#admExport');
+    if (exp) exp.style.display = 'none';
+    var span = bar.querySelector('span');
+    if (span) span.innerHTML = '✏️ <b>Modo edición</b> · se <b style="color:#cbe83a">publica solo</b> al tocar afuera';
+    var pub = document.createElement('button');
+    pub.id = 'admPublish'; pub.type = 'button'; pub.textContent = 'Publicar';
+    pub.addEventListener('click', function () { toast('Publicando…'); publish(); });
+    var exit = bar.querySelector('#admExit');
+    if (exit) bar.insertBefore(pub, exit); else bar.appendChild(pub);
+  }
 
   function makeEditable() {
     for (var s = 0; s < SELECTORS.length; s++) {
