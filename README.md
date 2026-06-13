@@ -68,10 +68,12 @@ Guía paso a paso: [`DEPLOY-EASYPANEL.md`](DEPLOY-EASYPANEL.md). Resumen: build 
 (Node) + **volumen en `/data`** + variables `ADMIN_USER`/`ADMIN_PASS`/`SESSION_SECRET` + dominio
 en puerto 80. **El volumen es obligatorio** (sin él se pierden las fotos en cada redeploy).
 
-## Editor de textos de la ficha
-La ficha trae un editor de textos in-page (`?admin` + `ADMIN_KEY` dentro de `ficha.html`, hoy
-`element2026` — cámbiala). Los textos editados se guardan en `localStorage`; para publicarlos a
-todos, el siguiente paso es enviarlos también por `PUT /api/config` (mejora futura).
+## Editor de textos de la ficha (en vivo)
+La ficha trae un editor de textos in-page conectado al backend (`ficha-publish.js`, inyectado por
+build.py). Estando **logueado** en `/admin`, abre la ficha con `?admin` (p.ej. `/baggy?admin`):
+los textos (subtítulo, tarjetas "por qué", looks) se vuelven editables y, al guardar, se
+**publican al instante para todos** (`PUT /api/config`, solo el campo `texts` por entalle; las
+fotos no se tocan). Para visitantes normales el script no hace nada.
 
 ## Estructura
 ```

@@ -34,7 +34,7 @@ JS_OPTIONAL = ["assets-data.js"]    # se copia tal cual SI existe (puede no esta
 # Archivos que mantiene el REPO (NO se copian del export): la version del backend.
 #   admin-auth.js      -> control de sesion respaldado por el servidor
 #   element-backend.js -> puente paneles<->backend (inyectado en los paneles)
-REPO_KEPT = ["admin-auth.js", "element-backend.js"]
+REPO_KEPT = ["admin-auth.js", "element-backend.js", "ficha-publish.js"]
 
 # Paginas del panel donde se inyecta element-backend.js (en el <head>)
 PANELS = {"login.html", "panel.html", "admin-fichas.html", "admin-catalogo.html"}
@@ -61,6 +61,9 @@ def post_process(outname, html):
     if outname == "ficha.html":
         html = html.replace("flare:", "'flare-slim':")          # 2 claves de objeto
         html = html.replace("'flare'", "'flare-slim'")          # fit:'flare' y refs
+        # editor de textos conectado al backend (publica al guardar, en modo admin)
+        if "ficha-publish.js" not in html:
+            html = html.replace("</head>", '  <script src="ficha-publish.js"></script>\n</head>', 1)
     return html
 
 # reescritura de enlaces: lo mas especifico primero (p.ej. "Catálogo" dentro de "Admin Catálogo")
