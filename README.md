@@ -70,10 +70,15 @@ en puerto 80. **El volumen es obligatorio** (sin él se pierden las fotos en cad
 
 ## Editor de textos de la ficha (en vivo)
 La ficha trae un editor de textos in-page conectado al backend (`ficha-publish.js`, inyectado por
-build.py). Estando **logueado** en `/admin`, abre la ficha con `?admin` (p.ej. `/baggy?admin`):
-los textos (subtítulo, tarjetas "por qué", looks) se vuelven editables y, al guardar, se
-**publican al instante para todos** (`PUT /api/config`, solo el campo `texts` por entalle; las
-fotos no se tocan). Para visitantes normales el script no hace nada.
+build.py). Estando **logueado** en `/admin`, abre la ficha con `?admin` (p.ej. `/baggy?admin`) o
+desde el Panel → tarjeta "Textos de las fichas". Dos capas:
+- **Por entalle** (subtítulo, tarjetas "por qué", looks): se guardan en `config[entalle].texts`.
+- **De marca / globales** (títulos de sección, cuidados, "el resumen", bullets, footer): se editan
+  una vez y se aplican a **todos los entalles** (`config.fichas._textOv`). Para los visitantes,
+  `ficha-publish.js` aplica estos overrides con un MutationObserver (robusto a los re-render).
+
+Al guardar (clic afuera) se **publica al instante para todos** (`PUT /api/config`; las fotos no se
+tocan). Para visitantes normales solo se aplican los textos publicados; no se edita nada.
 
 ## Estructura
 ```
