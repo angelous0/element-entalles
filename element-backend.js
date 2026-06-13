@@ -139,6 +139,26 @@
     document.cookie = 'el_user=; Path=/; Max-Age=0; SameSite=Lax';
     try { localStorage.removeItem('element_admin_session_v1'); } catch (e) {} // sesion demo vieja
   }
+  // En el Panel (hub): agrega una tarjeta "Textos de las fichas" que abre la ficha
+  // en modo edicion. Asi no hay que escribir ?admin a mano.
+  function injectPanelCard(){
+    var cards = document.querySelector('.cards');
+    if (!cards || document.getElementById('el-edit-texts')) return;
+    var a = document.createElement('a');
+    a.className = 'card';
+    a.id = 'el-edit-texts';
+    a.href = '/baggy?admin';
+    a.target = '_blank';
+    a.rel = 'noopener';
+    a.innerHTML =
+      '<span class="tag">Textos · descripciones</span>' +
+      '<div class="ic"><svg viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg></div>' +
+      '<h3>Textos de las fichas</h3>' +
+      '<p>Edita los textos de cada entalle (subtítulo, “por qué” y looks) directo sobre la página. Se publica al instante.</p>' +
+      '<span class="go">Editar <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>';
+    cards.appendChild(a);
+  }
+
   function onReady(fn){ if (document.readyState !== 'loading') fn(); else document.addEventListener('DOMContentLoaded', fn); }
   onReady(function () {
     if (isLoginPage()) {
@@ -149,6 +169,7 @@
         .catch(function(){});
       return;
     }
+    injectPanelCard(); // solo hace algo en el Panel (donde existe .cards)
     // pagina protegida: valida la sesion real; si no hay, limpia lo viejo y va al login
     fetch('/api/session', { credentials:'same-origin' })
       .then(function(r){ return r.json(); })
