@@ -22,6 +22,7 @@ async function processFile(p) {
     if (ext === 'png' && underFits) {
       const out = p.replace(/\.png$/i, '.webp');
       const buf = await sharp(p)
+        .rotate()  // aplica la orientacion EXIF (foto parada) antes de redimensionar
         .resize(MAXEDGE_FRAME, MAXEDGE_FRAME, { fit: 'inside', withoutEnlargement: true })
         .webp({ quality: 80, alphaQuality: 88, effort: 5 })
         .toBuffer();
@@ -33,6 +34,7 @@ async function processFile(p) {
       const st = fs.statSync(p);
       if (st.size <= JPG_MIN_BYTES) return false;
       const buf = await sharp(p)
+        .rotate()  // aplica la orientacion EXIF (foto parada) antes de redimensionar
         .resize(MAXEDGE_JPG, MAXEDGE_JPG, { fit: 'inside', withoutEnlargement: true })
         .jpeg({ quality: 82, mozjpeg: true })
         .toBuffer();
