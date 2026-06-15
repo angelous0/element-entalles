@@ -15,7 +15,7 @@ Uso:
 
 Deja intactos: Dockerfile, nginx.conf, _redirects, .htpasswd, README*, DEPLOY*, build.py.
 """
-import sys, os, glob, zipfile, unicodedata, shutil
+import sys, os, glob, zipfile, unicodedata, shutil, subprocess, re
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 
@@ -102,8 +102,10 @@ class Source:
         cands=[(p,raw) for (p,raw) in self.entries
                if p.split("/")[-1]==basename and not excluded(p)]
         if not cands: return None
-        # prefer deploy/, luego ruta mas corta
-        cands.sort(key=lambda pr: (0 if "deploy/" in ("/"+pr[0]) else 1, pr[0].count("/"), len(pr[0])))
+        # Prefiere la version de la RAIZ (export actual) sobre deploy/, que en los
+        # exports completos suele quedar STALE (vieja). En los exports "lean" solo
+        # existe deploy/ -> igual se usa (es el unico candidato).
+        cands.sort(key=lambda pr: (1 if "deploy/" in ("/"+pr[0]) else 0, pr[0].count("/"), len(pr[0])))
         return cands[0][1]
     def read_text(self, basename):
         raw=self.find(basename); return self._raw(raw).decode("utf-8") if raw else None
@@ -111,10 +113,11 @@ class Source:
     def assets(self):
         a=[(p,raw) for (p,raw) in self.entries
            if "/assets/" in ("/"+p) and not excluded(p)]
-        prefer_deploy=any("deploy/assets/" in ("/"+p) for p,_ in a)
+        # Si hay assets en la RAIZ (export actual), ignora los de deploy/ (stale).
+        has_root=any("deploy/assets/" not in ("/"+p) for p,_ in a)
         out={}
         for p,raw in a:
-            if prefer_deploy and "deploy/assets/" not in ("/"+p): continue
+            if has_root and "deploy/assets/" in ("/"+p): continue
             out[p[p.find("assets/"):]]=raw
         return list(out.items())
 
@@ -142,16 +145,18 @@ def main():
     for js in REPO_KEPT:
         print("  %-20s (repo, backend)" % js if os.path.exists(os.path.join(HERE,js)) else "  !! falta %s en el repo" % js)
 
-    # 3) assets-data.js (opcional: copiar si existe; si no, quitar el viejo)
+    # 3) assets-data.js: copiar SOLO si algun HTML lo referencia (si no, quitar el viejo)
+    used = any('assets-data.js' in open(os.path.join(HERE,o),encoding='utf-8').read()
+               for o in FILE_MAP.values() if os.path.exists(os.path.join(HERE,o)))
     for js in JS_OPTIONAL:
         raw=src.find(js); dst=os.path.join(HERE,js)
-        if raw:
+        if raw and used:
             with open(dst,"wb") as fh: fh.write(src.read_bytes_of(raw))
             print("  %s" % js)
         elif os.path.exists(dst):
-            os.remove(dst); print("  %s (ya no existe en el export -> eliminado del proyecto)" % js)
+            os.remove(dst); print("  %s (no usado por ningun HTML -> eliminado)" % js)
 
-    # 4) assets/ (subarbol completo, prefiriendo deploy/assets)
+    # 4) assets/ (subarbol completo, prefiriendo la raiz sobre deploy/)
     adir=os.path.join(HERE,"assets")
     if os.path.isdir(adir): shutil.rmtree(adir)
     n=0
@@ -159,7 +164,28 @@ def main():
         dst=os.path.join(HERE,rel); os.makedirs(os.path.dirname(dst),exist_ok=True)
         with open(dst,"wb") as fh: fh.write(src.read_bytes_of(raw)); n+=1
     print("  assets/  (%d archivos)" % n)
-    print("\nListo. Revisa con: python3 -m http.server 8080")
+
+    # 5) optimizar imagenes (frames 360 PNG -> WebP) + reescribir refs .png -> .webp
+    webp_ok=False
+    try:
+        r=subprocess.run(["node", os.path.join(HERE,"optimize-assets.js")], cwd=HERE,
+                         capture_output=True, text=True, timeout=900)
+        if r.stdout: sys.stdout.write(r.stdout)
+        if r.returncode!=0 and r.stderr: sys.stderr.write(r.stderr)
+        webp_ok=bool(glob.glob(os.path.join(HERE,"assets","fits","*-360","*.webp")))
+    except Exception as e:
+        print("  (no pude optimizar imagenes: %s)" % e)
+    if webp_ok:
+        for out in ("index.html","ficha.html"):
+            p=os.path.join(HERE,out)
+            if not os.path.exists(p): continue
+            h=open(p,encoding="utf-8").read()
+            h2=re.sub(r"(assets/fits/[^\"'\s)]+)\.png", r"\1.webp", h)
+            if h2!=h: open(p,"w",encoding="utf-8").write(h2)
+        print("  imagenes -> WebP (frames 360), refs .png reescritas a .webp")
+    else:
+        print("  (imagenes quedan en PNG: node/sharp no disponible)")
+    print("\nListo. Revisa con: ver-local.command (o python3 -m http.server 8080)")
 
 if __name__ == "__main__":
     main()

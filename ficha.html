@@ -1244,7 +1244,15 @@
 
   // Aplica foto principal + fotos de detalle del entalle (desde el panel)
   // Media por defecto incorporada (sin depender del panel admin / localStorage)
-  const DEFAULT_MEDIA = {};
+  const DEFAULT_MEDIA = {
+    baggy: {
+      details: [
+        'assets/fits/baggy-details/02.jpg',
+        'assets/fits/baggy-details/03.jpg',
+        'assets/fits/baggy-details/01.jpg'
+      ]
+    }
+  };
 
   function applyEntalleMedia(key, ecfg){
     ecfg = ecfg || {};
@@ -1517,7 +1525,7 @@
   const PANTS = {
     baggy:       { wx:22, ww:86, l:'M22 18 L18 196 L60 196 L62 18 Z',                 r:'M68 18 L70 196 L112 196 L108 18 Z' },
     oversize:    { wx:14, ww:102,l:'M14 18 L10 196 L60 196 L62 18 Z',                 r:'M68 18 L70 196 L120 196 L116 18 Z' },
-    'flare-slim':       { wx:26, ww:78, l:'M26 18 L34 112 L18 196 L52 196 L48 112 L58 18 Z', r:'M72 18 L82 112 L78 196 L112 196 L96 112 L104 18 Z' },
+    'flare-slim': { wx:26, ww:78, l:'M26 18 L34 112 L18 196 L52 196 L48 112 L58 18 Z', r:'M72 18 L82 112 L78 196 L112 196 L96 112 L104 18 Z' },
     'flare-relax':{ wx:24, ww:82, l:'M24 18 L32 116 L14 196 L54 196 L48 116 L60 18 Z', r:'M70 18 L82 116 L76 196 L116 196 L98 116 L106 18 Z' },
     mom:         { wx:26, ww:78, l:'M26 18 L30 196 L52 196 L60 18 Z',                 r:'M70 18 L78 196 L100 196 L104 18 Z' },
     regular:     { wx:28, ww:74, l:'M28 18 L26 196 L54 196 L58 18 Z',                 r:'M72 18 L76 196 L104 196 L102 18 Z' },

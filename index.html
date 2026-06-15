@@ -7,7 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Archivo:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
-<link rel="preload" as="image" href="assets/fits/skinny-360/01.png" fetchpriority="high">
+<link rel="preload" as="image" href="assets/fits/skinny-360/01.webp" fetchpriority="high">
 <style>
   :root{
     --bg:#0a0a0a;
@@ -413,57 +413,57 @@
 
   // Tight → Loose order
   const FITS = [
-    { key:'skinny',      name:'Skinny',      tagline:'Ceñido total',        sig:'#ff5470',
-      spin:['assets/fits/skinny-360/01.png','assets/fits/skinny-360/02.png','assets/fits/skinny-360/03.png','assets/fits/skinny-360/04.png','assets/fits/skinny-360/05.png','assets/fits/skinny-360/06.png','assets/fits/skinny-360/07.png','assets/fits/skinny-360/08.png','assets/fits/skinny-360/09.png'],
-      thumb:'assets/fits/skinny-360/01.png',
+    { key:'skinny',      name:'Skinny',      tagline:'Ceñido total',        sig:'#ff5470', icon:'assets/fits/icons/skinny.svg',
+      spin:['assets/fits/skinny-360/01.webp','assets/fits/skinny-360/02.webp','assets/fits/skinny-360/03.webp','assets/fits/skinny-360/04.webp','assets/fits/skinny-360/05.webp','assets/fits/skinny-360/06.webp','assets/fits/skinny-360/07.webp'],
+      thumb:'assets/fits/skinny-360/01.webp',
       desc:'Ceñido de cadera a tobillo. Segunda piel, máxima silueta y un look afilado sin concesiones.',
       tags:['Ceñido','Tiro medio','Stretch'],
       w:{waist:30, hip:34, knee:17, hem:14, inner:4} },
-    { key:'pitillo',     name:'Pitillo',     tagline:'Afilado y limpio',     sig:'#ff7a59',
-      spin:['assets/fits/pitillo-360/01.png','assets/fits/pitillo-360/02.png','assets/fits/pitillo-360/03.png','assets/fits/pitillo-360/04.png','assets/fits/pitillo-360/05.png','assets/fits/pitillo-360/06.png','assets/fits/pitillo-360/07.png','assets/fits/pitillo-360/08.png','assets/fits/pitillo-360/09.png','assets/fits/pitillo-360/10.png','assets/fits/pitillo-360/11.png'],
-      thumb:'assets/fits/pitillo-360/01.png',
+    { key:'pitillo',     name:'Pitillo',     tagline:'Afilado y limpio',     sig:'#ff7a59', icon:'assets/fits/icons/pitillo.svg',
+      spin:['assets/fits/pitillo-360/01.webp','assets/fits/pitillo-360/02.webp','assets/fits/pitillo-360/03.webp','assets/fits/pitillo-360/04.webp','assets/fits/pitillo-360/05.webp','assets/fits/pitillo-360/06.webp','assets/fits/pitillo-360/07.webp','assets/fits/pitillo-360/08.webp'],
+      thumb:'assets/fits/pitillo-360/01.webp',
       desc:'Ajustado y afilado de cadera a tobillo. Líneas limpias y silueta marcada para un look pulido.',
       tags:['Ajustado','Silueta marcada','Versátil'],
       w:{waist:31, hip:35, knee:19, hem:16, inner:4} },
-    { key:'semipitillo', name:'Semipitillo', tagline:'Ajustado con aire',    sig:'#b88cf0',
-      spin:['assets/fits/semipitillo-360/01.png','assets/fits/semipitillo-360/02.png','assets/fits/semipitillo-360/03.png','assets/fits/semipitillo-360/04.png','assets/fits/semipitillo-360/05.png','assets/fits/semipitillo-360/06.png','assets/fits/semipitillo-360/07.png','assets/fits/semipitillo-360/08.png','assets/fits/semipitillo-360/09.png','assets/fits/semipitillo-360/10.png','assets/fits/semipitillo-360/11.png','assets/fits/semipitillo-360/12.png'],
-      thumb:'assets/fits/semipitillo-360/01.png',
+    { key:'semipitillo', name:'Semipitillo', tagline:'Ajustado con aire',    sig:'#b88cf0', icon:'assets/fits/icons/semipitillo.svg',
+      spin:['assets/fits/semipitillo-360/01.webp','assets/fits/semipitillo-360/02.webp','assets/fits/semipitillo-360/03.webp','assets/fits/semipitillo-360/04.webp','assets/fits/semipitillo-360/05.webp','assets/fits/semipitillo-360/06.webp'],
+      thumb:'assets/fits/semipitillo-360/01.webp',
       desc:'Ajustado pero con aire al tobillo. El equilibrio entre lo cómodo del recto y lo afilado del pitillo.',
       tags:['Slim','Tobillo limpio','Versátil'],
       w:{waist:32, hip:36, knee:22, hem:19, inner:4} },
-    { key:'regular',     name:'Regular',     tagline:'Recto y atemporal',    sig:'#5b8cf5',
-      spin:['assets/fits/regular-360/01.png','assets/fits/regular-360/02.png','assets/fits/regular-360/03.png','assets/fits/regular-360/04.png','assets/fits/regular-360/05.png','assets/fits/regular-360/06.png','assets/fits/regular-360/07.png','assets/fits/regular-360/08.png','assets/fits/regular-360/09.png','assets/fits/regular-360/10.png','assets/fits/regular-360/11.png','assets/fits/regular-360/12.png'],
-      thumb:'assets/fits/regular-360/01.png',
+    { key:'regular',     name:'Regular',     tagline:'Recto y atemporal',    sig:'#5b8cf5', icon:'assets/fits/icons/regular.svg',
+      spin:['assets/fits/regular-360/01.webp','assets/fits/regular-360/02.webp','assets/fits/regular-360/03.webp','assets/fits/regular-360/04.webp','assets/fits/regular-360/05.webp','assets/fits/regular-360/06.webp','assets/fits/regular-360/07.webp','assets/fits/regular-360/08.webp'],
+      thumb:'assets/fits/regular-360/01.webp',
       desc:'Recto, parejo y atemporal. Ni ajustado ni holgado: el corte equilibrado que nunca falla.',
       tags:['Recto','Equilibrado','Clásico'],
       w:{waist:33, hip:38, knee:28, hem:25, inner:4} },
-    { key:'mom',         name:'Mom',         tagline:'Tiro alto noventero',  sig:'#5bc0a8',
-      spin:['assets/fits/mom-360/01.png','assets/fits/mom-360/02.png','assets/fits/mom-360/03.png','assets/fits/mom-360/04.png','assets/fits/mom-360/05.png','assets/fits/mom-360/06.png','assets/fits/mom-360/07.png','assets/fits/mom-360/08.png','assets/fits/mom-360/09.png','assets/fits/mom-360/10.png','assets/fits/mom-360/11.png','assets/fits/mom-360/12.png'],
-      thumb:'assets/fits/mom-cut.png',
+    { key:'mom',         name:'Mom',         tagline:'Tiro alto noventero',  sig:'#5bc0a8', icon:'assets/fits/icons/mom.svg',
+      spin:['assets/fits/mom-360/01.webp','assets/fits/mom-360/02.webp','assets/fits/mom-360/03.webp','assets/fits/mom-360/04.webp','assets/fits/mom-360/05.webp','assets/fits/mom-360/06.webp','assets/fits/mom-360/07.webp','assets/fits/mom-360/08.webp'],
+      thumb:'assets/fits/mom-360/01.webp',
       desc:'Tiro alto, holgado en la cadera y ligeramente entallado al tobillo. El clásico noventero, cómodo y favorecedor.',
       tags:['Tiro alto','Holgado','Favorecedor'],
       w:{waist:32, hip:41, knee:26, hem:21, inner:5} },
-    { key:'flare-slim',       name:'Flare',       variant:'Slim',  tagline:'Campana ceñida retro', sig:'#e85d9b',
-      spin:['assets/fits/flare-360/01.png','assets/fits/flare-360/02.png','assets/fits/flare-360/03.png','assets/fits/flare-360/04.png','assets/fits/flare-360/05.png','assets/fits/flare-360/06.png','assets/fits/flare-360/07.png','assets/fits/flare-360/08.png'],
-      thumb:'assets/fits/flare-cut.png',
+    { key:'flare-slim',  name:'Flare',       variant:'Slim',  tagline:'Campana ceñida retro', sig:'#e85d9b', icon:'assets/fits/icons/flare-slim.svg',
+      spin:['assets/fits/flare-slim-360/01.webp','assets/fits/flare-slim-360/02.webp','assets/fits/flare-slim-360/03.webp','assets/fits/flare-slim-360/04.webp','assets/fits/flare-slim-360/05.webp','assets/fits/flare-slim-360/06.webp','assets/fits/flare-slim-360/07.webp','assets/fits/flare-slim-360/08.webp'],
+      thumb:'assets/fits/flare-slim-360/01.webp',
       desc:'Ajustado arriba, abierto abajo. La campana que estiliza la pierna y le da movimiento retro al outfit.',
       tags:['Campana','Tiro medio','Estiliza'],
       w:{waist:32, hip:36, knee:21, hem:33, inner:5} },
-    { key:'flare-relax', name:'Flare',       variant:'Relax', tagline:'Campana de caída holgada', sig:'#c95ba0',
-      spin:['assets/fits/flare-relax-360/01.png','assets/fits/flare-relax-360/02.png','assets/fits/flare-relax-360/03.png','assets/fits/flare-relax-360/04.png','assets/fits/flare-relax-360/05.png','assets/fits/flare-relax-360/06.png'],
-      thumb:'assets/fits/flare-relax-360/01.png',
+    { key:'flare-relax', name:'Flare',       variant:'Relax', tagline:'Campana de caída holgada', sig:'#c95ba0', icon:'assets/fits/icons/flare-relax.svg',
+      spin:['assets/fits/flare-relax-360/01.webp','assets/fits/flare-relax-360/02.webp','assets/fits/flare-relax-360/03.webp','assets/fits/flare-relax-360/04.webp','assets/fits/flare-relax-360/05.webp','assets/fits/flare-relax-360/06.webp'],
+      thumb:'assets/fits/flare-relax-360/01.webp',
       desc:'La campana con caída más relajada: holgura cómoda en cadera y pierna, con la misma apertura retro abajo.',
       tags:['Campana','Relajado','Estiliza'],
       w:{waist:33, hip:39, knee:27, hem:34, inner:6} },
-    { key:'oversize',    name:'Oversize',    tagline:'Volumen estructurado', sig:'#d9a06c',
-      spin:['assets/fits/oversize-360/01.png','assets/fits/oversize-360/02.png','assets/fits/oversize-360/03.png','assets/fits/oversize-360/04.png','assets/fits/oversize-360/05.png','assets/fits/oversize-360/06.png','assets/fits/oversize-360/07.png','assets/fits/oversize-360/08.png','assets/fits/oversize-360/09.png','assets/fits/oversize-360/10.png'],
-      thumb:'assets/fits/oversize-360/01.png',
+    { key:'oversize',    name:'Oversize',    tagline:'Volumen estructurado', sig:'#d9a06c', icon:'assets/fits/icons/oversize.svg',
+      spin:['assets/fits/oversize-360/01.webp','assets/fits/oversize-360/02.webp','assets/fits/oversize-360/03.webp','assets/fits/oversize-360/04.webp','assets/fits/oversize-360/05.webp','assets/fits/oversize-360/06.webp'],
+      thumb:'assets/fits/oversize-360/01.webp',
       desc:'Una talla más, una actitud más. Volumen estructurado, comodidad real y presencia total.',
       tags:['Volumen','Estructurado','Presencia'],
       w:{waist:37, hip:45, knee:40, hem:37, inner:8} },
-    { key:'baggy',       name:'Baggy',       tagline:'Amplio streetwear',    sig:'#cbe83a',
-      spin:['assets/fits/baggy-360/01.png','assets/fits/baggy-360/02.png','assets/fits/baggy-360/03.png','assets/fits/baggy-360/04.png','assets/fits/baggy-360/05.png','assets/fits/baggy-360/06.png','assets/fits/baggy-360/07.png','assets/fits/baggy-360/08.png'],
-      thumb:'assets/fits/baggy-360/01.png',
+    { key:'baggy',       name:'Baggy',       tagline:'Amplio streetwear',    sig:'#cbe83a', icon:'assets/fits/icons/baggy.svg',
+      spin:['assets/fits/baggy-360/01.webp','assets/fits/baggy-360/02.webp','assets/fits/baggy-360/03.webp','assets/fits/baggy-360/04.webp','assets/fits/baggy-360/05.webp','assets/fits/baggy-360/06.webp','assets/fits/baggy-360/07.webp'],
+      thumb:'assets/fits/baggy-360/01.webp',
       desc:'Corte amplio, caída urbana y presencia streetwear. Para verse fuerte, sentirse cómodo y durar.',
       tags:['Amplio','Caída urbana','Streetwear'],
       w:{waist:34, hip:41, knee:34, hem:31, inner:6} }
@@ -730,8 +730,8 @@
   // Build thumbnails
   const thumbsEl = document.getElementById('thumbs');
   thumbsEl.innerHTML = FITS.map((f,i) => `
-    <button class="thumb-btn${f.thumb?' has-photo':''}" data-i="${i}" aria-label="${f.name} ${f.variant||''}">
-      ${f.thumb ? `<img class="thumb-photo" src="${f.thumb}" alt="${f.name}">` : jeanSVG(f, { showTag:false })}
+    <button class="thumb-btn${(f.icon||f.thumb)?' has-photo':''}" data-i="${i}" aria-label="${f.name} ${f.variant||''}">
+      ${f.icon ? `<img class="thumb-photo" src="${f.icon}" alt="${f.name}">` : f.thumb ? `<img class="thumb-photo" src="${f.thumb}" alt="${f.name}">` : jeanSVG(f, { showTag:false })}
       <span class="tname">${f.name}${f.variant?`<span class="tsub">${f.variant}</span>`:''}</span>
     </button>`).join('');
   thumbsEl.querySelectorAll('.thumb-btn').forEach(b => {
