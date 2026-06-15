@@ -12,3 +12,5 @@ server/node_modules
 data
 server/data
 server/public
+ver-local.command
+data-local
