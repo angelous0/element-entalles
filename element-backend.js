@@ -162,6 +162,8 @@
   function onReady(fn){ if (document.readyState !== 'loading') fn(); else document.addEventListener('DOMContentLoaded', fn); }
   onReady(function () {
     if (isLoginPage()) {
+      // quita el texto "demo: admin/element" del diseño (ya no aplica: la clave es del servidor)
+      var _demo = document.querySelector('.demo'); if (_demo) _demo.style.display = 'none';
       // ¿hay sesion REAL en el servidor? (no confiar solo en la cookie de UX -> evita bucles)
       fetch('/api/session', { credentials:'same-origin' })
         .then(function(r){ return r.json(); })
