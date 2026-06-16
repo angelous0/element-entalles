@@ -49,6 +49,43 @@
     applying = false;
   }
 
+  // ===== Fotos de los looks (Street/Limpio/Noche) por entalle =====
+  // Se guardan en config[entalle].styleImg[look] (URL ya optimizada por /api/media).
+  function curEntalle() {
+    var h = (location.hash || '').replace('#', ''); if (h) return h;
+    var seg = (location.pathname.split('/').filter(Boolean).pop() || '').replace(/\.html$/, '');
+    return seg || 'baggy';
+  }
+  function curStyle() { var t = document.querySelector('.style-tab.active'); return t ? t.getAttribute('data-style') : 'street'; }
+  function styleImgUrl(ent, st) {
+    var srv = (window.ELEMENT_FICHAS_CFG || {});
+    var d = {}; try { d = JSON.parse(rawGet(CFG) || '{}'); } catch (e) {}
+    var map = (d[ent] && d[ent].styleImg) || (srv[ent] && srv[ent].styleImg) || {};
+    return map[st] || null;
+  }
+  function applyLookPhoto() {
+    var vis = document.querySelector('.style-vis'); if (!vis) return;
+    var url = styleImgUrl(curEntalle(), curStyle());
+    var img = vis.querySelector('.el-look-photo');
+    if (url) {
+      if (!img) { img = document.createElement('img'); img.className = 'el-look-photo'; img.alt = ''; vis.appendChild(img); }
+      if (img.getAttribute('src') !== url) img.setAttribute('src', url);
+      img.style.display = 'block';
+    } else if (img) { img.style.display = 'none'; }
+  }
+  function injectLookCSS() {
+    if (document.getElementById('el-look-css')) return;
+    var st = document.createElement('style'); st.id = 'el-look-css';
+    st.textContent = '.style-vis{position:relative}'
+      + '.el-look-photo{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;background:#0e0e0e;z-index:2}'
+      + '.el-look-up{position:absolute;left:0;right:0;bottom:0;z-index:3;text-align:center;padding:7px 8px;'
+      + 'background:rgba(10,10,10,.72);color:#cbe83a;font-family:"JetBrains Mono",monospace;font-size:10px;'
+      + 'letter-spacing:.1em;text-transform:uppercase;cursor:pointer}'
+      + '.el-look-up:hover{background:rgba(10,10,10,.92)}'
+      + '.style-vis.el-editable{outline:1.5px dashed rgba(203,232,58,.6);outline-offset:3px;cursor:pointer}';
+    document.head.appendChild(st);
+  }
+
   // ---- modo admin ----
   var params = new URLSearchParams(location.search);
   var isAdmin = params.has('admin') || /\/admin\/?$/.test(location.pathname);
@@ -58,10 +95,10 @@
   var t1 = null;
   var obs = new MutationObserver(function () {
     clearTimeout(t1);
-    t1 = setTimeout(function () { applyOverrides(); if (adminOn) { makeEditable(); fixAdminBar(); } }, 70);
+    t1 = setTimeout(function () { applyOverrides(); applyLookPhoto(); if (adminOn) { makeEditable(); fixAdminBar(); setupLookUpload(); } }, 70);
   });
   function ready(fn) { if (document.readyState !== 'loading') fn(); else document.addEventListener('DOMContentLoaded', fn); }
-  ready(function () { loadOV(); applyOverrides(); obs.observe(document.body, { childList: true, subtree: true, characterData: true }); });
+  ready(function () { injectLookCSS(); loadOV(); applyOverrides(); applyLookPhoto(); obs.observe(document.body, { childList: true, subtree: true, characterData: true }); });
 
   if (!isAdmin) return; // visitantes: aplican overrides (arriba) y nada mas
 
@@ -85,6 +122,7 @@
       + '.cms-editable:hover{outline-color:#cbe83a}.cms-editable:focus{outline:2px solid #cbe83a;outline-offset:3px}';
     document.head.appendChild(st);
     makeEditable();
+    setupLookUpload();
     setTimeout(fixAdminBar, 300);
   });
 
@@ -120,6 +158,35 @@
     }
   }
 
+  // sube/cambia la foto del look actual (Street/Limpio/Noche) del entalle actual
+  function setupLookUpload() {
+    var vis = document.querySelector('.style-vis'); if (!vis || vis.dataset.elUp) return;
+    vis.dataset.elUp = '1'; vis.classList.add('el-editable');
+    var up = document.createElement('div'); up.className = 'el-look-up';
+    up.textContent = '📷 Subir / cambiar foto del look';
+    vis.appendChild(up);
+    var inp = document.createElement('input'); inp.type = 'file'; inp.accept = 'image/*'; inp.style.display = 'none';
+    vis.appendChild(inp);
+    vis.addEventListener('click', function () { inp.click(); });
+    inp.addEventListener('change', function () {
+      if (!inp.files[0]) return;
+      var ent = curEntalle(), st = curStyle();
+      toast('Subiendo foto del look…');
+      var fd = new FormData(); fd.append('file', inp.files[0], 'look');
+      fetch('/api/media?slot=fichas/' + ent + '-look-' + st, { method: 'POST', body: fd, credentials: 'same-origin' })
+        .then(function (r) { if (r.status === 401) throw new Error('sin-sesion'); if (!r.ok) throw new Error('subida ' + r.status); return r.json(); })
+        .then(function (j) {
+          var d = {}; try { d = JSON.parse(rawGet(CFG) || '{}'); } catch (e) {}
+          d[ent] = d[ent] || {}; d[ent].styleImg = d[ent].styleImg || {}; d[ent].styleImg[st] = j.url;
+          localStorage.setItem(CFG, JSON.stringify(d)); // -> schedulePublish
+          applyLookPhoto();
+          toast('Foto del look lista (optimizada)');
+        })
+        .catch(function (e) { toast('No se pudo subir (' + (e.message || e) + ')'); });
+      inp.value = '';
+    });
+  }
+
   // 2) publicar (per-entalle + globales) cuando se guarda algo en el borrador
   localStorage.setItem = function (k, v) { rawSet(k, v); if (k === CFG) schedulePublish(); };
 
@@ -147,10 +214,14 @@
       .then(function (r) { return r.json(); })
       .then(function (cur) {
         cur.fichas = cur.fichas || {};
-        // textos por entalle
+        // textos + fotos de look por entalle
         Object.keys(d).forEach(function (k) {
           if (k[0] === '_') return;
-          if (d[k] && d[k].texts) { cur.fichas[k] = cur.fichas[k] || {}; cur.fichas[k].texts = d[k].texts; }
+          if (d[k] && (d[k].texts || d[k].styleImg)) {
+            cur.fichas[k] = cur.fichas[k] || {};
+            if (d[k].texts) cur.fichas[k].texts = d[k].texts;
+            if (d[k].styleImg) cur.fichas[k].styleImg = d[k].styleImg;
+          }
         });
         // textos de marca globales
         if (d._textOv) cur.fichas._textOv = d._textOv;
