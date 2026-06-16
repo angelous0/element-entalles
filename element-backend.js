@@ -17,6 +17,18 @@
   var rawSet = localStorage.setItem.bind(localStorage);
   var rawGet = localStorage.getItem.bind(localStorage);
 
+  // Mejora visual del panel de Fichas: que el boton de camara 📷 no se corte.
+  // Casillas de color mas anchas + el nombre se ajusta sin empujar los controles.
+  try {
+    var _css = document.createElement('style');
+    _css.textContent =
+      '.color-list{grid-template-columns:repeat(auto-fill,minmax(156px,1fr))!important;gap:9px!important}'
+      + '.ccell{gap:8px!important;overflow:hidden}'
+      + '.ccell .nm{flex:1 1 0!important;min-width:0!important;line-height:1.15}'
+      + '.ccell .ck,.ccell .cam,.ccell .cam-x{flex-shrink:0}';
+    (document.head || document.documentElement).appendChild(_css);
+  } catch (e) {}
+
   // ---- 1) SEED sincrono desde el servidor ----
   // Solo en los paneles que de verdad usan localStorage (fichas / catalogo).
   // En login.html y panel.html NO se hace, para no bloquear la carga (pantalla en blanco).

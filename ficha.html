@@ -1264,7 +1264,8 @@
     const ph = mainEl.querySelector('.main-ph'); if (ph) ph.remove();
     cornerEl.textContent = 'Look principal';
     mainCaption.textContent = 'Vista completa';
-    const details = ecfg.details || dm.details || [];
+    const details = ecfg.details || [];
+    var _strip = document.getElementById('thumbs'); if (_strip) _strip.style.display = details.length ? '' : 'none';
     thumbs.forEach((t,i) => {
       t.classList.remove('active');
       if (details[i]){

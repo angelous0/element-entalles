@@ -61,6 +61,11 @@ def post_process(outname, html):
     if outname == "ficha.html":
         html = html.replace("flare:", "'flare-slim':")          # 2 claves de objeto
         html = html.replace("'flare'", "'flare-slim'")          # fit:'flare' y refs
+        # Fotos de detalle: ignorar las "por defecto" (DEFAULT_MEDIA, p.ej. las 3 del Baggy)
+        # y ocultar la tira cuando no hay fotos reales (las que se suben por el panel SI salen).
+        html = html.replace(
+            "const details = ecfg.details || dm.details || [];",
+            "const details = ecfg.details || [];\n    var _strip = document.getElementById('thumbs'); if (_strip) _strip.style.display = details.length ? '' : 'none';")
         # editor de textos conectado al backend (publica al guardar, en modo admin)
         if "ficha-publish.js" not in html:
             html = html.replace("</head>", '  <script src="ficha-publish.js"></script>\n</head>', 1)
