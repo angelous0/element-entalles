@@ -64,6 +64,12 @@ def post_process(outname, html):
         # editor de textos conectado al backend (publica al guardar, en modo admin)
         if "ficha-publish.js" not in html:
             html = html.replace("</head>", '  <script src="ficha-publish.js"></script>\n</head>', 1)
+    # 5) panel de fichas: su lista de entalles seguia con "Flare" (uno). Ahora son dos:
+    #    Flare Slim + Flare Relax (igual que el inicio/ficha).
+    if outname == "admin-fichas.html":
+        html = html.replace(
+            "{key:'flare',name:'Flare',sig:'#e85d9b'},",
+            "{key:'flare-slim',name:'Flare Slim',sig:'#e85d9b'},\n    {key:'flare-relax',name:'Flare Relax',sig:'#c95ba0'},")
     return html
 
 # reescritura de enlaces: lo mas especifico primero (p.ej. "Catálogo" dentro de "Admin Catálogo")
