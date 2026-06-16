@@ -39,9 +39,13 @@
   var applying = false;
   function applyOverrides() {
     if (applying) return; applying = true;
+    // NO resetear el elemento que se esta editando (el que tiene el foco), o el
+    // observer pelearia con cada tecla y no dejaria borrar/escribir.
+    var active = document.activeElement;
     for (var s = 0; s < SELECTORS.length; s++) {
       var els = document.querySelectorAll(SELECTORS[s]);
       for (var i = 0; i < els.length; i++) {
+        if (els[i] === active) continue;
         var ov = OV[keyOf(els[i], SELECTORS[s], i)];
         if (ov != null && els[i].textContent !== ov) els[i].textContent = ov;
       }
