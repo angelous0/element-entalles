@@ -72,6 +72,9 @@
     if (!r.ok) throw new Error('subida ' + r.status);
     return (await r.json()).url;
   }
+  // Expuesto para el PANEL: subir cada imagen al elegirla y guardar SOLO la URL (no la
+  // imagen entera) -> el localStorage no se llena ("Memoria llena"). Devuelve la URL final.
+  window.elementUpload = function (dataURL, slot) { return up(dataURL, slot); };
   async function upFichas(f) {
     for (var k in f) {
       if (k[0] === '_') continue;

@@ -392,8 +392,14 @@
   }
   heroSlot.onclick=(e)=>{ if(e.target.closest('#heroX')) return; heroInput.click(); };
   document.getElementById('heroX').onclick=(e)=>{ e.stopPropagation(); const c=entCfg(cur); delete c.hero; save(); renderMedia(); };
-  heroInput.onchange=async()=>{ if(!heroInput.files[0])return; toast('Procesando…'); const d=await compress(heroInput.files[0]); if(d){ entCfg(cur).hero=d; save(); renderMedia(); toast('Foto principal lista'); } heroInput.value=''; };
-  detInput.onchange=async()=>{ if(!detInput.files[0])return; toast('Procesando…'); const d=await compress(detInput.files[0]); if(d){ const c=entCfg(cur); c.details=c.details||[]; c.details[detTarget]=d; save(); renderMedia(); toast('Detalle añadido'); } detInput.value=''; };
+  // Sube la imagen al servidor al instante y deja en el navegador solo el enlace corto
+  // (no la imagen entera) -> la memoria del navegador no se llena. Sin backend: queda igual.
+  async function putImg(dataURL, slot){
+    try { return (window.elementUpload) ? await window.elementUpload(dataURL, slot) : dataURL; }
+    catch(e){ toast('No se pudo subir la foto'); return dataURL; }
+  }
+  heroInput.onchange=async()=>{ if(!heroInput.files[0])return; toast('Procesando…'); const d=await compress(heroInput.files[0]); if(d){ const u=await putImg(d,'fichas/'+cur+'-hero'); entCfg(cur).hero=u; save(); renderMedia(); toast('Foto principal lista'); } heroInput.value=''; };
+  detInput.onchange=async()=>{ if(!detInput.files[0])return; toast('Procesando…'); const d=await compress(detInput.files[0]); if(d){ const c=entCfg(cur); c.details=c.details||[]; const u=await putImg(d,'fichas/'+cur+'-det-'+detTarget); c.details[detTarget]=u; save(); renderMedia(); toast('Detalle añadido'); } detInput.value=''; };
 
   // ===== fotos de la paleta de colores (POR ENTALLE: cada entalle tiene las suyas) =====
   const palInput = document.createElement('input');
@@ -404,7 +410,7 @@
     if(!palInput.files[0] || !palTarget) return;
     toast('Procesando…');
     const d = await compress(palInput.files[0], 1200);
-    if(d){ const c=entCfg(cur); c.pal=c.pal||{}; c.pal[palTarget]=d; save(); renderColorLists(); toast('Foto del color guardada'); }
+    if(d){ const c=entCfg(cur); c.pal=c.pal||{}; const u=await putImg(d,'fichas/'+cur+'-color-'+palTarget); c.pal[palTarget]=u; save(); renderColorLists(); toast('Foto del color guardada'); }
     palInput.value='';
   };
 

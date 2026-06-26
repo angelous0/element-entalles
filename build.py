@@ -87,9 +87,10 @@ def post_process(outname, html):
             "    Object.keys(MASTER).forEach(id => { MASTER[id].img = entPal[id] || glob[id] || null; });\n"
             "  }\n"
             "  applyColorPhotos();")
-        html = html.replace(
-            "  function renderColors(fam){\n    currentFam = fam;",
-            "  function renderColors(fam){\n    currentFam = fam;\n    applyColorPhotos();   // sincroniza las fotos de color al entalle actual (cada uno tiene las suyas)")
+        if "applyColorPhotos();   // sincroniza" not in html:
+            html = html.replace(
+                "  function renderColors(fam){\n    currentFam = fam;",
+                "  function renderColors(fam){\n    currentFam = fam;\n    applyColorPhotos();   // sincroniza las fotos de color al entalle actual (cada uno tiene las suyas)")
     # 5) panel de fichas: su lista de entalles seguia con "Flare" (uno). Ahora son dos:
     #    Flare Slim + Flare Relax (igual que el inicio/ficha).
     if outname == "admin-fichas.html":
@@ -134,6 +135,22 @@ def post_process(outname, html):
                 "    delete cfg._pal; save();\n"
                 "  }\n\n"
                 "  renderTabs(); renderPanel(); updatePubState();")
+        # Subida inmediata: cada foto sube al servidor al ELEGIRLA y en el navegador queda
+        # solo el enlace (no la imagen entera) -> el localStorage no se llena ("Memoria llena").
+        html = html.replace(
+            "  heroInput.onchange=async()=>{ if(!heroInput.files[0])return; toast('Procesando…'); const d=await compress(heroInput.files[0]); if(d){ entCfg(cur).hero=d; save(); renderMedia(); toast('Foto principal lista'); } heroInput.value=''; };\n"
+            "  detInput.onchange=async()=>{ if(!detInput.files[0])return; toast('Procesando…'); const d=await compress(detInput.files[0]); if(d){ const c=entCfg(cur); c.details=c.details||[]; c.details[detTarget]=d; save(); renderMedia(); toast('Detalle añadido'); } detInput.value=''; };",
+            "  // Sube la imagen al servidor al instante y deja en el navegador solo el enlace corto\n"
+            "  // (no la imagen entera) -> la memoria del navegador no se llena. Sin backend: queda igual.\n"
+            "  async function putImg(dataURL, slot){\n"
+            "    try { return (window.elementUpload) ? await window.elementUpload(dataURL, slot) : dataURL; }\n"
+            "    catch(e){ toast('No se pudo subir la foto'); return dataURL; }\n"
+            "  }\n"
+            "  heroInput.onchange=async()=>{ if(!heroInput.files[0])return; toast('Procesando…'); const d=await compress(heroInput.files[0]); if(d){ const u=await putImg(d,'fichas/'+cur+'-hero'); entCfg(cur).hero=u; save(); renderMedia(); toast('Foto principal lista'); } heroInput.value=''; };\n"
+            "  detInput.onchange=async()=>{ if(!detInput.files[0])return; toast('Procesando…'); const d=await compress(detInput.files[0]); if(d){ const c=entCfg(cur); c.details=c.details||[]; const u=await putImg(d,'fichas/'+cur+'-det-'+detTarget); c.details[detTarget]=u; save(); renderMedia(); toast('Detalle añadido'); } detInput.value=''; };")
+        html = html.replace(
+            "    if(d){ const c=entCfg(cur); c.pal=c.pal||{}; c.pal[palTarget]=d; save(); renderColorLists(); toast('Foto del color guardada'); }",
+            "    if(d){ const c=entCfg(cur); c.pal=c.pal||{}; const u=await putImg(d,'fichas/'+cur+'-color-'+palTarget); c.pal[palTarget]=u; save(); renderColorLists(); toast('Foto del color guardada'); }")
     return html
 
 # reescritura de enlaces: lo mas especifico primero (p.ej. "Catálogo" dentro de "Admin Catálogo")
