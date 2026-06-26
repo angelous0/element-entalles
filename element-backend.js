@@ -80,7 +80,10 @@
       if (Array.isArray(e.details)) for (var i = 0; i < e.details.length; i++) {
         if (isData(e.details[i])) e.details[i] = await up(e.details[i], 'fichas/' + k + '-det-' + i);
       }
+      // fotos de color POR ENTALLE: cada entalle/color es su propio archivo (no se pisan).
+      if (e.pal) for (var pc in e.pal) { if (isData(e.pal[pc])) e.pal[pc] = await up(e.pal[pc], 'fichas/' + k + '-color-' + pc); }
     }
+    // compat: fotos de color globales de publicaciones viejas.
     if (f._pal) for (var c in f._pal) { if (isData(f._pal[c])) f._pal[c] = await up(f._pal[c], 'colors/' + c); }
   }
 

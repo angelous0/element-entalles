@@ -69,12 +69,71 @@ def post_process(outname, html):
         # editor de textos conectado al backend (publica al guardar, en modo admin)
         if "ficha-publish.js" not in html:
             html = html.replace("</head>", '  <script src="ficha-publish.js"></script>\n</head>', 1)
+        # Fotos de color POR ENTALLE: el diseno aplicaba cfg._pal global a MASTER (se veian
+        # iguales en todos los entalles). Cada entalle tiene su propia foto en cfg[ent].pal;
+        # sincronizamos MASTER.img segun el entalle actual al renderizar los colores.
+        html = html.replace(
+            "  // Fotos de colores personalizadas (subidas desde el panel Admin Fichas)\n"
+            "  const PAL_OV = fichasCfg._pal || {};\n"
+            "  Object.keys(PAL_OV).forEach(id => { if (MASTER[id]) MASTER[id].img = PAL_OV[id]; });",
+            "  // Fotos de colores personalizadas (subidas desde el panel Admin Fichas).\n"
+            "  // POR ENTALLE: cada entalle tiene su propia foto por color (fichasCfg[ent].pal).\n"
+            "  // _pal global queda solo como compatibilidad con publicaciones viejas.\n"
+            "  // MASTER comparte referencias con colorData, así que sincronizamos .img según el entalle actual.\n"
+            "  function applyColorPhotos(){\n"
+            "    const ent = fichasCfg[currentFitKey] || {};\n"
+            "    const entPal = ent.pal || {};\n"
+            "    const glob = fichasCfg._pal || {};\n"
+            "    Object.keys(MASTER).forEach(id => { MASTER[id].img = entPal[id] || glob[id] || null; });\n"
+            "  }\n"
+            "  applyColorPhotos();")
+        html = html.replace(
+            "  function renderColors(fam){\n    currentFam = fam;",
+            "  function renderColors(fam){\n    currentFam = fam;\n    applyColorPhotos();   // sincroniza las fotos de color al entalle actual (cada uno tiene las suyas)")
     # 5) panel de fichas: su lista de entalles seguia con "Flare" (uno). Ahora son dos:
     #    Flare Slim + Flare Relax (igual que el inicio/ficha).
     if outname == "admin-fichas.html":
         html = html.replace(
             "{key:'flare',name:'Flare',sig:'#e85d9b'},",
             "{key:'flare-slim',name:'Flare Slim',sig:'#e85d9b'},\n    {key:'flare-relax',name:'Flare Relax',sig:'#c95ba0'},")
+        # Fotos de color POR ENTALLE (el diseno las guardaba globales en cfg._pal -> se veian
+        # iguales en TODOS los entalles). Cada entalle guarda las suyas en cfg[ent].pal.
+        html = html.replace(
+            "subes la foto real de cada color (se usa en todas las fichas).",
+            "subes la foto real de cada color para <b style=\"color:var(--text);font-weight:600\">este entalle</b> (cada entalle tiene sus propias fotos).")
+        html = html.replace(
+            "  // ===== fotos de la paleta de colores (globales: se usan en todos los entalles) =====",
+            "  // ===== fotos de la paleta de colores (POR ENTALLE: cada entalle tiene las suyas) =====")
+        html = html.replace(
+            "if(d){ cfg._pal = cfg._pal || {}; cfg._pal[palTarget] = d; save(); renderColorLists(); toast('Foto del color guardada'); }",
+            "if(d){ const c=entCfg(cur); c.pal=c.pal||{}; c.pal[palTarget]=d; save(); renderColorLists(); toast('Foto del color guardada'); }")
+        html = html.replace(
+            "    const c=entCfg(cur); c.colors=c.colors||{};\n    const pal = cfg._pal || {};",
+            "    const c=entCfg(cur); c.colors=c.colors||{};\n    const pal = c.pal || {};")
+        html = html.replace(
+            "        if(cfg._pal){ delete cfg._pal[b.dataset.camx]; if(!Object.keys(cfg._pal).length) delete cfg._pal; }",
+            "        const cp=entCfg(cur).pal; if(cp){ delete cp[b.dataset.camx]; if(!Object.keys(cp).length) delete entCfg(cur).pal; }")
+        html = html.replace(
+            "    cfg._palMeta[fam].splice(i,1);\n"
+            "    if(cfg._pal && cfg._pal[id]){ delete cfg._pal[id]; if(!Object.keys(cfg._pal).length) delete cfg._pal; }\n"
+            "    Object.keys(cfg).forEach(k=>{ if(k[0]==='_') return; const cc=cfg[k]; if(cc && cc.colors && cc.colors[fam]){ cc.colors[fam]=cc.colors[fam].filter(x=>x!==id); if(!cc.colors[fam].length) delete cc.colors[fam]; } });",
+            "    cfg._palMeta[fam].splice(i,1);\n"
+            "    Object.keys(cfg).forEach(k=>{ if(k[0]==='_') return; const cc=cfg[k]; if(!cc) return;\n"
+            "      if(cc.colors && cc.colors[fam]){ cc.colors[fam]=cc.colors[fam].filter(x=>x!==id); if(!cc.colors[fam].length) delete cc.colors[fam]; }\n"
+            "      if(cc.pal && cc.pal[id]){ delete cc.pal[id]; if(!Object.keys(cc.pal).length) delete cc.pal; }\n"
+            "    });")
+        # Migración 1x: copia las fotos globales viejas a cada entalle y quita la global.
+        if "Migración 1x: antes las fotos de color" not in html:
+            html = html.replace(
+                "  renderTabs(); renderPanel(); updatePubState();",
+                "  // Migración 1x: antes las fotos de color eran globales (cfg._pal) y se veían igual en\n"
+                "  // todos los entalles. Ahora cada entalle tiene las suyas (cfg[ent].pal). Copiamos las\n"
+                "  // globales a cada entalle (como punto de partida) y quitamos la global -> ya son independientes.\n"
+                "  if(cfg._pal && Object.keys(cfg._pal).length){\n"
+                "    allEnt().forEach(e=>{ const c=entCfg(e.key); c.pal=c.pal||{}; Object.keys(cfg._pal).forEach(id=>{ if(c.pal[id]==null) c.pal[id]=cfg._pal[id]; }); });\n"
+                "    delete cfg._pal; save();\n"
+                "  }\n\n"
+                "  renderTabs(); renderPanel(); updatePubState();")
     return html
 
 # reescritura de enlaces: lo mas especifico primero (p.ej. "Catálogo" dentro de "Admin Catálogo")

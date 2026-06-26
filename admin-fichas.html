@@ -221,7 +221,7 @@
         </div>
         <div class="hint-row">
           <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 8h.01M11 12h1v4h1"/></svg>
-          <span>Marca solo los colores en que este entalle realmente se vende. Si no marcas ninguno, la ficha muestra la paleta completa por defecto. Con el botón de cámara 📷 subes la foto real de cada color (se usa en todas las fichas). Con <b style="color:var(--text);font-weight:600">Editar lista</b> cambias nombres, agregas o eliminas colores de la paleta.</span>
+          <span>Marca solo los colores en que este entalle realmente se vende. Si no marcas ninguno, la ficha muestra la paleta completa por defecto. Con el botón de cámara 📷 subes la foto real de cada color para <b style="color:var(--text);font-weight:600">este entalle</b> (cada entalle tiene sus propias fotos). Con <b style="color:var(--text);font-weight:600">Editar lista</b> cambias nombres, agregas o eliminas colores de la paleta.</span>
         </div>
       </div>
     </div>
@@ -395,7 +395,7 @@
   heroInput.onchange=async()=>{ if(!heroInput.files[0])return; toast('Procesando…'); const d=await compress(heroInput.files[0]); if(d){ entCfg(cur).hero=d; save(); renderMedia(); toast('Foto principal lista'); } heroInput.value=''; };
   detInput.onchange=async()=>{ if(!detInput.files[0])return; toast('Procesando…'); const d=await compress(detInput.files[0]); if(d){ const c=entCfg(cur); c.details=c.details||[]; c.details[detTarget]=d; save(); renderMedia(); toast('Detalle añadido'); } detInput.value=''; };
 
-  // ===== fotos de la paleta de colores (globales: se usan en todos los entalles) =====
+  // ===== fotos de la paleta de colores (POR ENTALLE: cada entalle tiene las suyas) =====
   const palInput = document.createElement('input');
   palInput.type='file'; palInput.accept='image/*'; palInput.className='hidden-input';
   document.body.appendChild(palInput);
@@ -404,14 +404,14 @@
     if(!palInput.files[0] || !palTarget) return;
     toast('Procesando…');
     const d = await compress(palInput.files[0], 1200);
-    if(d){ cfg._pal = cfg._pal || {}; cfg._pal[palTarget] = d; save(); renderColorLists(); toast('Foto del color guardada'); }
+    if(d){ const c=entCfg(cur); c.pal=c.pal||{}; c.pal[palTarget]=d; save(); renderColorLists(); toast('Foto del color guardada'); }
     palInput.value='';
   };
 
   // ===== colors availability =====
   function renderColorLists(){
     const c=entCfg(cur); c.colors=c.colors||{};
-    const pal = cfg._pal || {};
+    const pal = c.pal || {};
     ['color','negra'].forEach(fam=>{
       const sel = c.colors[fam]||[];
       const el = document.getElementById(fam==='color'?'listColor':'listNegra');
@@ -433,7 +433,7 @@
       el.querySelectorAll('[data-cam]').forEach(b=>b.onclick=(e)=>{ e.stopPropagation(); palTarget=b.dataset.cam; palInput.click(); });
       el.querySelectorAll('[data-camx]').forEach(b=>b.onclick=(e)=>{
         e.stopPropagation();
-        if(cfg._pal){ delete cfg._pal[b.dataset.camx]; if(!Object.keys(cfg._pal).length) delete cfg._pal; }
+        const cp=entCfg(cur).pal; if(cp){ delete cp[b.dataset.camx]; if(!Object.keys(cp).length) delete entCfg(cur).pal; }
         save(); renderColorLists(); toast('Foto del color quitada');
       });
     });
@@ -499,8 +499,10 @@
     if(!confirm('¿Eliminar el color "'+(col.name||'sin nombre')+'"? Se quita de todas las fichas.')) return;
     const id = col.id;
     cfg._palMeta[fam].splice(i,1);
-    if(cfg._pal && cfg._pal[id]){ delete cfg._pal[id]; if(!Object.keys(cfg._pal).length) delete cfg._pal; }
-    Object.keys(cfg).forEach(k=>{ if(k[0]==='_') return; const cc=cfg[k]; if(cc && cc.colors && cc.colors[fam]){ cc.colors[fam]=cc.colors[fam].filter(x=>x!==id); if(!cc.colors[fam].length) delete cc.colors[fam]; } });
+    Object.keys(cfg).forEach(k=>{ if(k[0]==='_') return; const cc=cfg[k]; if(!cc) return;
+      if(cc.colors && cc.colors[fam]){ cc.colors[fam]=cc.colors[fam].filter(x=>x!==id); if(!cc.colors[fam].length) delete cc.colors[fam]; }
+      if(cc.pal && cc.pal[id]){ delete cc.pal[id]; if(!Object.keys(cc.pal).length) delete cc.pal; }
+    });
     save(); renderCmBody(); renderColorLists(); toast('Color eliminado');
   }
   function addColor(){
@@ -545,6 +547,14 @@
     }catch(e){ toast('Memoria llena'); }
   }
   document.getElementById('publishBtn').onclick = publish;
+
+  // Migración 1x: antes las fotos de color eran globales (cfg._pal) y se veían igual en
+  // todos los entalles. Ahora cada entalle tiene las suyas (cfg[ent].pal). Copiamos las
+  // globales a cada entalle (como punto de partida) y quitamos la global -> ya son independientes.
+  if(cfg._pal && Object.keys(cfg._pal).length){
+    allEnt().forEach(e=>{ const c=entCfg(e.key); c.pal=c.pal||{}; Object.keys(cfg._pal).forEach(id=>{ if(c.pal[id]==null) c.pal[id]=cfg._pal[id]; }); });
+    delete cfg._pal; save();
+  }
 
   renderTabs(); renderPanel(); updatePubState();
 

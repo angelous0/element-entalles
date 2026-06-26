@@ -1413,9 +1413,17 @@
   ['color','negra'].forEach(fam => {
     [...colorData[fam].featured, ...colorData[fam].extras].forEach(c => { MASTER[c.id] = c; });
   });
-  // Fotos de colores personalizadas (subidas desde el panel Admin Fichas)
-  const PAL_OV = fichasCfg._pal || {};
-  Object.keys(PAL_OV).forEach(id => { if (MASTER[id]) MASTER[id].img = PAL_OV[id]; });
+  // Fotos de colores personalizadas (subidas desde el panel Admin Fichas).
+  // POR ENTALLE: cada entalle tiene su propia foto por color (fichasCfg[ent].pal).
+  // _pal global queda solo como compatibilidad con publicaciones viejas.
+  // MASTER comparte referencias con colorData, así que sincronizamos .img según el entalle actual.
+  function applyColorPhotos(){
+    const ent = fichasCfg[currentFitKey] || {};
+    const entPal = ent.pal || {};
+    const glob = fichasCfg._pal || {};
+    Object.keys(MASTER).forEach(id => { MASTER[id].img = entPal[id] || glob[id] || null; });
+  }
+  applyColorPhotos();
   function availColors(fam){
     const cfg = fichasCfg[currentFitKey];
     const ids = cfg && cfg.colors && cfg.colors[fam];
@@ -1457,6 +1465,7 @@
 
   function renderColors(fam){
     currentFam = fam;
+    applyColorPhotos();   // sincroniza las fotos de color al entalle actual (cada uno tiene las suyas)
     const av = availColors(fam);
     const featured = av.featured;
     const extras   = av.extras;
