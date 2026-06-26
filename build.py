@@ -91,6 +91,36 @@ def post_process(outname, html):
             html = html.replace(
                 "  function renderColors(fam){\n    currentFam = fam;",
                 "  function renderColors(fam){\n    currentFam = fam;\n    applyColorPhotos();   // sincroniza las fotos de color al entalle actual (cada uno tiene las suyas)")
+        # Paleta personalizada: la ficha usaba solo los colores "quemados" del diseño, así que
+        # los colores que el dueño crea/renombra en el panel (_palMeta, ids c-xxxx) no aparecían.
+        # Integramos _palMeta a colorData + MASTER.
+        if "(ids c-xxxx que el diseño base no conoce)" not in html:
+            html = html.replace(
+                "  const MASTER = {};\n"
+                "  ['color','negra'].forEach(fam => {\n"
+                "    [...colorData[fam].featured, ...colorData[fam].extras].forEach(c => { MASTER[c.id] = c; });\n"
+                "  });",
+                "  const MASTER = {};\n"
+                "  ['color','negra'].forEach(fam => {\n"
+                "    [...colorData[fam].featured, ...colorData[fam].extras].forEach(c => { MASTER[c.id] = c; });\n"
+                "  });\n"
+                "  // Paleta personalizada publicada desde el panel (_palMeta): el dueño pudo renombrar,\n"
+                "  // agregar o quitar colores (ids c-xxxx que el diseño base no conoce). Sin integrarla,\n"
+                "  // esos colores no aparecen en la ficha. La integramos a colorData + MASTER, conservando\n"
+                "  // los datos del diseño (c2/sub/desc) cuando el id coincide.\n"
+                "  if (fichasCfg._palMeta) ['color','negra'].forEach(fam => {\n"
+                "    const list = fichasCfg._palMeta[fam];\n"
+                "    if (!Array.isArray(list) || !list.length) return;\n"
+                "    const built = list.map(pc => {\n"
+                "      const base = MASTER[pc.id] || {};\n"
+                "      const m = Object.assign({ c2: pc.hex || '#888888', sub: '', desc: '' }, base,\n"
+                "        { id: pc.id, name: pc.name || base.name || pc.id, hex: pc.hex || base.hex || '#888888' });\n"
+                "      if (!m.c2) m.c2 = m.hex;\n"
+                "      MASTER[pc.id] = m;\n"
+                "      return m;\n"
+                "    });\n"
+                "    colorData[fam] = { featured: built.slice(0, 6), extras: built.slice(6) };\n"
+                "  });")
     # 5) panel de fichas: su lista de entalles seguia con "Flare" (uno). Ahora son dos:
     #    Flare Slim + Flare Relax (igual que el inicio/ficha).
     if outname == "admin-fichas.html":

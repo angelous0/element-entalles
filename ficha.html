@@ -1413,6 +1413,23 @@
   ['color','negra'].forEach(fam => {
     [...colorData[fam].featured, ...colorData[fam].extras].forEach(c => { MASTER[c.id] = c; });
   });
+  // Paleta personalizada publicada desde el panel (_palMeta): el dueño pudo renombrar,
+  // agregar o quitar colores (ids c-xxxx que el diseño base no conoce). Sin integrarla,
+  // esos colores no aparecen en la ficha. La integramos a colorData + MASTER, conservando
+  // los datos del diseño (c2/sub/desc) cuando el id coincide.
+  if (fichasCfg._palMeta) ['color','negra'].forEach(fam => {
+    const list = fichasCfg._palMeta[fam];
+    if (!Array.isArray(list) || !list.length) return;
+    const built = list.map(pc => {
+      const base = MASTER[pc.id] || {};
+      const m = Object.assign({ c2: pc.hex || '#888888', sub: '', desc: '' }, base,
+        { id: pc.id, name: pc.name || base.name || pc.id, hex: pc.hex || base.hex || '#888888' });
+      if (!m.c2) m.c2 = m.hex;
+      MASTER[pc.id] = m;
+      return m;
+    });
+    colorData[fam] = { featured: built.slice(0, 6), extras: built.slice(6) };
+  });
   // Fotos de colores personalizadas (subidas desde el panel Admin Fichas).
   // POR ENTALLE: cada entalle tiene su propia foto por color (fichasCfg[ent].pal).
   // _pal global queda solo como compatibilidad con publicaciones viejas.
