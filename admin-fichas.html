@@ -134,6 +134,13 @@
   .fam-acts{display:flex;gap:8px;align-items:center}
   .fam-head .editlist{font-family:"JetBrains Mono",monospace;font-size:9px;letter-spacing:0.1em;text-transform:uppercase;color:var(--accent);border:1px solid var(--line);border-radius:99px;padding:5px 9px;background:var(--bg-2)}
   .fam-head .editlist:hover{border-color:var(--accent)}
+  /* el-fam-distinct: distinguir de un vistazo Versión Color (acento lima) vs Versión Negra (oscuro) */
+  .fam-block:has([data-all="color"]){border-left:3px solid var(--accent);padding-left:12px;border-radius:0 6px 6px 0;background:linear-gradient(90deg,rgba(203,232,58,.06),transparent 55%)}
+  .fam-block:has([data-all="negra"]){border-left:3px solid #6a6a6a;padding-left:12px;border-radius:0 6px 6px 0;background:linear-gradient(90deg,rgba(255,255,255,.05),transparent 55%)}
+  .fam-block:has([data-all="color"]) .fam-head .lbl{color:var(--accent)}
+  .fam-block:has([data-all="negra"]) .fam-head .lbl{color:#cfcfcf}
+  .fam-block:has([data-all="color"]) .fam-head .lbl::before{content:'';display:inline-block;width:11px;height:11px;border-radius:3px;margin-right:8px;vertical-align:-1px;background:var(--accent)}
+  .fam-block:has([data-all="negra"]) .fam-head .lbl::before{content:'';display:inline-block;width:11px;height:11px;border-radius:3px;margin-right:8px;vertical-align:-1px;background:#0d0d0d;border:1px solid #6a6a6a}
 
   /* ===== editor de colores (modal) ===== */
   .cmodal{position:fixed;inset:0;z-index:80;background:rgba(0,0,0,0.62);backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;padding:20px}

@@ -97,6 +97,18 @@ def post_process(outname, html):
         html = html.replace(
             "{key:'flare',name:'Flare',sig:'#e85d9b'},",
             "{key:'flare-slim',name:'Flare Slim',sig:'#e85d9b'},\n    {key:'flare-relax',name:'Flare Relax',sig:'#c95ba0'},")
+        # Distinguir de un vistazo los dos bloques: Versión Color (acento lima) vs Negra (oscuro).
+        if "el-fam-distinct" not in html:
+            html = html.replace(
+                "  .fam-head .editlist:hover{border-color:var(--accent)}",
+                "  .fam-head .editlist:hover{border-color:var(--accent)}\n"
+                "  /* el-fam-distinct: distinguir de un vistazo Versión Color (acento lima) vs Versión Negra (oscuro) */\n"
+                "  .fam-block:has([data-all=\"color\"]){border-left:3px solid var(--accent);padding-left:12px;border-radius:0 6px 6px 0;background:linear-gradient(90deg,rgba(203,232,58,.06),transparent 55%)}\n"
+                "  .fam-block:has([data-all=\"negra\"]){border-left:3px solid #6a6a6a;padding-left:12px;border-radius:0 6px 6px 0;background:linear-gradient(90deg,rgba(255,255,255,.05),transparent 55%)}\n"
+                "  .fam-block:has([data-all=\"color\"]) .fam-head .lbl{color:var(--accent)}\n"
+                "  .fam-block:has([data-all=\"negra\"]) .fam-head .lbl{color:#cfcfcf}\n"
+                "  .fam-block:has([data-all=\"color\"]) .fam-head .lbl::before{content:'';display:inline-block;width:11px;height:11px;border-radius:3px;margin-right:8px;vertical-align:-1px;background:var(--accent)}\n"
+                "  .fam-block:has([data-all=\"negra\"]) .fam-head .lbl::before{content:'';display:inline-block;width:11px;height:11px;border-radius:3px;margin-right:8px;vertical-align:-1px;background:#0d0d0d;border:1px solid #6a6a6a}")
         # Fotos de color POR ENTALLE (el diseno las guardaba globales en cfg._pal -> se veian
         # iguales en TODOS los entalles). Cada entalle guarda las suyas en cfg[ent].pal.
         html = html.replace(
